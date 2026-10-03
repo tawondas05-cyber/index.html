@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seiko Studio — AI Design & Printing Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="topbar">
+  <div>
+    <h1>Seiko Studio</h1>
+    <p>AI Design & Printing Studio</p>
+  </div>
+
+  <div class="credits">
+    AI Credits <strong>100</strong>
+  </div>
+</header>
+
+<main class="container">
+
+  <section class="hero">
+    <span class="badge">AI DESIGN WORKSPACE</span>
+    <h2>Buat desain dari brief<br>hingga siap cetak.</h2>
+    <p>
+      Masukkan informasi pelanggan, upload bahan visual,
+      gunakan AI untuk menyusun prompt, lalu buat desain.
+    </p>
+  </section>
+
+  <!-- 01 -->
+  <section class="card">
+    <div class="section-title">
+      <span>01</span>
+      <div>
+        <h2>Informasi Desain</h2>
+        <p>Isi informasi utama desain.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <label>
+        Judul Utama
+        <input id="title" type="text" placeholder="Contoh: GRAND OPENING">
+      </label>
+
+      <label>
+        Subjudul
+        <input id="subtitle" type="text" placeholder="Contoh: Promo Spesial">
+      </label>
+
+      <label class="full">
+        Deskripsi / Informasi
+        <textarea id="description" placeholder="Masukkan informasi yang harus ada di desain..."></textarea>
+      </label>
+
+      <label>
+        Slogan
+        <input id="slogan" type="text" placeholder="Contoh: Harga Bersahabat">
+      </label>
+
+      <label>
+        Nama Produk / Usaha
+        <input id="business" type="text" placeholder="Nama usaha">
+      </label>
+    </div>
+  </section>
+
+  <!-- 02 -->
+  <section class="card">
+    <div class="section-title">
+      <span>02</span>
+      <div>
+        <h2>Kontak & Alamat</h2>
+        <p>Informasi kontak yang akan ditampilkan.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <label>
+        WhatsApp
+        <input id="whatsapp" type="text" placeholder="08xxxxxxxxxx">
+      </label>
+
+      <label>
+        Instagram
+        <input id="instagram" type="text" placeholder="@username">
+      </label>
+
+      <label>
+        TikTok
+        <input id="tiktok" type="text" placeholder="@username">
+      </label>
+
+      <label>
+        YouTube
+        <input id="youtube" type="text" placeholder="Nama channel">
+      </label>
+
+      <label class="full">
+        Alamat
+        <textarea id="address" placeholder="Alamat lengkap..."></textarea>
+      </label>
+    </div>
+  </section>
+
+  <!-- 03 -->
+  <section class="card">
+    <div class="section-title">
+      <span>03</span>
+      <div>
+        <h2>Bahan Visual</h2>
+        <p>Upload logo, foto produk, atau bahan referensi.</p>
+      </div>
+    </div>
+
+    <label class="upload">
+      <input id="images" type="file" accept="image/*" multiple>
+      <strong>＋ Upload gambar</strong>
+      <small>PNG, JPG, JPEG, WEBP</small>
+    </label>
+
+    <div id="preview" class="preview"></div>
+  </section>
+
+  <!-- 04 -->
+  <section class="card">
+    <div class="section-title">
+      <span>04</span>
+      <div>
+        <h2>Spesifikasi Desain</h2>
+        <p>Tentukan ukuran dan gaya desain.</p>
+      </div>
+    </div>
+
+    <div class="grid">
+      <label>
+        Ukuran
+        <input id="size" type="text" placeholder="Contoh: 3 × 1 meter">
+      </label>
+
+      <label>
+        Warna Dominan
+        <input id="colors" type="text" placeholder="Contoh: Merah, putih, hitam">
+      </label>
+
+      <label>
+        Tema
+        <select id="theme">
+          <option>Modern</option>
+          <option>Minimalis</option>
+          <option>Elegan</option>
+          <option>Premium</option>
+          <option>Colorful</option>
+          <option>Promosi</option>
+          <option>Custom</option>
+        </select>
+      </label>
+
+      <div>
+        <span class="label-text">Orientasi</span>
+        <div class="orientation">
+          <button type="button" class="orientation-btn active" data-value="Landscape">
+            Landscape
+          </button>
+
+          <button type="button" class="orientation-btn" data-value="Portrait">
+            Portrait
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 -->
+  <section class="card">
+    <div class="section-title">
+      <span>05</span>
+      <div>
+        <h2>Input AI</h2>
+        <p>Gunakan audio atau gambar sebagai sumber informasi.</p>
+      </div>
+    </div>
+
+    <div class="ai-input-grid">
+
+      <div class="ai-box">
+        <div class="ai-icon">🎙️</div>
+        <h3>Audio</h3>
+        <p>Rekam atau upload suara pelanggan.</p>
+
+        <input id="audio" type="file" accept="audio/*">
+
+        <button type="button" class="secondary" id="recordBtn">
+          🎙️ Mulai Rekam
+        </button>
+
+        <div id="recordStatus"></div>
+      </div>
+
+      <div class="ai-box">
+        <div class="ai-icon">👁️</div>
+        <h3>Vision</h3>
+        <p>AI membaca informasi dari gambar.</p>
+
+        <input id="vision" type="file" accept="image/*">
+
+        <button type="button" class="secondary" id="visionBtn">
+          🔍 Baca Gambar
+        </button>
+
+        <div id="visionStatus"></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 06 -->
+  <section class="card">
+    <div class="section-title">
+      <span>06</span>
+      <div>
+        <h2>Instruksi Tambahan</h2>
+        <p>Berikan arahan khusus untuk AI.</p>
+      </div>
+    </div>
+
+    <textarea
+      id="instructions"
+      class="large-textarea"
+      placeholder="Contoh: Buat desain terlihat menarik, profesional, mudah dibaca dari jarak jauh..."
+    ></textarea>
+  </section>
+
+  <!-- AI PROMPT -->
+  <section class="prompt-card">
+    <div>
+      <span class="badge">AI PROMPT ENGINE</span>
+      <h2>Siapkan Prompt Desain</h2>
+      <p>
+        AI akan menggabungkan seluruh informasi menjadi prompt desain.
+      </p>
+    </div>
+
+    <button type="button" class="primary" id="generatePrompt">
+      ✨ Buat Prompt AI
+    </button>
+
+    <textarea id="promptOutput" readonly placeholder="Prompt AI akan muncul di sini..."></textarea>
+  </section>
+
+  <!-- RESULT -->
+  <section class="card">
+    <div class="section-title">
+      <span>07</span>
+      <div>
+        <h2>Hasil Desain</h2>
+        <p>Preview hasil desain dan lakukan revisi.</p>
+      </div>
+    </div>
+
+    <div id="designResult" class="design-result">
+      <div class="empty-result">
+        <span>✦</span>
+        <h3>Belum ada desain</h3>
+        <p>Buat prompt AI terlebih dahulu.</p>
+      </div>
+    </div>
+
+    <div class="revision">
+      <textarea
+        id="revision"
+        placeholder="Tulis revisi desain di sini..."
+      ></textarea>
+
+      <button type="button" class="primary" id="revisionBtn">
+        🔄 Buat Versi Revisi
+      </button>
+    </div>
+  </section>
+
+  <div class="bottom-actions">
+    <button type="button" class="secondary" id="saveBtn">
+      💾 Simpan Draft
+    </button>
+
+    <button type="button" class="primary" id="downloadBtn">
+      ↓ Export SVG
+    </button>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+
+</body>
+</html>
