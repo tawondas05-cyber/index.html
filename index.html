@@ -1,2978 +1,743 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SEIKO STUDIO — AI Design & Printing Studio</title>
-
-<style>
-:root{
-    --bg:#08090c;
-    --panel:#111318;
-    --panel-2:#171920;
-    --panel-3:#1d2028;
-    --border:#292d37;
-    --text:#f4f5f7;
-    --muted:#969ca9;
-    --accent:#d9ff3f;
-    --accent-dark:#9ab800;
-    --danger:#ff6464;
-    --success:#63e6a2;
-    --shadow:0 18px 50px rgba(0,0,0,.28);
-    --radius:18px;
-}
-
-*{
-    box-sizing:border-box;
-}
-
-html{
-    scroll-behavior:smooth;
-}
-
-body{
-    margin:0;
-    background:
-        radial-gradient(circle at 15% 0%,rgba(217,255,63,.055),transparent 28%),
-        radial-gradient(circle at 90% 20%,rgba(100,120,255,.045),transparent 30%),
-        var(--bg);
-    color:var(--text);
-    font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    line-height:1.5;
-}
-
-button,
-input,
-textarea,
-select{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.container{
-    width:min(1180px,calc(100% - 32px));
-    margin:auto;
-}
-
-/* HEADER */
-
-.header{
-    position:sticky;
-    top:0;
-    z-index:50;
-    backdrop-filter:blur(18px);
-    background:rgba(8,9,12,.84);
-    border-bottom:1px solid rgba(255,255,255,.07);
-}
-
-.header-inner{
-    min-height:76px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:20px;
-}
-
-.brand{
-    display:flex;
-    align-items:center;
-    gap:13px;
-}
-
-.logo{
-    width:42px;
-    height:42px;
-    border-radius:12px;
-    display:grid;
-    place-items:center;
-    background:var(--accent);
-    color:#0a0b0d;
-    font-size:23px;
-    font-weight:950;
-    box-shadow:0 0 28px rgba(217,255,63,.16);
-}
-
-.brand-title{
-    font-size:15px;
-    font-weight:900;
-    letter-spacing:.12em;
-}
-
-.brand-subtitle{
-    color:var(--muted);
-    font-size:11px;
-    margin-top:1px;
-}
-
-.header-right{
-    display:flex;
-    align-items:center;
-    gap:12px;
-}
-
-.status{
-    display:flex;
-    align-items:center;
-    gap:7px;
-    padding:8px 11px;
-    border:1px solid var(--border);
-    border-radius:999px;
-    color:#b7bdc8;
-    font-size:11px;
-    font-weight:700;
-}
-
-.status-dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:var(--success);
-    box-shadow:0 0 10px rgba(99,230,162,.55);
-}
-
-.theme-btn{
-    width:36px;
-    height:36px;
-    border:1px solid var(--border);
-    background:var(--panel);
-    color:var(--text);
-    border-radius:10px;
-}
-
-/* HERO */
-
-.hero{
-    padding:58px 0 34px;
-}
-
-.hero h1{
-    margin:0;
-    font-size:clamp(32px,5vw,58px);
-    line-height:1;
-    letter-spacing:-.045em;
-    max-width:780px;
-}
-
-.hero h1 span{
-    color:var(--accent);
-}
-
-.hero p{
-    margin:18px 0 0;
-    max-width:720px;
-    color:var(--muted);
-    font-size:15px;
-}
-
-/* SECTIONS */
-
-.section{
-    margin:18px 0;
-    background:linear-gradient(180deg,rgba(255,255,255,.025),rgba(255,255,255,.012));
-    border:1px solid var(--border);
-    border-radius:var(--radius);
-    box-shadow:var(--shadow);
-    overflow:hidden;
-}
-
-.section-head{
-    display:flex;
-    align-items:center;
-    gap:13px;
-    padding:21px 23px;
-    border-bottom:1px solid var(--border);
-}
-
-.section-number{
-    width:35px;
-    height:35px;
-    border-radius:10px;
-    display:grid;
-    place-items:center;
-    background:var(--panel-3);
-    border:1px solid var(--border);
-    color:var(--accent);
-    font-size:12px;
-    font-weight:900;
-}
-
-.section-title{
-    font-size:14px;
-    font-weight:900;
-    letter-spacing:.08em;
-}
-
-.section-description{
-    color:var(--muted);
-    font-size:11px;
-    margin-top:2px;
-}
-
-.section-body{
-    padding:23px;
-}
-
-.grid{
-    display:grid;
-    gap:16px;
-}
-
-.grid-2{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-}
-
-.grid-3{
-    grid-template-columns:repeat(3,minmax(0,1fr));
-}
-
-.field{
-    display:flex;
-    flex-direction:column;
-    gap:7px;
-}
-
-.field.full{
-    grid-column:1/-1;
-}
-
-label{
-    color:#b9bec8;
-    font-size:11px;
-    font-weight:800;
-    letter-spacing:.035em;
-}
-
-input,
-textarea,
-select{
-    width:100%;
-    color:var(--text);
-    background:var(--panel-2);
-    border:1px solid var(--border);
-    outline:none;
-    border-radius:11px;
-    padding:12px 13px;
-    transition:.18s ease;
-}
-
-input,
-select{
-    height:44px;
-}
-
-textarea{
-    min-height:120px;
-    resize:vertical;
-}
-
-input:focus,
-textarea:focus,
-select:focus{
-    border-color:rgba(217,255,63,.62);
-    box-shadow:0 0 0 3px rgba(217,255,63,.06);
-}
-
-select option{
-    background:#15171d;
-}
-
-/* BUTTONS */
-
-.btn{
-    border:1px solid var(--border);
-    background:var(--panel-2);
-    color:var(--text);
-    min-height:42px;
-    padding:10px 15px;
-    border-radius:10px;
-    font-weight:850;
-    font-size:12px;
-    transition:.18s ease;
-}
-
-.btn:hover{
-    border-color:#444a57;
-    transform:translateY(-1px);
-}
-
-.btn-primary{
-    background:var(--accent);
-    color:#080a0b;
-    border-color:var(--accent);
-}
-
-.btn-primary:hover{
-    background:#e4ff65;
-    border-color:#e4ff65;
-}
-
-.btn-danger{
-    color:#ff9292;
-}
-
-.actions{
-    display:flex;
-    flex-wrap:wrap;
-    gap:9px;
-    margin-top:15px;
-}
-
-/* UPLOAD */
-
-.upload-box{
-    border:1px dashed #414752;
-    background:rgba(255,255,255,.018);
-    border-radius:14px;
-    padding:28px 20px;
-    text-align:center;
-    transition:.2s ease;
-}
-
-.upload-box.dragover{
-    border-color:var(--accent);
-    background:rgba(217,255,63,.045);
-}
-
-.upload-icon{
-    font-size:28px;
-    margin-bottom:8px;
-}
-
-.upload-box strong{
-    display:block;
-    font-size:13px;
-}
-
-.upload-box span{
-    display:block;
-    margin-top:4px;
-    color:var(--muted);
-    font-size:11px;
-}
-
-.file-input{
-    display:none;
-}
-
-.file-list{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
-    gap:10px;
-    margin-top:14px;
-}
-
-.file-card{
-    position:relative;
-    overflow:hidden;
-    min-height:135px;
-    background:var(--panel-2);
-    border:1px solid var(--border);
-    border-radius:12px;
-}
-
-.file-card img{
-    display:block;
-    width:100%;
-    height:92px;
-    object-fit:cover;
-}
-
-.file-info{
-    padding:7px 9px;
-    font-size:10px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-    color:#c7cbd2;
-}
-
-.file-remove{
-    position:absolute;
-    top:6px;
-    right:6px;
-    width:24px;
-    height:24px;
-    border:0;
-    border-radius:7px;
-    background:rgba(0,0,0,.72);
-    color:white;
-}
-
-/* MODE */
-
-.mode-grid{
-    display:grid;
-    grid-template-columns:repeat(2,minmax(0,1fr));
-    gap:14px;
-}
-
-.mode-card{
-    position:relative;
-    padding:20px;
-    border:1px solid var(--border);
-    border-radius:15px;
-    background:var(--panel-2);
-    cursor:pointer;
-    transition:.18s ease;
-}
-
-.mode-card:hover{
-    border-color:#464c58;
-}
-
-.mode-card.active{
-    border-color:var(--accent);
-    box-shadow:inset 0 0 0 1px rgba(217,255,63,.18);
-}
-
-.mode-card input{
-    position:absolute;
-    opacity:0;
-    pointer-events:none;
-}
-
-.mode-code{
-    color:var(--accent);
-    font-weight:950;
-    font-size:21px;
-}
-
-.mode-title{
-    margin-top:4px;
-    font-weight:850;
-}
-
-.mode-description{
-    margin-top:4px;
-    color:var(--muted);
-    font-size:11px;
-}
-
-.mode-examples{
-    margin-top:12px;
-    color:#aeb4bf;
-    font-size:10px;
-}
-
-/* CHECKS */
-
-.check-grid{
-    display:grid;
-    grid-template-columns:repeat(3,minmax(0,1fr));
-    gap:9px;
-}
-
-.check{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:11px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    background:var(--panel-2);
-    color:#c8ccd4;
-    font-size:11px;
-}
-
-.check input{
-    width:auto;
-    height:auto;
-}
-
-/* OUTPUT */
-
-.output-grid{
-    display:flex;
-    flex-wrap:wrap;
-    gap:9px;
-}
-
-.output-option{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding:11px 13px;
-    border:1px solid var(--border);
-    border-radius:10px;
-    background:var(--panel-2);
-    color:#c8ccd4;
-    font-size:11px;
-}
-
-.output-option input{
-    width:auto;
-    height:auto;
-}
-
-.output-note{
-    margin-top:13px;
-    color:#777e8b;
-    font-size:10px;
-}
-
-/* AI */
-
-.provider-status{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    margin-top:8px;
-    color:#858b98;
-    font-size:10px;
-}
-
-.provider-status .dot{
-    width:7px;
-    height:7px;
-    border-radius:50%;
-    background:#777d89;
-}
-
-.prompt-box{
-    position:relative;
-}
-
-.prompt-toolbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    gap:10px;
-    margin-bottom:7px;
-}
-
-.prompt-toolbar label{
-    margin:0;
-}
-
-.prompt-actions{
-    display:flex;
-    gap:7px;
-}
-
-.prompt-actions .btn{
-    min-height:34px;
-    padding:7px 10px;
-    font-size:10px;
-}
-
-.prompt-textarea{
-    min-height:220px;
-    font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
-    font-size:11px;
-    line-height:1.65;
-}
-
-.mode-selector{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-}
-
-.ai-mode{
-    position:relative;
-}
-
-.ai-mode input{
-    position:absolute;
-    opacity:0;
-}
-
-.ai-mode label{
-    display:block;
-    padding:11px;
-    text-align:center;
-    border:1px solid var(--border);
-    border-radius:10px;
-    background:var(--panel-2);
-    color:#aeb4bf;
-    cursor:pointer;
-}
-
-.ai-mode input:checked + label{
-    border-color:var(--accent);
-    color:var(--accent);
-}
-
-/* PREVIEW */
-
-.preview-wrap{
-    display:grid;
-    grid-template-columns:minmax(0,1.4fr) minmax(280px,.6fr);
-    gap:18px;
-}
-
-.preview-stage{
-    min-height:520px;
-    display:grid;
-    place-items:center;
-    padding:20px;
-    background:
-        linear-gradient(45deg,#11131a 25%,transparent 25%),
-        linear-gradient(-45deg,#11131a 25%,transparent 25%),
-        linear-gradient(45deg,transparent 75%,#11131a 75%),
-        linear-gradient(-45deg,transparent 75%,#11131a 75%);
-    background-size:28px 28px;
-    background-position:0 0,0 14px,14px -14px,-14px 0;
-    border:1px solid var(--border);
-    border-radius:14px;
-}
-
-.preview-placeholder{
-    text-align:center;
-    color:#656b76;
-}
-
-.preview-placeholder .big{
-    font-size:42px;
-    margin-bottom:9px;
-}
-
-.preview-image{
-    display:none;
-    max-width:100%;
-    max-height:650px;
-    object-fit:contain;
-    border-radius:4px;
-    box-shadow:0 20px 60px rgba(0,0,0,.45);
-}
-
-.preview-meta{
-    padding:18px;
-    border:1px solid var(--border);
-    border-radius:14px;
-    background:var(--panel-2);
-}
-
-.meta-title{
-    font-size:11px;
-    font-weight:900;
-    letter-spacing:.08em;
-    color:#b8bdc6;
-    margin-bottom:14px;
-}
-
-.meta-row{
-    display:flex;
-    justify-content:space-between;
-    gap:15px;
-    padding:10px 0;
-    border-bottom:1px solid rgba(255,255,255,.055);
-    font-size:11px;
-}
-
-.meta-row:last-child{
-    border-bottom:0;
-}
-
-.meta-row span:first-child{
-    color:#777e8b;
-}
-
-.meta-row span:last-child{
-    text-align:right;
-    color:#d6d9df;
-    font-weight:700;
-}
-
-/* PROMPT USED */
-
-.used-prompt{
-    position:relative;
-}
-
-.used-prompt textarea{
-    min-height:170px;
-    font-family:"SFMono-Regular",Consolas,"Liberation Mono",monospace;
-    font-size:11px;
-    line-height:1.6;
-}
-
-/* TOAST */
-
-.toast-container{
-    position:fixed;
-    right:18px;
-    bottom:18px;
-    z-index:100;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-}
-
-.toast{
-    min-width:260px;
-    max-width:390px;
-    padding:13px 15px;
-    border:1px solid var(--border);
-    border-radius:12px;
-    background:#16181e;
-    box-shadow:var(--shadow);
-    color:#e7e9ed;
-    font-size:11px;
-    animation:toastIn .2s ease;
-}
-
-.toast.success{
-    border-color:rgba(99,230,162,.3);
-}
-
-.toast.warning{
-    border-color:rgba(217,255,63,.28);
-}
-
-.toast.error{
-    border-color:rgba(255,100,100,.3);
-}
-
-@keyframes toastIn{
-    from{
-        opacity:0;
-        transform:translateY(8px);
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEIKO STUDIO — AI Design & Printing Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          },
+          colors: {
+            brand: {
+              50: '#fff1f2',
+              100: '#ffe4e6',
+              500: '#e11d48',
+              600: '#be123c',
+              700: '#9f1239',
+              900: '#480b1a',
+              accent: '#f43f5e'
+            },
+            dark: {
+              bg: '#090a0f',
+              card: '#12141c',
+              border: '#1f2433',
+              input: '#181b26'
+            }
+          }
+        }
+      }
     }
-    to{
-        opacity:1;
-        transform:translateY(0);
+  </script>
+  <style>
+    body {
+      background-color: #090a0f;
+      color: #f3f4f6;
+      font-family: 'Plus Jakarta Sans', sans-serif;
     }
-}
-
-/* LOADING */
-
-.loading{
-    display:inline-flex;
-    align-items:center;
-    gap:8px;
-}
-
-.spinner{
-    width:14px;
-    height:14px;
-    border:2px solid rgba(0,0,0,.2);
-    border-top-color:#080a0b;
-    border-radius:50%;
-    animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-    to{transform:rotate(360deg);}
-}
-
-/* FOOTER */
-
-.footer{
-    padding:35px 0 60px;
-    color:#656b76;
-    font-size:10px;
-    text-align:center;
-}
-
-.footer strong{
-    color:#aeb4bf;
-}
-
-/* LIGHT MODE */
-
-body.light{
-    --bg:#f3f4f6;
-    --panel:#ffffff;
-    --panel-2:#f7f8fa;
-    --panel-3:#eceef2;
-    --border:#dfe2e7;
-    --text:#14161b;
-    --muted:#68707d;
-    --shadow:0 15px 45px rgba(30,35,45,.08);
-}
-
-body.light .header{
-    background:rgba(243,244,246,.88);
-}
-
-body.light select option{
-    background:white;
-    color:#111;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:850px){
-    .grid-3,
-    .grid-2,
-    .preview-wrap{
-        grid-template-columns:1fr;
+    .glass-card {
+      background: rgba(18, 20, 28, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
     }
-
-    .check-grid{
-        grid-template-columns:1fr 1fr;
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
     }
-
-    .hero{
-        padding-top:40px;
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #12141c;
     }
-
-    .preview-stage{
-        min-height:400px;
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #2b3042;
+      border-radius: 3px;
     }
-}
-
-@media(max-width:600px){
-    .container{
-        width:min(100% - 20px,1180px);
-    }
-
-    .header-inner{
-        min-height:66px;
-    }
-
-    .brand-subtitle{
-        display:none;
-    }
-
-    .status{
-        display:none;
-    }
-
-    .section-head{
-        padding:17px;
-    }
-
-    .section-body{
-        padding:17px;
-    }
-
-    .mode-grid{
-        grid-template-columns:1fr;
-    }
-
-    .check-grid{
-        grid-template-columns:1fr;
-    }
-
-    .mode-selector{
-        grid-template-columns:1fr;
-    }
-
-    .preview-stage{
-        min-height:320px;
-    }
-
-    .actions .btn{
-        flex:1;
-    }
-}
-</style>
+  </style>
 </head>
+<body class="min-h-screen text-gray-100 selection:bg-brand-500 selection:text-white custom-scrollbar pb-12">
 
-<body>
-
-<header class="header">
-    <div class="container header-inner">
-        <div class="brand">
-            <div class="logo">S</div>
-            <div>
-                <div class="brand-title">SEIKO STUDIO</div>
-                <div class="brand-subtitle">AI Design & Printing Studio</div>
-            </div>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-50 glass-card border-b border-dark-border px-4 lg:px-8 py-4 mb-8">
+    <div class="max-w-6xl mx-auto flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-red-500 flex items-center justify-center font-extrabold text-xl text-white shadow-lg shadow-brand-500/30">
+          S
         </div>
-
-        <div class="header-right">
-            <div class="status">
-                <span class="status-dot"></span>
-                UI READY · PROVIDER NOT CONNECTED
-            </div>
-
-            <button class="theme-btn" id="themeBtn" title="Ganti tema">☾</button>
+        <div>
+          <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+            SEIKO STUDIO
+            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-brand-500/20 text-brand-accent border border-brand-500/30">PROD FORM</span>
+          </h1>
+          <p class="text-xs text-gray-400">AI Design & Printing Studio</p>
         </div>
+      </div>
+      <div class="flex items-center gap-2 bg-dark-input px-3 py-1.5 rounded-full border border-dark-border">
+        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-xs font-mono text-gray-300" id="systemStatusText">System Ready</span>
+      </div>
     </div>
-</header>
+  </header>
 
+  <main class="max-w-6xl mx-auto px-4 lg:px-8 space-y-8">
 
-<main class="container">
+    <!-- ERROR ALERT BANNER (HIDDEN BY DEFAULT) -->
+    <div id="errorBanner" class="hidden p-4 rounded-xl bg-red-950/80 border border-red-500/50 text-red-200 text-sm flex items-start justify-between gap-3 shadow-lg">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">⚠️</span>
+        <span id="errorMessage">Terjadi kesalahan pada sistem.</span>
+      </div>
+      <button onclick="hideError()" class="text-red-400 hover:text-white font-bold">&times;</button>
+    </div>
 
-    <section class="hero">
-        <h1>
-            Create. Refine. <span>Print.</span>
-        </h1>
-        <p>
-            Satu ruang kerja untuk menyusun brief desain, memasukkan referensi visual,
-            menentukan spesifikasi RGB/CMYK, mengelola prompt AI, revisi, preview,
-            dan output desain.
-        </p>
+    <!-- 01 — DATA DESAIN -->
+    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+      <div class="flex items-center gap-3 mb-6 pb-3 border-b border-dark-border">
+        <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">01</span>
+        <h2 class="text-lg font-bold text-white">DATA DESAIN</h2>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Nama / Brand</label>
+          <input type="text" id="inputBrand" placeholder="Contoh: Kopi Janji Jiwa, Seiko Tech" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Jenis Desain (Input Teks Bebas)</label>
+          <input type="text" id="inputType" placeholder="Contoh: Banner Promosi Roll-Up 200x80cm, Poster Cafe Minimalis" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Headline Utama</label>
+          <input type="text" id="inputHeadline" placeholder="Contoh: DISKON SPESIAL HARI INI - BELI 1 GRATIS 1" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Informasi Pendukung</label>
+          <textarea id="inputInfo" rows="3" placeholder="Contoh: Alamat toko, Syarat & Ketentuan, List Menu, Sosmed" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Call To Action (CTA)</label>
+          <textarea id="inputCTA" rows="3" placeholder="Contoh: Hubungi WA: 0812-3456-7890 / Kunjungi seikostudio.id" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"></textarea>
+        </div>
+      </div>
     </section>
 
+    <!-- 02 — INPUT VISUAL -->
+    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+      <div class="flex items-center justify-between mb-6 pb-3 border-b border-dark-border">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">02</span>
+          <h2 class="text-lg font-bold text-white">INPUT VISUAL</h2>
+        </div>
+        <div class="flex items-center gap-2">
+          <button id="btnVoiceInput" onclick="toggleVoiceInput()" class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition">
+            🎤 <span id="voiceText">Voice Input</span>
+          </button>
+          <button id="btnAnalyzeImg" onclick="analyzeImages()" class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition">
+            🖼 <span>Analyze Image</span>
+          </button>
+        </div>
+      </div>
 
-    <!-- 01 DATA DESAIN -->
+      <div class="space-y-4">
+        <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="border-2 border-dashed border-dark-border hover:border-brand-500/50 rounded-2xl p-8 text-center bg-dark-input/50 cursor-pointer transition">
+          <input type="file" id="fileInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event)">
+          <div class="text-3xl mb-2">📁</div>
+          <p class="text-sm text-gray-300 font-medium">Klik atau drag & drop file visual di sini</p>
+          <p class="text-xs text-gray-500 mt-1">Logo, Foto Produk, Screenshot, Foto Toko, Referensi Desain</p>
+        </div>
 
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">01</div>
+        <div id="thumbnailContainer" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
+      </div>
+    </section>
+
+    <!-- 03 — MODE DESAIN & 04 — SPESIFIKASI & 05 — FORMAT OUTPUT -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+      <!-- 03 MODE DESAIN -->
+      <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+        <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">03</span>
+          <h2 class="text-sm font-bold text-white uppercase">MODE DESAIN</h2>
+        </div>
+
+        <div class="space-y-4">
+          <div class="grid grid-cols-2 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border">
+            <button id="btnModeRGB" onclick="setMode('RGB')" class="py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition">RGB (Digital)</button>
+            <button id="btnModeCMYK" onclick="setMode('CMYK')" class="py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition">CMYK (Print)</button>
+          </div>
+
+          <div id="presetsRGB" class="space-y-2">
+            <p class="text-[11px] font-semibold text-gray-400 uppercase">Preset Media Digital:</p>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Social Media</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Website</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">WhatsApp</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">TikTok</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">YouTube</span>
+            </div>
+          </div>
+
+          <div id="presetsCMYK" class="space-y-2 hidden">
+            <p class="text-[11px] font-semibold text-gray-400 uppercase">Preset Percetakan:</p>
+            <div class="flex flex-wrap gap-1.5 text-xs">
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Banner</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Poster</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Brochure</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">ID Card</span>
+              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Invitation</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 04 SPESIFIKASI -->
+      <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+        <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">04</span>
+          <h2 class="text-sm font-bold text-white uppercase">SPESIFIKASI</h2>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Ukuran</label>
+            <input type="text" id="specSize" value="1080 x 1080 px (1:1)" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Orientasi</label>
+            <select id="specOrientation" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
+              <option value="Square (1:1)">Square (1:1)</option>
+              <option value="Portrait (9:16)">Portrait (9:16)</option>
+              <option value="Landscape (16:9)">Landscape (16:9)</option>
+              <option value="Custom">Custom</option>
+            </select>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
             <div>
-                <div class="section-title">DATA DESAIN</div>
-                <div class="section-description">Informasi utama proyek desain</div>
+              <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Bleed</label>
+              <input type="text" id="specBleed" value="3 mm" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
             </div>
-        </div>
-
-        <div class="section-body">
-            <div class="grid grid-2">
-
-                <div class="field">
-                    <label for="brandName">NAMA / BRAND</label>
-                    <input id="brandName" placeholder="Contoh: Seiko Coffee">
-                </div>
-
-                <div class="field">
-                    <label for="designType">JENIS DESAIN</label>
-                    <input id="designType" placeholder="Contoh: Poster promo, banner, feed Instagram">
-                </div>
-
-                <div class="field full">
-                    <label for="headline">HEADLINE UTAMA</label>
-                    <input id="headline" placeholder="Masukkan headline utama">
-                </div>
-
-                <div class="field">
-                    <label for="supportInfo">INFORMASI PENDUKUNG</label>
-                    <textarea id="supportInfo" placeholder="Harga, alamat, nomor WhatsApp, promo, tanggal, detail produk, dll."></textarea>
-                </div>
-
-                <div class="field">
-                    <label for="cta">CALL TO ACTION</label>
-                    <textarea id="cta" placeholder="Contoh: Pesan sekarang / Hubungi kami / Kunjungi toko"></textarea>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-
-    <!-- 02 INPUT VISUAL -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">02</div>
             <div>
-                <div class="section-title">INPUT VISUAL</div>
-                <div class="section-description">Logo, foto produk, referensi, screenshot, dan gambar pendukung</div>
+              <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Resolusi</label>
+              <input type="text" id="specRes" value="300 DPI" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
             </div>
+          </div>
+          <div class="pt-1 space-y-1">
+            <label class="flex items-center gap-2 text-xs text-gray-300">
+              <input type="checkbox" id="chkPrintReady" checked class="rounded border-dark-border bg-dark-input text-brand-500"> Print-ready PDF
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-300">
+              <input type="checkbox" id="chkBleed" checked class="rounded border-dark-border bg-dark-input text-brand-500"> Include Bleed
+            </label>
+            <label class="flex items-center gap-2 text-xs text-gray-300">
+              <input type="checkbox" id="chkCropMarks" checked class="rounded border-dark-border bg-dark-input text-brand-500"> Crop Marks
+            </label>
+          </div>
+        </div>
+      </section>
+
+      <!-- 05 FORMAT OUTPUT -->
+      <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+        <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">05</span>
+          <h2 class="text-sm font-bold text-white uppercase">FORMAT OUTPUT</h2>
         </div>
 
-        <div class="section-body">
-
-            <div class="upload-box" id="uploadBox">
-                <div class="upload-icon">🖼️</div>
-                <strong>Upload gambar referensi</strong>
-                <span>Logo · Product Photo · Store Photo · Screenshot · Design Reference</span>
-
-                <div class="actions" style="justify-content:center">
-                    <button class="btn btn-primary" id="chooseFilesBtn">
-                        + PILIH FILE
-                    </button>
-
-                    <button class="btn" id="voiceBtn">
-                        🎤 VOICE INPUT
-                    </button>
-
-                    <button class="btn" id="analyzeBtn">
-                        🖼 ANALYZE IMAGE
-                    </button>
-                </div>
-
-                <input
-                    type="file"
-                    id="fileInput"
-                    class="file-input"
-                    accept="image/*"
-                    multiple
-                >
-            </div>
-
-            <div id="fileList" class="file-list"></div>
-
+        <div class="space-y-2 text-xs">
+          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
+            <span>PNG (Raster High-Res)</span>
+            <input type="checkbox" name="fmt" value="PNG" checked class="rounded border-dark-border bg-dark-input text-brand-500">
+          </label>
+          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
+            <span>JPG (Standard Image)</span>
+            <input type="checkbox" name="fmt" value="JPG" class="rounded border-dark-border bg-dark-input text-brand-500">
+          </label>
+          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
+            <span>PDF (Vector/Print Document)</span>
+            <input type="checkbox" name="fmt" value="PDF" class="rounded border-dark-border bg-dark-input text-brand-500">
+          </label>
+          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
+            <span class="flex items-center gap-1.5">
+              CDR
+              <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">Corel Export Required</span>
+            </span>
+            <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
+          </label>
+          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
+            <span class="flex items-center gap-1.5">
+              AI / PSD
+              <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">Adobe Engine Required</span>
+            </span>
+            <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
+          </label>
         </div>
+      </section>
+
+    </div>
+
+    <!-- 06 — AI IMAGE ENGINE & PROMPT -->
+    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-6">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">06</span>
+          <h2 class="text-lg font-bold text-white">AI IMAGE ENGINE & PROMPT</h2>
+        </div>
+        <div id="providerStatusBadge" class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+          Connected
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Platform / Model AI</label>
+          <select id="selectAIModel" onchange="updateModelStatus()" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
+            <option value="Gemini / Nano Banana 2" selected>Gemini / Nano Banana 2 (Active)</option>
+            <option value="Gemini / Nano Banana Pro">Gemini / Nano Banana Pro (Active Pro)</option>
+            <option value="GPT Image">GPT Image (Not Connected)</option>
+            <option value="Leonardo AI">Leonardo AI (Not Connected)</option>
+            <option value="Ideogram">Ideogram (Not Connected)</option>
+            <option value="Custom API">Custom API (Not Connected)</option>
+            <option value="Local Preview">Local Preview (Testing Only - Non AI)</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Mode AI</label>
+          <div class="grid grid-cols-3 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border text-xs">
+            <button id="btnAIModeTextToImg" onclick="setAIMode('Text -> Image')" class="py-2 rounded-lg bg-brand-600 font-bold text-white transition">Text → Image</button>
+            <button id="btnAIModeImgToImg" onclick="setAIMode('Image -> Image')" class="py-2 rounded-lg text-gray-400 hover:text-white transition">Image → Image</button>
+            <button id="btnAIModeEditImg" onclick="setAIMode('Edit Image')" class="py-2 rounded-lg text-gray-400 hover:text-white transition">Edit Image</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI PROMPT AREA -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <label class="block text-xs font-semibold uppercase text-gray-400">AI Prompt (Source of Truth)</label>
+          <button onclick="generatePromptAuto()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-xs font-bold text-white shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5">
+            ✨ GENERATE PROMPT
+          </button>
+        </div>
+
+        <textarea id="aiPrompt" rows="6" placeholder="Ketik prompt AI secara manual atau klik tombol ✨ GENERATE PROMPT untuk membuat prompt otomatis dari data formulir di atas..." class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-gray-100 font-mono focus:outline-none focus:border-brand-500 transition custom-scrollbar leading-relaxed"></textarea>
+      </div>
+
+      <!-- MAIN GENERATE BUTTON -->
+      <div class="pt-2">
+        <button id="btnGenerateDesign" onclick="executeGenerateDesign()" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-600 via-red-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-extrabold text-base tracking-wide shadow-xl shadow-brand-600/30 transition transform active:scale-[0.99] flex items-center justify-center gap-2">
+          <span>✨ GENERATE DESIGN</span>
+        </button>
+        <p id="processStepText" class="text-center text-xs font-mono text-gray-400 mt-2">Status: Ready</p>
+      </div>
     </section>
 
+    <!-- 07 — REVISION -->
+    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
+      <div class="flex items-center gap-3 pb-3 border-b border-dark-border">
+        <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">07</span>
+        <h2 class="text-lg font-bold text-white">REVISION</h2>
+      </div>
 
-    <!-- 03 MODE DESAIN -->
+      <div>
+        <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Instruksi Perubahan Desain</label>
+        <textarea id="revisionInstruction" rows="3" placeholder="Contoh: Buat lebih premium, headline lebih besar, foto produk lebih dominan, ubah warna menjadi hitam dan merah, tambahkan badge DISKON 30%." class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"></textarea>
+      </div>
 
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">03</div>
-            <div>
-                <div class="section-title">MODE DESAIN</div>
-                <div class="section-description">Pilih kebutuhan media digital atau produksi cetak</div>
-            </div>
-        </div>
-
-        <div class="section-body">
-
-            <div class="mode-grid">
-
-                <label class="mode-card active" id="rgbCard">
-                    <input type="radio" name="colorMode" value="RGB" checked>
-                    <div class="mode-code">RGB</div>
-                    <div class="mode-title">MEDIA DIGITAL</div>
-                    <div class="mode-description">
-                        Untuk kebutuhan layar dan platform digital.
-                    </div>
-                    <div class="mode-examples">
-                        Social Media · Website · WhatsApp · TikTok · YouTube
-                    </div>
-                </label>
-
-                <label class="mode-card" id="cmykCard">
-                    <input type="radio" name="colorMode" value="CMYK">
-                    <div class="mode-code">CMYK</div>
-                    <div class="mode-title">PERCETAKAN</div>
-                    <div class="mode-description">
-                        Untuk kebutuhan produksi dan percetakan.
-                    </div>
-                    <div class="mode-examples">
-                        Banner · Poster · Brochure · ID Card · Invitation
-                    </div>
-                </label>
-
-            </div>
-
-        </div>
+      <button onclick="executeRevision()" class="px-6 py-3 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-sm font-bold text-white transition flex items-center gap-2">
+        ↻ GENERATE REVISION
+      </button>
     </section>
 
+    <!-- 08 — DESIGN PREVIEW -->
+    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">08</span>
+          <h2 class="text-lg font-bold text-white">DESIGN PREVIEW</h2>
+        </div>
+        <div id="previewStatusBadge" class="text-xs font-mono px-2.5 py-1 rounded bg-gray-800 text-gray-400 border border-dark-border">
+          Idle
+        </div>
+      </div>
 
-    <!-- 04 SPESIFIKASI -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">04</div>
-            <div>
-                <div class="section-title">SPESIFIKASI</div>
-                <div class="section-description">Ukuran dan parameter produksi</div>
-            </div>
+      <!-- CANVAS PREVIEW CONTAINER -->
+      <div class="relative w-full min-h-[420px] rounded-2xl bg-dark-input border border-dark-border flex items-center justify-center p-4 overflow-hidden group">
+        <div id="previewPlaceholder" class="text-center text-gray-500 space-y-2">
+          <div class="text-5xl">🎨</div>
+          <p class="text-sm font-medium">Hasil desain AI akan muncul di sini</p>
+          <p class="text-xs text-gray-600">Tekan tombol <span class="text-brand-accent font-semibold">✨ GENERATE DESIGN</span> untuk memulai</p>
         </div>
 
-        <div class="section-body">
+        <img id="generatedImageResult" class="hidden max-h-[600px] w-auto max-w-full object-contain rounded-xl shadow-2xl border border-dark-border" alt="Hasil Desain AI">
+      </div>
 
-            <div class="grid grid-3">
-
-                <div class="field">
-                    <label for="size">UKURAN</label>
-                    <input id="size" placeholder="Contoh: 1080 × 1350 px / A4 / 60 × 160 cm">
-                </div>
-
-                <div class="field">
-                    <label for="orientation">ORIENTASI</label>
-                    <select id="orientation">
-                        <option value="Portrait">Portrait</option>
-                        <option value="Landscape">Landscape</option>
-                        <option value="Square">Square</option>
-                    </select>
-                </div>
-
-                <div class="field">
-                    <label for="bleed">BLEED</label>
-                    <input id="bleed" value="3 mm">
-                </div>
-
-                <div class="field">
-                    <label for="resolution">RESOLUSI</label>
-                    <select id="resolution">
-                        <option value="300 DPI">300 DPI</option>
-                        <option value="150 DPI">150 DPI</option>
-                        <option value="72 DPI">72 DPI</option>
-                        <option value="4K">4K</option>
-                    </select>
-                </div>
-
-            </div>
-
-            <div style="height:15px"></div>
-
-            <div class="check-grid">
-
-                <label class="check">
-                    <input type="checkbox" id="printReady">
-                    Print-ready PDF
-                </label>
-
-                <label class="check">
-                    <input type="checkbox" id="includeBleed" checked>
-                    Include Bleed
-                </label>
-
-                <label class="check">
-                    <input type="checkbox" id="cropMarks">
-                    Crop Marks
-                </label>
-
-            </div>
-
+      <!-- PREVIEW ACTION BUTTONS -->
+      <div id="previewActions" class="hidden flex flex-wrap items-center justify-between gap-3 pt-2">
+        <div class="flex flex-wrap items-center gap-2">
+          <button onclick="useDesign()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition">
+            ✓ USE DESIGN
+          </button>
+          <button onclick="focusRevision()" class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition">
+            ✎ REVISE
+          </button>
+          <button onclick="executeGenerateDesign()" class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition">
+            ↻ REGENERATE
+          </button>
         </div>
+
+        <button onclick="downloadDesign()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-red-600 hover:from-brand-500 hover:to-red-500 text-xs font-extrabold text-white shadow-lg transition flex items-center gap-2">
+          ↓ DOWNLOAD HASIL DESAIN
+        </button>
+      </div>
     </section>
 
-
-    <!-- 05 OUTPUT -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">05</div>
-            <div>
-                <div class="section-title">FORMAT OUTPUT</div>
-                <div class="section-description">Format yang diinginkan untuk hasil akhir</div>
-            </div>
+    <!-- 09 — PROMPT USED -->
+    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
+      <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+        <div class="flex items-center gap-3">
+          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">09</span>
+          <h2 class="text-lg font-bold text-white">PROMPT YANG DIGUNAKAN</h2>
         </div>
-
-        <div class="section-body">
-
-            <div class="output-grid">
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="PDF">
-                    PDF
-                </label>
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="JPG" checked>
-                    JPG
-                </label>
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="PNG">
-                    PNG
-                </label>
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="TIFF">
-                    TIFF
-                </label>
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="CDR">
-                    CDR
-                </label>
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="AI">
-                    AI
-                </label>
-
-                <label class="output-option">
-                    <input type="checkbox" name="output" value="PSD">
-                    PSD
-                </label>
-
-            </div>
-
-            <div class="output-note">
-                Catatan: CDR / AI / PSD hanya dapat dibuat secara benar jika engine export
-                mendukung format editable/vector/layered. Aplikasi ini tidak akan
-                mengganti nama PNG menjadi file CDR/AI/PSD palsu.
-            </div>
-
+        <div class="flex items-center gap-2">
+          <button onclick="copyPromptUsed()" class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition">
+            📋 Copy Prompt
+          </button>
+          <button onclick="editPromptUsed()" class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition">
+            ✏️ Edit
+          </button>
         </div>
+      </div>
+
+      <div id="promptUsedBox" class="p-4 rounded-xl bg-dark-input border border-dark-border text-xs text-gray-300 font-mono min-h-[80px] whitespace-pre-wrap break-words leading-relaxed">
+        (Belum ada prompt yang dieksekusi. Prompt yang benar-benar dikirim ke AI akan muncul di sini setelah generate berhasil).
+      </div>
     </section>
 
-
-    <!-- 06 AI ENGINE -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">06</div>
-            <div>
-                <div class="section-title">AI IMAGE ENGINE</div>
-                <div class="section-description">Provider dan prompt untuk proses generasi desain</div>
-            </div>
-        </div>
-
-        <div class="section-body">
-
-            <div class="grid grid-2">
-
-                <div class="field">
-                    <label for="provider">PLATFORM / MODEL AI</label>
-
-                    <select id="provider">
-                        <option value="gemini-flash">
-                            Gemini / Nano Banana 2 — Belum Terhubung
-                        </option>
-
-                        <option value="gemini-pro">
-                            Gemini / Nano Banana Pro — Belum Terhubung
-                        </option>
-
-                        <option value="gpt-image">
-                            GPT Image — Belum Terhubung
-                        </option>
-
-                        <option value="leonardo">
-                            Leonardo AI — Belum Terhubung
-                        </option>
-
-                        <option value="ideogram">
-                            Ideogram — Belum Terhubung
-                        </option>
-
-                        <option value="custom">
-                            Custom API — Belum Terhubung
-                        </option>
-
-                        <option value="local-preview">
-                            Local Preview — Tanpa API
-                        </option>
-                    </select>
-
-                    <div class="provider-status">
-                        <span class="dot"></span>
-                        <span id="providerStatus">
-                            Provider AI belum terhubung. Local Preview tersedia tanpa API.
-                        </span>
-                    </div>
-                </div>
-
-                <div class="field">
-                    <label>MODE</label>
-
-                    <div class="mode-selector">
-
-                        <div class="ai-mode">
-                            <input type="radio" id="textImage" name="aiMode" value="Text → Image" checked>
-                            <label for="textImage">Text → Image</label>
-                        </div>
-
-                        <div class="ai-mode">
-                            <input type="radio" id="imageImage" name="aiMode" value="Image → Image">
-                            <label for="imageImage">Image → Image</label>
-                        </div>
-
-                        <div class="ai-mode">
-                            <input type="radio" id="editImage" name="aiMode" value="Edit Image">
-                            <label for="editImage">Edit Image</label>
-                        </div>
-
-                    </div>
-                </div>
-
-            </div>
-
-            <div style="height:20px"></div>
-
-            <div class="prompt-box">
-
-                <div class="prompt-toolbar">
-                    <label for="aiPrompt">AI PROMPT</label>
-
-                    <div class="prompt-actions">
-                        <button class="btn" id="clearPromptBtn">
-                            CLEAR
-                        </button>
-
-                        <button class="btn" id="generatePromptBtn">
-                            ✨ GENERATE PROMPT
-                        </button>
-                    </div>
-                </div>
-
-                <textarea
-                    id="aiPrompt"
-                    class="prompt-textarea"
-                    placeholder="Prompt AI akan muncul di sini. Anda bebas mengeditnya sebelum menekan GENERATE DESIGN."
-                ></textarea>
-
-            </div>
-
-            <div class="actions">
-
-                <button class="btn btn-primary" id="generateDesignBtn">
-                    ✨ GENERATE DESIGN
-                </button>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- 07 REVISION -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">07</div>
-            <div>
-                <div class="section-title">REVISION</div>
-                <div class="section-description">Perbaiki desain berdasarkan hasil sebelumnya</div>
-            </div>
-        </div>
-
-        <div class="section-body">
-
-            <div class="field">
-                <label for="revisionText">INSTRUKSI REVISI</label>
-
-                <textarea
-                    id="revisionText"
-                    style="min-height:145px"
-                    placeholder="Contoh: Buat headline lebih besar, kurangi elemen dekorasi, gunakan background lebih bersih, pertahankan logo dan komposisi utama."
-                ></textarea>
-            </div>
-
-            <div class="actions">
-
-                <button class="btn btn-primary" id="revisionBtn">
-                    ↻ GENERATE REVISION
-                </button>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- 08 PREVIEW -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">08</div>
-            <div>
-                <div class="section-title">DESIGN PREVIEW</div>
-                <div class="section-description">Preview hasil desain saat ini</div>
-            </div>
-        </div>
-
-        <div class="section-body">
-
-            <div class="preview-wrap">
-
-                <div class="preview-stage">
-
-                    <div class="preview-placeholder" id="previewPlaceholder">
-                        <div class="big">✦</div>
-                        <div>Belum ada desain</div>
-                        <small>Gunakan GENERATE DESIGN untuk membuat preview.</small>
-                    </div>
-
-                    <img
-                        id="previewImage"
-                        class="preview-image"
-                        alt="SEIKO Studio Design Preview"
-                    >
-
-                </div>
-
-
-                <div class="preview-meta">
-
-                    <div class="meta-title">
-                        DESIGN INFORMATION
-                    </div>
-
-                    <div class="meta-row">
-                        <span>Mode</span>
-                        <span id="metaMode">RGB</span>
-                    </div>
-
-                    <div class="meta-row">
-                        <span>Ukuran</span>
-                        <span id="metaSize">—</span>
-                    </div>
-
-                    <div class="meta-row">
-                        <span>Orientasi</span>
-                        <span id="metaOrientation">Portrait</span>
-                    </div>
-
-                    <div class="meta-row">
-                        <span>Resolusi</span>
-                        <span id="metaResolution">300 DPI</span>
-                    </div>
-
-                    <div class="meta-row">
-                        <span>Engine</span>
-                        <span id="metaEngine">Local Preview</span>
-                    </div>
-
-                    <div class="meta-row">
-                        <span>Status</span>
-                        <span id="metaStatus">Draft</span>
-                    </div>
-
-                    <div class="actions">
-
-                        <button class="btn" id="useDesignBtn">
-                            ✓ USE DESIGN
-                        </button>
-
-                        <button class="btn" id="reviseBtn">
-                            ✎ REVISE
-                        </button>
-
-                        <button class="btn" id="regenerateBtn">
-                            ↻ REGENERATE
-                        </button>
-
-                        <button class="btn btn-primary" id="downloadBtn">
-                            ↓ DOWNLOAD
-                        </button>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <!-- 09 PROMPT USED -->
-
-    <section class="section">
-        <div class="section-head">
-            <div class="section-number">09</div>
-            <div>
-                <div class="section-title">PROMPT USED</div>
-                <div class="section-description">Prompt terakhir yang digunakan untuk membuat desain</div>
-            </div>
-        </div>
-
-        <div class="section-body">
-
-            <div class="used-prompt">
-
-                <textarea
-                    id="promptUsed"
-                    readonly
-                    placeholder="Prompt yang benar-benar digunakan akan tampil di sini."
-                ></textarea>
-
-                <div class="actions">
-
-                    <button class="btn" id="copyPromptBtn">
-                        COPY PROMPT
-                    </button>
-
-                    <button class="btn" id="editPromptBtn">
-                        EDIT
-                    </button>
-
-                </div>
-
-            </div>
-
-        </div>
-    </section>
-
-
-    <footer class="footer">
-        <strong>SEIKO STUDIO</strong> · AI Design & Printing Studio
-        <br>
-        UI Engine: Ready · AI Provider: Not Connected · Local Preview: Available
-    </footer>
-
-</main>
-
-
-<div class="toast-container" id="toastContainer"></div>
-
-
-<script>
-"use strict";
-
-/* =========================================================
-   SEIKO STUDIO
-   Frontend-only foundation
-   Tidak ada API key.
-   Tidak ada fake API request.
-   ========================================================= */
-
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
-const state = {
-    files: [],
-    lastDesignUrl: "",
-    lastExecutedPrompt: "",
-    lastDesignSource: "Local Preview",
-    designUsed: false
-};
-
-
-/* =========================================================
-   DOM
-   ========================================================= */
-
-const $ = (selector) => document.querySelector(selector);
-
-const fileInput = $("#fileInput");
-const uploadBox = $("#uploadBox");
-const fileList = $("#fileList");
-
-const aiPrompt = $("#aiPrompt");
-const promptUsed = $("#promptUsed");
-const revisionText = $("#revisionText");
-
-const previewImage = $("#previewImage");
-const previewPlaceholder = $("#previewPlaceholder");
-
-const provider = $("#provider");
-const providerStatus = $("#providerStatus");
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-function toast(message, type = "success") {
-    const container = $("#toastContainer");
-
-    const item = document.createElement("div");
-    item.className = `toast ${type}`;
-    item.textContent = message;
-
-    container.appendChild(item);
-
-    setTimeout(() => {
-        item.style.opacity = "0";
-        item.style.transform = "translateY(8px)";
-
-        setTimeout(() => item.remove(), 180);
-    }, 3000);
-}
-
-
-/* =========================================================
-   THEME
-   ========================================================= */
-
-$("#themeBtn").addEventListener("click", () => {
-    document.body.classList.toggle("light");
-
-    const light = document.body.classList.contains("light");
-
-    $("#themeBtn").textContent = light ? "☀" : "☾";
-
-    localStorage.setItem("seiko-theme", light ? "light" : "dark");
-});
-
-if (localStorage.getItem("seiko-theme") === "light") {
-    document.body.classList.add("light");
-    $("#themeBtn").textContent = "☀";
-}
-
-
-/* =========================================================
-   FILE UPLOAD
-   ========================================================= */
-
-$("#chooseFilesBtn").addEventListener("click", () => {
-    fileInput.click();
-});
-
-fileInput.addEventListener("change", (event) => {
-    addFiles([...event.target.files]);
-    fileInput.value = "";
-});
-
-
-uploadBox.addEventListener("dragover", (event) => {
-    event.preventDefault();
-    uploadBox.classList.add("dragover");
-});
-
-uploadBox.addEventListener("dragleave", () => {
-    uploadBox.classList.remove("dragover");
-});
-
-uploadBox.addEventListener("drop", (event) => {
-    event.preventDefault();
-    uploadBox.classList.remove("dragover");
-
-    const files = [...event.dataTransfer.files]
-        .filter(file => file.type.startsWith("image/"));
-
-    addFiles(files);
-});
-
-
-function addFiles(files) {
-
-    for (const file of files) {
-
-        if (!file.type.startsWith("image/")) {
-            continue;
-        }
-
-        const id = crypto.randomUUID
-            ? crypto.randomUUID()
-            : `${Date.now()}-${Math.random()}`;
-
-        state.files.push({
-            id,
-            file,
-            url: URL.createObjectURL(file)
-        });
+  </main>
+
+  <footer class="max-w-6xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-gray-500">
+    <p>© 2026 SEIKO STUDIO — AI Design & Printing Studio. Production Ready Workflow.</p>
+  </footer>
+
+  <!-- CLIENT-SIDE SCRIPT -->
+  <script>
+    // App State
+    let currentMode = 'RGB';
+    let currentAIMode = 'Text -> Image';
+    let uploadedImages = []; // base64 images
+    let lastUsedPrompt = '';
+    let lastGeneratedImageUrl = null;
+
+    // Show / Hide Error Alert
+    function showError(msg) {
+      document.getElementById('errorMessage').innerText = msg;
+      document.getElementById('errorBanner').classList.remove('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    renderFiles();
-
-    if (files.length) {
-        toast(`${files.length} gambar ditambahkan.`);
-    }
-}
-
-
-function removeFile(id) {
-
-    const item = state.files.find(file => file.id === id);
-
-    if (item) {
-        URL.revokeObjectURL(item.url);
+    function hideError() {
+      document.getElementById('errorBanner').classList.add('hidden');
     }
 
-    state.files = state.files.filter(file => file.id !== id);
+    // Provider Selector Change Handler
+    function updateModelStatus() {
+      const selected = document.getElementById('selectAIModel').value;
+      const badge = document.getElementById('providerStatusBadge');
 
-    renderFiles();
-}
+      if (selected.includes('Gemini')) {
+        badge.innerText = 'Connected';
+        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+      } else if (selected === 'Local Preview') {
+        badge.innerText = 'Local Testing';
+        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
+      } else {
+        badge.innerText = 'Not Connected';
+        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30';
+      }
+    }
 
+    // Set RGB vs CMYK Mode
+    function setMode(mode) {
+      currentMode = mode;
+      const btnRGB = document.getElementById('btnModeRGB');
+      const btnCMYK = document.getElementById('btnModeCMYK');
+      const presRGB = document.getElementById('presetsRGB');
+      const presCMYK = document.getElementById('presetsCMYK');
 
-function renderFiles() {
+      if (mode === 'RGB') {
+        btnRGB.className = 'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
+        btnCMYK.className = 'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
+        presRGB.classList.remove('hidden');
+        presCMYK.classList.add('hidden');
+      } else {
+        btnCMYK.className = 'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
+        btnRGB.className = 'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
+        presCMYK.classList.remove('hidden');
+        presRGB.classList.add('hidden');
+      }
+    }
 
-    fileList.innerHTML = "";
+    // Set AI Mode
+    function setAIMode(mode) {
+      currentAIMode = mode;
+      const btn1 = document.getElementById('btnAIModeTextToImg');
+      const btn2 = document.getElementById('btnAIModeImgToImg');
+      const btn3 = document.getElementById('btnAIModeEditImg');
 
-    state.files.forEach(item => {
+      [btn1, btn2, btn3].forEach(b => b.className = 'py-2 rounded-lg text-gray-400 hover:text-white transition');
 
-        const card = document.createElement("div");
-        card.className = "file-card";
+      if (mode === 'Text -> Image') btn1.className = 'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+      if (mode === 'Image -> Image') btn2.className = 'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+      if (mode === 'Edit Image') btn3.className = 'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+    }
 
-        card.innerHTML = `
-            <img src="${item.url}" alt="">
-            <div class="file-info">${escapeHtml(item.file.name)}</div>
-            <button class="file-remove" type="button">×</button>
-        `;
+    // Handle Image Upload & Convert to Base64
+    function handleFileSelect(e) {
+      const files = Array.from(e.target.files);
+      const container = document.getElementById('thumbnailContainer');
 
-        card.querySelector(".file-remove")
-            .addEventListener("click", () => removeFile(item.id));
+      files.forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          const base64Data = event.target.result;
+          uploadedImages.push(base64Data);
 
-        fileList.appendChild(card);
-    });
-}
+          const thumb = document.createElement('div');
+          thumb.className = 'relative group aspect-square rounded-xl overflow-hidden border border-dark-border bg-dark-input';
+          thumb.innerHTML = `
+            <img src="${base64Data}" class="w-full h-full object-cover" alt="Upload">
+            <button onclick="removeImage(this, '${base64Data}')" class="absolute top-1 right-1 bg-red-600/80 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition">&times;</button>
+          `;
+          container.appendChild(thumb);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
 
+    function removeImage(btnEl, base64Data) {
+      uploadedImages = uploadedImages.filter(img => img !== base64Data);
+      btnEl.parentElement.remove();
+    }
 
-/* =========================================================
-   VOICE INPUT
-   ========================================================= */
-
-$("#voiceBtn").addEventListener("click", () => {
-
-    const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-    if (!SpeechRecognition) {
-        toast(
-            "Voice Input tidak tersedia di browser ini.",
-            "warning"
-        );
+    // Voice Input via Web Speech API
+    function toggleVoiceInput() {
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showError('Browser Anda tidak mendukung Web Speech API.');
         return;
+      }
+
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.lang = 'id-ID';
+      recognition.interimResults = false;
+
+      const voiceBtnText = document.getElementById('voiceText');
+      voiceBtnText.innerText = 'Listening...';
+
+      recognition.start();
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const promptArea = document.getElementById('aiPrompt');
+        promptArea.value = (promptArea.value ? promptArea.value + ' ' : '') + transcript;
+        voiceBtnText.innerText = 'Voice Input';
+      };
+
+      recognition.onerror = () => {
+        voiceBtnText.innerText = 'Voice Input';
+        showError('Gagal merekam suara.');
+      };
+
+      recognition.onend = () => {
+        voiceBtnText.innerText = 'Voice Input';
+      };
     }
 
-    const recognition = new SpeechRecognition();
-
-    recognition.lang = "id-ID";
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-        $("#voiceBtn").textContent = "🎙 MENDENGARKAN...";
-    };
-
-    recognition.onresult = (event) => {
-
-        const text =
-            event.results[0][0].transcript;
-
-        const target = $("#supportInfo");
-
-        target.value =
-            target.value.trim()
-                ? `${target.value.trim()}\n${text}`
-                : text;
-
-        toast("Voice Input berhasil dimasukkan.");
-    };
-
-    recognition.onerror = () => {
-        toast("Voice Input gagal digunakan.", "error");
-    };
-
-    recognition.onend = () => {
-        $("#voiceBtn").textContent = "🎤 VOICE INPUT";
-    };
-
-    recognition.start();
-});
-
-
-/* =========================================================
-   ANALYZE IMAGE
-   ========================================================= */
-
-$("#analyzeBtn").addEventListener("click", () => {
-
-    if (!state.files.length) {
-        toast(
-            "Upload minimal satu gambar terlebih dahulu.",
-            "warning"
-        );
+    function analyzeImages() {
+      if (uploadedImages.length === 0) {
+        showError('Silakan upload file visual terlebih dahulu sebelum melakukan analisis.');
         return;
+      }
+      alert(`Analisis Visual: Terdeteksi ${uploadedImages.length} berkas gambar siap dikirimkan ke AI.`);
     }
 
-    /*
-      Sengaja tidak mengklaim ini sebagai AI Vision.
-      Analisis AI sebenarnya baru dilakukan setelah
-      provider Vision/Multimodal terhubung.
-    */
+    // ✨ GENERATE PROMPT (Automatic prompt builder from design data)
+    function generatePromptAuto() {
+      const brand = document.getElementById('inputBrand').value || 'Brand';
+      const type = document.getElementById('inputType').value || 'Promotional Poster';
+      const headline = document.getElementById('inputHeadline').value || '';
+      const info = document.getElementById('inputInfo').value || '';
+      const cta = document.getElementById('inputCTA').value || '';
+      const size = document.getElementById('specSize').value || 'Square';
+      const res = document.getElementById('specRes').value || '300 DPI';
 
-    const info = [
-        `Jumlah gambar referensi: ${state.files.length}`,
-        "Referensi visual tersedia untuk digunakan sebagai input desain.",
-        "AI Vision belum terhubung pada versi frontend ini."
-    ].join("\n");
+      let prompt = `Create a high-end, professional graphic design for "${brand}".\n`;
+      prompt += `Design Type: ${type}.\n`;
+      if (headline) prompt += `Main Headline Text: "${headline}".\n`;
+      if (info) prompt += `Supporting Info: "${info}".\n`;
+      if (cta) prompt += `Call To Action: "${cta}".\n`;
+      prompt += `Mode: ${currentMode} color space, Dimensions/Resolution: ${size}, ${res}.\n`;
+      prompt += `Style: Modern, sleek, ultra-clean, studio lighting, highly descriptive typography, commercial advertising quality.`;
 
-    const target = $("#supportInfo");
+      if (uploadedImages.length > 0) {
+        prompt += `\nIncorporate visual style and composition elements from the provided reference image(s).`;
+      }
 
-    target.value =
-        target.value.trim()
-            ? `${target.value.trim()}\n\n${info}`
-            : info;
+      document.getElementById('aiPrompt').value = prompt;
+    }
 
-    toast(
-        "Input visual terdeteksi. AI Vision belum terhubung.",
-        "warning"
-    );
-});
+    // ✨ GENERATE DESIGN (Main Workflow Function)
+    async function executeGenerateDesign() {
+      hideError();
 
+      // SOURCE OF TRUTH: Ambil prompt langsung dari textarea #aiPrompt
+      const promptArea = document.getElementById('aiPrompt');
+      const promptToUse = promptArea.value.trim();
 
-/* =========================================================
-   COLOR MODE
-   ========================================================= */
-
-document
-    .querySelectorAll('input[name="colorMode"]')
-    .forEach(input => {
-
-        input.addEventListener("change", updateColorMode);
-
-    });
-
-function updateColorMode() {
-
-    const value =
-        document.querySelector(
-            'input[name="colorMode"]:checked'
-        ).value;
-
-    $("#rgbCard").classList.toggle(
-        "active",
-        value === "RGB"
-    );
-
-    $("#cmykCard").classList.toggle(
-        "active",
-        value === "CMYK"
-    );
-
-    $("#metaMode").textContent = value;
-}
-
-
-/* =========================================================
-   PROVIDER
-   ========================================================= */
-
-provider.addEventListener("change", updateProviderStatus);
-
-function updateProviderStatus() {
-
-    const value = provider.value;
-
-    if (value === "local-preview") {
-
-        providerStatus.textContent =
-            "Local Preview aktif. Tidak membutuhkan API key.";
-
-        $("#metaEngine").textContent =
-            "Local Preview";
-
+      if (!promptToUse) {
+        showError('Isi AI Prompt tidak boleh kosong. Ketik prompt atau klik ✨ GENERATE PROMPT terlebih dahulu.');
         return;
-    }
-
-    providerStatus.textContent =
-        "Provider belum terhubung. Pilihan ini disiapkan untuk integrasi backend.";
-
-    $("#metaEngine").textContent =
-        "Provider belum terhubung";
-}
-
-
-/* =========================================================
-   GENERATE PROMPT
-   ========================================================= */
-
-$("#generatePromptBtn").addEventListener(
-    "click",
-    generatePromptFromForm
-);
-
-
-function getFormData() {
-
-    const colorMode =
-        document.querySelector(
-            'input[name="colorMode"]:checked'
-        ).value;
-
-    const aiMode =
-        document.querySelector(
-            'input[name="aiMode"]:checked'
-        ).value;
-
-    const outputs =
-        [...document.querySelectorAll(
-            'input[name="output"]:checked'
-        )].map(input => input.value);
-
-    return {
-
-        brand:
-            $("#brandName").value.trim(),
-
-        type:
-            $("#designType").value.trim(),
-
-        headline:
-            $("#headline").value.trim(),
-
-        support:
-            $("#supportInfo").value.trim(),
-
-        cta:
-            $("#cta").value.trim(),
-
-        colorMode,
-
-        size:
-            $("#size").value.trim(),
-
-        orientation:
-            $("#orientation").value,
-
-        bleed:
-            $("#bleed").value.trim(),
-
-        resolution:
-            $("#resolution").value,
-
-        printReady:
-            $("#printReady").checked,
-
-        includeBleed:
-            $("#includeBleed").checked,
-
-        cropMarks:
-            $("#cropMarks").checked,
-
-        outputs,
-
-        provider:
-            provider.value,
-
-        aiMode
-
-    };
-}
-
-
-function generatePromptFromForm() {
-
-    const data = getFormData();
-
-    const parts = [];
-
-    parts.push(
-        "Create a professional commercial graphic design."
-    );
-
-    if (data.brand) {
-        parts.push(`Brand: ${data.brand}.`);
-    }
-
-    if (data.type) {
-        parts.push(`Design type: ${data.type}.`);
-    }
-
-    if (data.headline) {
-        parts.push(`Main headline: "${data.headline}".`);
-    }
-
-    if (data.support) {
-        parts.push(`Supporting information: ${data.support}.`);
-    }
-
-    if (data.cta) {
-        parts.push(`Call to action: "${data.cta}".`);
-    }
-
-    parts.push(
-        `Color workflow: ${data.colorMode}.`
-    );
-
-    if (data.size) {
-        parts.push(`Final size: ${data.size}.`);
-    }
-
-    parts.push(
-        `Orientation: ${data.orientation}.`
-    );
-
-    parts.push(
-        `Resolution: ${data.resolution}.`
-    );
-
-    if (data.includeBleed) {
-        parts.push(
-            `Include ${data.bleed || "3 mm"} bleed.`
-        );
-    }
-
-    if (data.cropMarks) {
-        parts.push(
-            "Include professional crop marks."
-        );
-    }
-
-    if (data.printReady) {
-        parts.push(
-            "Prepare the composition for print-ready production."
-        );
-    }
-
-    if (data.outputs.length) {
-        parts.push(
-            `Requested output formats: ${data.outputs.join(", ")}.`
-        );
-    }
-
-    if (state.files.length) {
-        parts.push(
-            `Use ${state.files.length} uploaded visual reference image(s) as design reference.`
-        );
-    }
-
-    parts.push(
-        "Use clear visual hierarchy, professional typography, balanced spacing, strong composition, polished commercial art direction, and realistic production quality."
-    );
-
-    const generated = parts.join("\n\n");
-
-    aiPrompt.value = generated;
-
-    toast("Prompt berhasil dibuat. Anda masih bebas mengeditnya.");
-
-    aiPrompt.focus();
-}
-
-
-/* =========================================================
-   CLEAR PROMPT
-   ========================================================= */
-
-$("#clearPromptBtn").addEventListener("click", () => {
-
-    aiPrompt.value = "";
-
-    toast("Prompt dikosongkan.", "warning");
-});
-
-
-/* =========================================================
-   GENERATE DESIGN
-   ========================================================= */
-
-$("#generateDesignBtn").addEventListener(
-    "click",
-    executeGenerateDesign
-);
-
-
-async function executeGenerateDesign() {
-
-    const prompt =
-        aiPrompt.value.trim();
-
-    if (!prompt) {
-
-        toast(
-            "Isi atau generate AI Prompt terlebih dahulu.",
-            "warning"
-        );
-
-        aiPrompt.focus();
-
-        return;
-    }
-
-    /*
-      PENTING:
-      Prompt yang digunakan di sini adalah isi textarea saat tombol
-      ditekan. Tidak dibuat ulang secara diam-diam.
-    */
-
-    state.lastExecutedPrompt = prompt;
-    state.designUsed = false;
-
-    promptUsed.value = prompt;
-
-    const selectedProvider = provider.value;
-
-    if (selectedProvider !== "local-preview") {
-
-        toast(
-            "Provider AI belum terhubung. Gunakan Local Preview untuk pengujian UI.",
-            "warning"
-        );
-
-        /*
-          Jangan fallback diam-diam.
-          User harus tahu bahwa provider sebenarnya belum aktif.
-        */
-
-        return;
-    }
-
-    await createLocalPreview(prompt);
-
-}
-
-
-/* =========================================================
-   LOCAL PREVIEW
-   ========================================================= */
-
-async function createLocalPreview(prompt) {
-
-    const button = $("#generateDesignBtn");
-
-    const original =
-        button.innerHTML;
-
-    button.innerHTML =
-        `<span class="loading">
-            <span class="spinner"></span>
-            MEMBUAT PREVIEW...
-        </span>`;
-
-    button.disabled = true;
-
-    try {
-
-        await delay(450);
-
-        const data = getFormData();
-
-        const imageUrl =
-            await buildLocalPoster(data, prompt);
-
-        setPreview(imageUrl);
-
-        state.lastDesignSource =
-            "Local Preview";
-
-        $("#metaEngine").textContent =
-            "Local Preview";
-
-        $("#metaStatus").textContent =
-            "Preview Ready";
-
-        toast(
-            "Local Preview berhasil dibuat. Ini bukan generative AI.",
-            "warning"
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            "Gagal membuat preview.",
-            "error"
-        );
-
-    } finally {
-
-        button.innerHTML = original;
-        button.disabled = false;
-    }
-}
-
-
-/* =========================================================
-   LOCAL POSTER GENERATOR
-   Hanya fallback UI/proof.
-   ========================================================= */
-
-async function buildLocalPoster(data, prompt) {
-
-    const orientation =
-        data.orientation;
-
-    let width = 1200;
-    let height = 1500;
-
-    if (orientation === "Landscape") {
-        width = 1600;
-        height = 1000;
-    }
-
-    if (orientation === "Square") {
-        width = 1200;
-        height = 1200;
-    }
-
-    const canvas =
-        document.createElement("canvas");
-
-    canvas.width = width;
-    canvas.height = height;
-
-    const ctx =
-        canvas.getContext("2d");
-
-    /*
-      Background.
-    */
-
-    const gradient =
-        ctx.createLinearGradient(
-            0,
-            0,
-            width,
-            height
-        );
-
-    if (data.colorMode === "CMYK") {
-
-        gradient.addColorStop(
-            0,
-            "#111111"
-        );
-
-        gradient.addColorStop(
-            .55,
-            "#252a18"
-        );
-
-        gradient.addColorStop(
-            1,
-            "#090909"
-        );
-
-    } else {
-
-        gradient.addColorStop(
-            0,
-            "#101218"
-        );
-
-        gradient.addColorStop(
-            .55,
-            "#171b25"
-        );
-
-        gradient.addColorStop(
-            1,
-            "#07080b"
-        );
-    }
-
-    ctx.fillStyle = gradient;
-
-    ctx.fillRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    /*
-      Accent.
-    */
-
-    ctx.fillStyle = "#d9ff3f";
-
-    ctx.fillRect(
-        width * .075,
-        height * .08,
-        width * .13,
-        7
-    );
-
-
-    /*
-      Brand.
-    */
-
-    ctx.fillStyle = "#ffffff";
-
-    ctx.font =
-        `800 ${Math.round(width * .028)}px Arial`;
-
-    ctx.fillText(
-        data.brand || "SEIKO STUDIO",
-        width * .075,
-        height * .13
-    );
-
-
-    /*
-      Headline.
-    */
-
-    const headline =
-        data.headline ||
-        data.type ||
-        "YOUR DESIGN";
-
-    const headlineSize =
-        Math.round(
-            Math.min(
-                width * .105,
-                130
-            )
-        );
-
-    ctx.font =
-        `900 ${headlineSize}px Arial`;
-
-    ctx.fillStyle =
-        "#ffffff";
-
-    wrapText(
-        ctx,
-        headline,
-        width * .075,
-        height * .31,
-        width * .78,
-        headlineSize * 1.05
-    );
-
-
-    /*
-      Supporting information.
-    */
-
-    if (data.support) {
-
-        ctx.font =
-            `400 ${Math.round(width * .022)}px Arial`;
-
-        ctx.fillStyle =
-            "#b8bdc7";
-
-        wrapText(
-            ctx,
-            data.support,
-            width * .075,
-            height * .61,
-            width * .72,
-            Math.round(width * .034)
-        );
-    }
-
-
-    /*
-      CTA.
-    */
-
-    const cta =
-        data.cta ||
-        "CALL TO ACTION";
-
-    const ctaY =
-        height * .79;
-
-    ctx.font =
-        `800 ${Math.round(width * .021)}px Arial`;
-
-    const ctaWidth =
-        ctx.measureText(cta).width + 70;
-
-    ctx.fillStyle =
-        "#d9ff3f";
-
-    roundRect(
-        ctx,
-        width * .075,
-        ctaY,
-        ctaWidth,
-        58,
-        12
-    );
-
-    ctx.fillStyle =
-        "#08090c";
-
-    ctx.fillText(
-        cta,
-        width * .075 + 35,
-        ctaY + 37
-    );
-
-
-    /*
-      Uploaded image reference.
-      Hanya sebagai visual reference sederhana,
-      bukan image-to-image AI.
-    */
-
-    if (state.files.length) {
-
-        const img =
-            await loadImage(
-                state.files[0].url
-            );
-
-        const boxX =
-            width * .57;
-
-        const boxY =
-            height * .18;
-
-        const boxW =
-            width * .32;
-
-        const boxH =
-            height * .42;
-
-        drawCoverImage(
-            ctx,
-            img,
-            boxX,
-            boxY,
-            boxW,
-            boxH
-        );
-
-        ctx.strokeStyle =
-            "rgba(217,255,63,.45)";
-
-        ctx.lineWidth = 2;
-
-        roundRectStroke(
-            ctx,
-            boxX,
-            boxY,
-            boxW,
-            boxH,
-            16
-        );
-    }
-
-
-    /*
-      Small footer metadata.
-    */
-
-    ctx.font =
-        `500 ${Math.round(width * .014)}px Arial`;
-
-    ctx.fillStyle =
-        "#666c78";
-
-    ctx.fillText(
-        `${data.colorMode} · ${data.resolution} · ${data.orientation}`,
-        width * .075,
-        height * .92
-    );
-
-    return canvas.toDataURL(
-        "image/png",
-        1
-    );
-}
-
-
-/* =========================================================
-   REVISION
-   ========================================================= */
-
-$("#revisionBtn").addEventListener(
-    "click",
-    executeRevision
-);
-
-
-async function executeRevision() {
-
-    const revision =
-        revisionText.value.trim();
-
-    if (!revision) {
-
-        toast(
-            "Masukkan instruksi revisi terlebih dahulu.",
-            "warning"
-        );
-
-        revisionText.focus();
-
-        return;
-    }
-
-    /*
-      Jika belum ada prompt sebelumnya,
-      generate prompt dasar sekali.
-    */
-
-    let basePrompt =
-        state.lastExecutedPrompt ||
-        aiPrompt.value.trim();
-
-    if (!basePrompt) {
-
-        generatePromptFromForm();
-
-        basePrompt =
-            aiPrompt.value.trim();
-    }
-
-    /*
-      Jangan menimpa prompt.
-      Revision dibuat sebagai prompt baru berdasarkan
-      prompt sebelumnya.
-    */
-
-    const revisedPrompt = [
-        "REVISION OF PREVIOUS DESIGN",
-        "",
-        "Previous prompt:",
-        basePrompt,
-        "",
-        "Revision instructions:",
-        revision,
-        "",
-        "Preserve important existing information, branding, hierarchy, and visual intent unless the revision explicitly changes them."
-    ].join("\n");
-
-    aiPrompt.value =
-        revisedPrompt;
-
-    toast(
-        "Prompt revisi dibuat berdasarkan prompt sebelumnya."
-    );
-
-    /*
-      Langsung generate hanya jika Local Preview.
-      Untuk provider AI, user bisa memeriksa/edit prompt
-      terlebih dahulu.
-    */
-
-    if (provider.value === "local-preview") {
-
-        await executeGenerateDesign();
-
-    } else {
-
-        toast(
-            "Periksa prompt revisi lalu tekan GENERATE DESIGN.",
-            "warning"
-        );
-
-        aiPrompt.focus();
-    }
-}
-
-
-/* =========================================================
-   REGENERATE
-   ========================================================= */
-
-$("#regenerateBtn").addEventListener(
-    "click",
-    async () => {
-
-        if (!state.lastExecutedPrompt) {
-
-            toast(
-                "Belum ada desain yang bisa diregenerate.",
-                "warning"
-            );
-
-            return;
-        }
-
-        aiPrompt.value =
-            state.lastExecutedPrompt;
-
-        await executeGenerateDesign();
-    }
-);
-
-
-/* =========================================================
-   PREVIEW ACTIONS
-   ========================================================= */
-
-function setPreview(url) {
-
-    state.lastDesignUrl = url;
-
-    previewImage.src = url;
-
-    previewImage.style.display =
-        "block";
-
-    previewPlaceholder.style.display =
-        "none";
-
-    updateMeta();
-}
-
-
-function updateMeta() {
-
-    const data =
-        getFormData();
-
-    $("#metaMode").textContent =
-        data.colorMode;
-
-    $("#metaSize").textContent =
-        data.size || "Auto";
-
-    $("#metaOrientation").textContent =
-        data.orientation;
-
-    $("#metaResolution").textContent =
-        data.resolution;
-}
-
-
-$("#useDesignBtn").addEventListener(
-    "click",
-    () => {
-
-        if (!state.lastDesignUrl) {
-
-            toast(
-                "Belum ada desain untuk digunakan.",
-                "warning"
-            );
-
-            return;
-        }
-
-        state.designUsed = true;
-
-        $("#metaStatus").textContent =
-            "Selected";
-
-        toast(
-            "Desain ditandai sebagai desain yang digunakan."
-        );
-    }
-);
-
-
-$("#reviseBtn").addEventListener(
-    "click",
-    () => {
-
-        revisionText.focus();
-
-        document
-            .querySelector(".section:nth-of-type(8)")
-            ?.scrollIntoView({
-                behavior:"smooth",
-                block:"center"
-            });
-    }
-);
-
-
-/* =========================================================
-   DOWNLOAD
-   ========================================================= */
-
-$("#downloadBtn").addEventListener(
-    "click",
-    downloadDesign
-);
-
-
-function downloadDesign() {
-
-    if (!state.lastDesignUrl) {
-
-        toast(
-            "Belum ada desain untuk di-download.",
-            "warning"
-        );
-
-        return;
-    }
-
-    const data =
-        getFormData();
-
-    const link =
-        document.createElement("a");
-
-    link.href =
-        state.lastDesignUrl;
-
-    const safeBrand =
-        (data.brand || "SEIKO_STUDIO")
-            .replace(
-                /[^a-z0-9_-]/gi,
-                "_"
-            );
-
-    link.download =
-        `${safeBrand}_DESIGN_${Date.now()}.png`;
-
-    document.body.appendChild(link);
-
-    link.click();
-
-    link.remove();
-
-    toast(
-        "Preview PNG berhasil di-download."
-    );
-}
-
-
-/* =========================================================
-   PROMPT USED
-   ========================================================= */
-
-$("#copyPromptBtn").addEventListener(
-    "click",
-    async () => {
-
-        const text =
-            promptUsed.value.trim();
-
-        if (!text) {
-
-            toast(
-                "Belum ada prompt yang digunakan.",
-                "warning"
-            );
-
-            return;
-        }
-
-        try {
-
-            await navigator.clipboard.writeText(text);
-
-            toast(
-                "Prompt berhasil disalin."
-            );
-
-        } catch {
-
-            promptUsed.removeAttribute("readonly");
-
-            promptUsed.select();
-
-            document.execCommand("copy");
-
-            promptUsed.setAttribute(
-                "readonly",
-                ""
-            );
-
-            toast(
-                "Prompt berhasil disalin."
-            );
-        }
-    }
-);
-
-
-$("#editPromptBtn").addEventListener(
-    "click",
-    () => {
-
-        const current =
-            promptUsed.value;
-
-        aiPrompt.value =
-            current;
-
-        aiPrompt.focus();
-
-        aiPrompt.scrollIntoView({
-            behavior:"smooth",
-            block:"center"
+      }
+
+      const selectedModel = document.getElementById('selectAIModel').value;
+      const btnGen = document.getElementById('btnGenerateDesign');
+      const processText = document.getElementById('processStepText');
+
+      // Update State: Generating...
+      btnGen.disabled = true;
+      btnGen.classList.add('opacity-50', 'cursor-not-allowed');
+      btnGen.innerHTML = `<span>⏳ GENERATING...</span>`;
+      processText.innerText = 'Status: Preparing Prompt → Processing → Sending Request...';
+
+      try {
+        // Panggil Serverless API Backend
+        const response = await fetch('/api/generate-image', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            provider: selectedModel,
+            prompt: promptToUse,
+            images: uploadedImages,
+            mode: currentAIMode
+          })
         });
 
-        toast(
-            "Prompt dipindahkan ke editor."
-        );
-    }
-);
+        const data = await response.json();
 
-
-/* =========================================================
-   FORM CHANGE → META
-   ========================================================= */
-
-[
-    "#size",
-    "#orientation",
-    "#resolution"
-].forEach(selector => {
-
-    $(selector).addEventListener(
-        "input",
-        updateMeta
-    );
-
-    $(selector).addEventListener(
-        "change",
-        updateMeta
-    );
-});
-
-
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-function delay(ms) {
-    return new Promise(
-        resolve => setTimeout(resolve, ms)
-    );
-}
-
-
-function escapeHtml(value) {
-
-    return String(value)
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-}
-
-
-function wrapText(
-    ctx,
-    text,
-    x,
-    y,
-    maxWidth,
-    lineHeight
-) {
-
-    const words =
-        String(text).split(/\s+/);
-
-    let line = "";
-    let currentY = y;
-
-    for (let i = 0; i < words.length; i++) {
-
-        const test =
-            line
-                ? `${line} ${words[i]}`
-                : words[i];
-
-        const width =
-            ctx.measureText(test).width;
-
-        if (
-            width > maxWidth &&
-            line
-        ) {
-
-            ctx.fillText(
-                line,
-                x,
-                currentY
-            );
-
-            line =
-                words[i];
-
-            currentY +=
-                lineHeight;
-
-        } else {
-
-            line = test;
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || 'Gagal menghasilkan gambar dari API.');
         }
+
+        // BERHASIL: Update UI dengan hasil AI sebenarnya
+        lastGeneratedImageUrl = data.imageUrl;
+        lastUsedPrompt = data.promptUsed;
+
+        const imgResult = document.getElementById('generatedImageResult');
+        imgResult.src = data.imageUrl;
+        imgResult.classList.remove('hidden');
+
+        document.getElementById('previewPlaceholder').classList.add('hidden');
+        document.getElementById('previewActions').classList.remove('hidden');
+
+        // Status Badges
+        const badge = document.getElementById('previewStatusBadge');
+        badge.innerText = `Generated via ${data.provider}`;
+        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+        // Update Section 09 — PROMPT USED
+        document.getElementById('promptUsedBox').innerText = data.promptUsed;
+
+        processText.innerText = 'Status: Preview Ready!';
+
+      } catch (err) {
+        showError(err.message || 'Terjadi kesalahan sistem.');
+        processText.innerText = 'Status: Generation Failed.';
+      } finally {
+        // Re-enable button
+        btnGen.disabled = false;
+        btnGen.classList.remove('opacity-50', 'cursor-not-allowed');
+        btnGen.innerHTML = `<span>✨ GENERATE DESIGN</span>`;
+      }
     }
 
-    if (line) {
+    // ↻ GENERATE REVISION
+    async function executeRevision() {
+      hideError();
+      const instruction = document.getElementById('revisionInstruction').value.trim();
 
-        ctx.fillText(
-            line,
-            x,
-            currentY
-        );
-    }
-}
+      if (!instruction) {
+        showError('Silakan isi instruksi perubahan desain pada bagian Revision.');
+        return;
+      }
 
+      if (!lastUsedPrompt) {
+        showError('Belum ada desain sebelumnya yang dihasilkan. Lakukan GENERATE DESIGN terlebih dahulu.');
+        return;
+      }
 
-function roundRect(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    radius
-) {
+      // Gabungkan prompt sebelumnya dengan instruksi revisi baru
+      const revisedPrompt = `${lastUsedPrompt}\n\n[REVISION INSTRUCTIONS]: ${instruction}`;
 
-    ctx.beginPath();
+      // Masukkan ke prompt textarea
+      document.getElementById('aiPrompt').value = revisedPrompt;
 
-    ctx.roundRect(
-        x,
-        y,
-        width,
-        height,
-        radius
-    );
-
-    ctx.fill();
-}
-
-
-function roundRectStroke(
-    ctx,
-    x,
-    y,
-    width,
-    height,
-    radius
-) {
-
-    ctx.beginPath();
-
-    ctx.roundRect(
-        x,
-        y,
-        width,
-        height,
-        radius
-    );
-
-    ctx.stroke();
-}
-
-
-function loadImage(src) {
-
-    return new Promise(
-        (resolve, reject) => {
-
-            const img =
-                new Image();
-
-            img.onload =
-                () => resolve(img);
-
-            img.onerror =
-                reject;
-
-            img.src = src;
-        }
-    );
-}
-
-
-function drawCoverImage(
-    ctx,
-    img,
-    x,
-    y,
-    width,
-    height
-) {
-
-    const imageRatio =
-        img.width / img.height;
-
-    const boxRatio =
-        width / height;
-
-    let sx = 0;
-    let sy = 0;
-    let sw = img.width;
-    let sh = img.height;
-
-    if (imageRatio > boxRatio) {
-
-        sw =
-            img.height * boxRatio;
-
-        sx =
-            (img.width - sw) / 2;
-
-    } else {
-
-        sh =
-            img.width / boxRatio;
-
-        sy =
-            (img.height - sh) / 2;
+      // Jalankan generate ulang
+      await executeGenerateDesign();
     }
 
-    ctx.save();
+    // Section 09 Action Buttons
+    function copyPromptUsed() {
+      if (!lastUsedPrompt) {
+        showError('Belum ada prompt yang dieksekusi untuk disalin.');
+        return;
+      }
+      navigator.clipboard.writeText(lastUsedPrompt);
+      alert('Prompt berhasil disalin ke clipboard!');
+    }
 
-    ctx.beginPath();
+    function editPromptUsed() {
+      if (!lastUsedPrompt) return;
+      const promptArea = document.getElementById('aiPrompt');
+      promptArea.value = lastUsedPrompt;
+      promptArea.focus();
+      window.scrollTo({ top: promptArea.offsetTop - 100, behavior: 'smooth' });
+    }
 
-    ctx.roundRect(
-        x,
-        y,
-        width,
-        height,
-        16
-    );
+    function focusRevision() {
+      const revArea = document.getElementById('revisionInstruction');
+      revArea.focus();
+      window.scrollTo({ top: revArea.offsetTop - 100, behavior: 'smooth' });
+    }
 
-    ctx.clip();
+    function useDesign() {
+      alert('Desain disetujui untuk proses percetakan / ekspor produksi.');
+    }
 
-    ctx.drawImage(
-        img,
-        sx,
-        sy,
-        sw,
-        sh,
-        x,
-        y,
-        width,
-        height
-    );
+    // Download Design Result
+    function downloadDesign() {
+      if (!lastGeneratedImageUrl) {
+        showError('Belum ada hasil desain yang siap didownload.');
+        return;
+      }
 
-    ctx.restore();
-}
-
-
-/* =========================================================
-   INITIALIZE
-   ========================================================= */
-
-updateColorMode();
-updateProviderStatus();
-updateMeta();
-
-</script>
-
+      const a = document.createElement('a');
+      a.href = lastGeneratedImageUrl;
+      a.download = `SEIKO_STUDIO_DESIGN_${Date.now()}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+  </script>
 </body>
 </html>
