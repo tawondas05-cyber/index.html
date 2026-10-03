@@ -7,127 +7,328 @@
 
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:#f5f7fb;
+  color:#172033;
+}
+
 .app{display:flex;min-height:100vh}
 
 .sidebar{
- width:220px;background:#101828;color:#fff;padding:24px 15px;
- position:fixed;top:0;bottom:0;left:0
+  width:220px;
+  background:#101828;
+  color:#fff;
+  padding:24px 15px;
+  position:fixed;
+  top:0;
+  bottom:0;
+  left:0;
 }
-.logo{font-size:21px;font-weight:800;margin-bottom:4px}
-.logo span{color:#7c6cff}
-.sub{font-size:10px;color:#98a2b3;margin-bottom:35px}
-.menu-title{font-size:10px;color:#667085;font-weight:bold;margin:20px 9px 8px}
-.menu a{
- display:block;text-decoration:none;color:#cbd5e1;padding:10px 11px;
- border-radius:8px;font-size:13px;margin-bottom:3px
-}
-.menu a:hover,.menu a.active{background:#1d2939;color:#fff}
 
-.main{margin-left:220px;width:calc(100% - 220px)}
-.topbar{
- height:65px;background:#fff;border-bottom:1px solid #e4e7ec;
- display:flex;align-items:center;padding:0 25px
+.logo{
+  font-size:21px;
+  font-weight:800;
+  margin-bottom:4px;
 }
+
+.logo span{color:#7c6cff}
+
+.sub{
+  font-size:10px;
+  color:#98a2b3;
+  margin-bottom:35px;
+}
+
+.menu-title{
+  font-size:10px;
+  color:#667085;
+  font-weight:bold;
+  margin:20px 9px 8px;
+}
+
+.menu a{
+  display:block;
+  text-decoration:none;
+  color:#cbd5e1;
+  padding:10px 11px;
+  border-radius:8px;
+  font-size:13px;
+  margin-bottom:3px;
+}
+
+.menu a:hover,
+.menu a.active{
+  background:#1d2939;
+  color:#fff;
+}
+
+.main{
+  margin-left:220px;
+  width:calc(100% - 220px);
+}
+
+.topbar{
+  height:65px;
+  background:#fff;
+  border-bottom:1px solid #e4e7ec;
+  display:flex;
+  align-items:center;
+  padding:0 25px;
+}
+
 .topbar strong{font-size:17px}
+
 .content{padding:24px}
+
 .page-title{margin-bottom:18px}
-.page-title h1{font-size:24px;margin-bottom:5px}
-.page-title p{font-size:13px;color:#667085}
+
+.page-title h1{
+  font-size:24px;
+  margin-bottom:5px;
+}
+
+.page-title p{
+  font-size:13px;
+  color:#667085;
+}
 
 .workspace{
- display:grid;
- grid-template-columns:minmax(450px,1.1fr) minmax(350px,.9fr);
- gap:18px
+  display:grid;
+  grid-template-columns:minmax(450px,1.1fr) minmax(350px,.9fr);
+  gap:18px;
 }
+
 .card{
- background:#fff;border:1px solid #e4e7ec;border-radius:13px;
- padding:19px;margin-bottom:17px
+  background:#fff;
+  border:1px solid #e4e7ec;
+  border-radius:13px;
+  padding:19px;
+  margin-bottom:17px;
 }
-.card-title{font-size:13px;font-weight:800;margin-bottom:15px}
+
+.card-title{
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:15px;
+}
 
 label{
- display:block;font-size:12px;font-weight:bold;color:#344054;
- margin-bottom:6px
+  display:block;
+  font-size:12px;
+  font-weight:bold;
+  color:#344054;
+  margin-bottom:6px;
 }
-input,textarea,select{
- width:100%;padding:10px;border:1px solid #d0d5dd;
- border-radius:8px;background:#fff;font-size:13px;
- margin-bottom:12px;outline:none
-}
-textarea{min-height:75px;resize:vertical}
-input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 
-.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+input,textarea,select{
+  width:100%;
+  padding:10px;
+  border:1px solid #d0d5dd;
+  border-radius:8px;
+  background:#fff;
+  font-size:13px;
+  margin-bottom:12px;
+  outline:none;
+}
+
+textarea{
+  min-height:75px;
+  resize:vertical;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#6d5dfc;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
 
 .upload{
- border:1.5px dashed #cbd5e1;border-radius:10px;
- padding:22px;text-align:center;background:#fafbfc;
- color:#667085;cursor:pointer
+  border:1.5px dashed #cbd5e1;
+  border-radius:10px;
+  padding:22px;
+  text-align:center;
+  background:#fafbfc;
+  color:#667085;
+  cursor:pointer;
 }
-.upload strong{display:block;color:#344054;margin-bottom:5px}
+
+.upload strong{
+  display:block;
+  color:#344054;
+  margin-bottom:5px;
+}
+
 .upload input{display:none}
 
-.tools{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
-.tool{
- padding:10px;border:1px solid #d0d5dd;border-radius:8px;
- text-align:center;font-size:12px;cursor:pointer
+.tools{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:10px;
 }
-.tool:hover{border-color:#6d5dfc}
 
-.modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.mode{
- border:1px solid #d0d5dd;border-radius:10px;
- padding:13px;cursor:pointer
+.tool{
+  padding:10px;
+  border:1px solid #d0d5dd;
+  border-radius:8px;
+  text-align:center;
+  font-size:12px;
 }
-.mode.active{border:2px solid #6d5dfc;background:#f8f7ff}
+
+.modes{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.mode{
+  border:1px solid #d0d5dd;
+  border-radius:10px;
+  padding:13px;
+  cursor:pointer;
+}
+
+.mode.active{
+  border:2px solid #6d5dfc;
+  background:#f8f7ff;
+}
+
 .mode b{font-size:13px}
-.mode small{display:block;color:#667085;font-size:10px;margin-top:4px}
+
+.mode small{
+  display:block;
+  color:#667085;
+  font-size:10px;
+  margin-top:4px;
+}
 
 .generate{
- width:100%;border:0;border-radius:9px;
- padding:13px;background:#6d5dfc;color:#fff;
- font-size:14px;font-weight:bold;cursor:pointer
+  width:100%;
+  border:0;
+  border-radius:9px;
+  padding:13px;
+  background:#6d5dfc;
+  color:#fff;
+  font-size:14px;
+  font-weight:bold;
+  cursor:pointer;
 }
+
 .generate:hover{background:#5948ed}
-.generate:disabled{opacity:.65;cursor:wait}
 
-.preview{min-height:450px}
+.preview{
+  min-height:450px;
+}
+
 .preview-box{
- min-height:370px;border:1px dashed #d0d5dd;
- background:#f8fafc;border-radius:11px;
- display:flex;align-items:center;justify-content:center;
- text-align:center;padding:20px;overflow:hidden
-}
-.empty-icon{font-size:42px;margin-bottom:10px}
-.preview-box h3{font-size:15px}
-.preview-box p{font-size:12px;color:#667085;margin-top:5px}
-.preview-img{
- max-width:100%;max-height:390px;border-radius:9px;
- display:none;object-fit:contain
-}
-.actions{display:none;gap:8px;margin-top:10px}
-.actions button{
- flex:1;padding:10px;border:1px solid #d0d5dd;
- background:#fff;border-radius:8px;font-weight:bold;cursor:pointer
+  min-height:370px;
+  border:1px dashed #d0d5dd;
+  background:#f8fafc;
+  border-radius:11px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:20px;
+  overflow:hidden;
 }
 
-.outputs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
-.outputs label{
- border:1px solid #d0d5dd;border-radius:7px;
- padding:9px;font-weight:600;cursor:pointer
+.empty-icon{
+  font-size:42px;
+  margin-bottom:10px;
 }
-.outputs input{width:auto;margin:0 4px 0 0}
+
+.preview-box h3{font-size:15px}
+
+.preview-box p{
+  font-size:12px;
+  color:#667085;
+  margin-top:5px;
+}
+
+#designCanvas{
+  max-width:100%;
+  max-height:520px;
+  width:auto;
+  height:auto;
+  display:none;
+  border-radius:8px;
+  box-shadow:0 8px 25px rgba(16,24,40,.15);
+}
+
+.actions{
+  display:none;
+  gap:8px;
+  margin-top:10px;
+}
+
+.actions button{
+  flex:1;
+  padding:10px;
+  border:1px solid #d0d5dd;
+  background:#fff;
+  border-radius:8px;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+.actions button:hover{
+  background:#f2f4f7;
+}
+
+.outputs{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:7px;
+}
+
+.outputs label{
+  border:1px solid #d0d5dd;
+  border-radius:7px;
+  padding:9px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.outputs input{
+  width:auto;
+  margin:0 4px 0 0;
+}
+
+.file-info{
+  font-size:11px;
+  color:#667085;
+  margin-top:7px;
+  line-height:1.5;
+}
+
+.status{
+  margin-top:10px;
+  font-size:12px;
+  color:#667085;
+}
 
 @media(max-width:1000px){
- .sidebar{display:none}
- .main{margin-left:0;width:100%}
- .workspace{grid-template-columns:1fr}
+  .sidebar{display:none}
+  .main{
+    margin-left:0;
+    width:100%;
+  }
+  .workspace{grid-template-columns:1fr}
 }
+
 @media(max-width:600px){
- .content{padding:14px}
- .row,.modes{grid-template-columns:1fr}
- .outputs{grid-template-columns:1fr 1fr}
+  .content{padding:14px}
+  .row,.modes{grid-template-columns:1fr}
+  .outputs{grid-template-columns:1fr 1fr}
 }
 </style>
 </head>
@@ -137,47 +338,59 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 <div class="app">
 
 <aside class="sidebar">
- <div class="logo">SEIKO <span>STUDIO</span></div>
- <div class="sub">AI DESIGN & PRINTING</div>
 
- <div class="menu-title">WORKSPACE</div>
- <div class="menu">
-  <a class="active" href="#">＋ Project</a>
-  <a href="#">Projects</a>
-  <a href="#">Designs</a>
-  <a href="#">Templates</a>
- </div>
+  <div class="logo">SEIKO <span>STUDIO</span></div>
+  <div class="sub">AI DESIGN & PRINTING</div>
 
- <div class="menu-title">AI TOOLS</div>
- <div class="menu">
-  <a href="#">🎤 Voice Input</a>
-  <a href="#">🖼 Vision</a>
- </div>
+  <div class="menu-title">WORKSPACE</div>
 
- <div class="menu-title">SYSTEM</div>
- <div class="menu">
-  <a href="#">Settings</a>
- </div>
+  <div class="menu">
+    <a class="active" href="#">＋ Project</a>
+    <a href="#">Projects</a>
+    <a href="#">Designs</a>
+    <a href="#">Templates</a>
+  </div>
+
+  <div class="menu-title">AI TOOLS</div>
+
+  <div class="menu">
+    <a href="#">🎤 Voice Input</a>
+    <a href="#">🖼 Vision</a>
+  </div>
+
+  <div class="menu-title">SYSTEM</div>
+
+  <div class="menu">
+    <a href="#">Settings</a>
+  </div>
+
 </aside>
+
 
 <main class="main">
 
 <header class="topbar">
- <strong>Project Studio</strong>
+  <strong>Project Studio</strong>
 </header>
+
 
 <section class="content">
 
 <div class="page-title">
- <h1>Buat Desain Baru</h1>
- <p>Masukkan data, bahan visual, dan spesifikasi. AI akan membantu membuat desain.</p>
+  <h1>Buat Desain Baru</h1>
+  <p>Masukkan data, bahan visual, dan spesifikasi. Generate berjalan langsung di browser.</p>
 </div>
 
+
 <div class="workspace">
+
+
+<!-- LEFT -->
 
 <div>
 
 <div class="card">
+
 <div class="card-title">INFORMASI DESAIN</div>
 
 <label>Jenis Desain</label>
@@ -194,44 +407,65 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 
 <label>Slogan / CTA</label>
 <input id="slogan" placeholder="Contoh: Pesan Sekarang">
+
 </div>
 
+
 <div class="card">
+
 <div class="card-title">KONTAK & INFORMASI</div>
 
 <div class="row">
+
 <div>
 <label>WhatsApp</label>
 <input id="whatsapp" placeholder="08xxxxxxxxxx">
 </div>
+
 <div>
 <label>Instagram</label>
 <input id="instagram" placeholder="@username">
 </div>
+
 </div>
 
+
 <div class="row">
+
 <div>
 <label>TikTok</label>
 <input id="tiktok" placeholder="@username">
 </div>
+
 <div>
 <label>Facebook / YouTube</label>
 <input id="social" placeholder="Username / link">
 </div>
+
 </div>
+
 
 <label>Alamat</label>
 <input id="alamat" placeholder="Alamat / lokasi">
+
 </div>
 
+
 <div class="card">
+
 <div class="card-title">BAHAN VISUAL</div>
 
 <label class="upload">
+
 <strong>＋ Upload Files</strong>
-Logo • Foto • Referensi • Screenshot • Dokumen
-<input id="files" type="file" multiple accept="image/*,.pdf,.doc,.docx">
+
+Logo • Foto • Referensi • Screenshot
+
+<input id="files"
+       type="file"
+       multiple
+       accept="image/*">
+
 </label>
 
 <div class="tools">
@@ -239,298 +473,1187 @@ Logo • Foto • Referensi • Screenshot • Dokumen
 <div class="tool">🖼 Vision</div>
 <div class="tool">📎 Files</div>
 </div>
+
+<div id="fileInfo" class="file-info"></div>
+
 </div>
 
+
 <div class="card">
+
 <div class="card-title">COLOR MODE</div>
 
 <div class="modes">
 
-<div class="mode active" onclick="setMode(this,'RGB')">
+<div class="mode active"
+     onclick="setMode(this,'RGB')">
+
 <b>🌈 RGB</b>
-<small>MEDIA DIGITAL<br>Social Media • Website • Display</small>
+
+<small>
+MEDIA DIGITAL<br>
+Social Media • Website • Display
+</small>
+
 </div>
 
-<div class="mode" onclick="setMode(this,'CMYK')">
+
+<div class="mode"
+     onclick="setMode(this,'CMYK')">
+
 <b>🖨 CMYK</b>
-<small>PERCETAKAN<br>Banner • Poster • Brosur • ID Card</small>
-</div>
+
+<small>
+PERCETAKAN<br>
+Banner • Poster • Brosur • ID Card
+</small>
 
 </div>
 
-<input type="hidden" id="colorMode" value="RGB">
 </div>
+
+<input type="hidden"
+       id="colorMode"
+       value="RGB">
+
+</div>
+
 
 <div class="card">
+
 <div class="card-title">SPESIFIKASI DESAIN</div>
 
 <div class="row">
-<div>
-<label>Ukuran</label>
-<input id="ukuran" placeholder="300 × 100 cm">
-</div>
 
 <div>
+
+<label>Ukuran</label>
+
+<input id="ukuran"
+       placeholder="300 × 100 cm">
+
+</div>
+
+
+<div>
+
 <label>Orientasi</label>
+
 <select id="orientasi">
+
 <option>Landscape</option>
 <option>Portrait</option>
 <option>Square</option>
+
 </select>
+
 </div>
+
 </div>
+
 
 <div class="row">
-<div>
-<label>Bleed</label>
-<input id="bleed" value="3 mm">
-</div>
 
 <div>
+
+<label>Bleed</label>
+
+<input id="bleed"
+       value="3 mm">
+
+</div>
+
+
+<div>
+
 <label>Resolusi</label>
+
 <select id="resolusi">
+
 <option>300 DPI</option>
 <option>150 DPI</option>
 <option>96 DPI</option>
+
 </select>
-</div>
+
 </div>
 
-<label><input type="checkbox" id="pdf" checked style="width:auto"> Print-ready PDF</label>
-<label><input type="checkbox" id="bleedCheck" checked style="width:auto"> Include Bleed</label>
-<label><input type="checkbox" id="crop" style="width:auto"> Crop Marks</label>
 </div>
+
+
+<label>
+<input type="checkbox"
+       id="pdf"
+       checked
+       style="width:auto">
+
+Print-ready PDF
+
+</label>
+
+
+<label>
+<input type="checkbox"
+       id="bleedCheck"
+       checked
+       style="width:auto">
+
+Include Bleed
+
+</label>
+
+
+<label>
+<input type="checkbox"
+       id="crop"
+       style="width:auto">
+
+Crop Marks
+
+</label>
+
+</div>
+
 
 <div class="card">
+
 <div class="card-title">INSTRUKSI TAMBAHAN</div>
 
 <textarea id="instruksi"
 placeholder="Contoh: premium, modern, elegan, mudah dibaca, warna biru putih..."></textarea>
 
-<button class="generate" onclick="generateDesign()">
+<button class="generate"
+        onclick="generateDesign()">
+
 ✨ GENERATE DESIGN
+
 </button>
+
+<div id="status"
+     class="status"></div>
+
 </div>
 
 </div>
+
+
+<!-- RIGHT -->
 
 <div>
 
+
 <div class="card preview">
+
 <div class="card-title">AI DESIGN PREVIEW</div>
 
 <div class="preview-box">
 
 <div id="empty">
+
 <div class="empty-icon">✦</div>
+
 <h3>Belum ada desain</h3>
-<p>Isi data kemudian klik Generate Design.</p>
+
+<p>
+Isi data kemudian klik Generate Design.
+</p>
+
 </div>
 
-<img id="previewImg" class="preview-img">
+
+<canvas id="designCanvas"></canvas>
 
 </div>
 
-<div class="actions" id="actions">
-<button onclick="useDesign()">✓ Gunakan</button>
-<button onclick="focusRevision()">✎ Revisi</button>
-<button onclick="generateDesign()">↻ Regenerate</button>
+
+<div class="actions"
+     id="actions">
+
+<button onclick="useDesign()">
+✓ Gunakan
+</button>
+
+<button onclick="focusRevision()">
+✎ Revisi
+</button>
+
+<button onclick="generateDesign()">
+↻ Regenerate
+</button>
+
 </div>
+
 </div>
+
 
 <div class="card">
-<div class="card-title">REVISI DESAIN</div>
+
+<div class="card-title">
+REVISI DESAIN
+</div>
 
 <textarea id="revisi"
 placeholder="Contoh: ubah warna menjadi merah, buat judul lebih besar..."></textarea>
 
-<button class="generate" onclick="generateRevision()">
+<button class="generate"
+        onclick="generateRevision()">
+
 ✨ GENERATE REVISI
+
 </button>
+
 </div>
+
 
 <div class="card">
-<div class="card-title">OUTPUT FILE</div>
+
+<div class="card-title">
+OUTPUT FILE
+</div>
+
 
 <div class="outputs">
-<label><input type="checkbox" checked> PDF</label>
-<label><input type="checkbox"> JPG</label>
-<label><input type="checkbox"> PNG</label>
-<label><input type="checkbox"> TIFF</label>
-<label><input type="checkbox"> CDR</label>
-<label><input type="checkbox"> AI</label>
-<label><input type="checkbox"> PSD</label>
+
+<label>
+<input type="checkbox" checked>
+PDF
+</label>
+
+<label>
+<input type="checkbox" checked>
+JPG
+</label>
+
+<label>
+<input type="checkbox" checked>
+PNG
+</label>
+
+<label>
+<input type="checkbox">
+TIFF
+</label>
+
+<label>
+<input type="checkbox">
+CDR
+</label>
+
+<label>
+<input type="checkbox">
+AI
+</label>
+
+<label>
+<input type="checkbox">
+PSD
+</label>
+
 </div>
 
-<button class="generate" style="margin-top:14px" onclick="downloadFile()">
+
+<button class="generate"
+        style="margin-top:14px"
+        onclick="downloadFile()">
+
 ↓ DOWNLOAD FILE
+
 </button>
+
 </div>
+
 
 </div>
 
 </div>
+
 </section>
+
 </main>
+
 </div>
+
 
 <script>
 
 let currentMode = "RGB";
 
+let uploadedImages = [];
+
+let lastDesignData = null;
+
+
+/* =========================
+   MODE
+========================= */
+
 function setMode(el,mode){
 
- document.querySelectorAll(".mode")
- .forEach(x=>x.classList.remove("active"));
+  document.querySelectorAll(".mode")
+  .forEach(x => x.classList.remove("active"));
 
- el.classList.add("active");
+  el.classList.add("active");
 
- currentMode = mode;
- document.getElementById("colorMode").value = mode;
+  currentMode = mode;
+
+  document.getElementById("colorMode").value = mode;
 }
+
+
+/* =========================
+   FILE UPLOAD
+========================= */
+
+document.getElementById("files").addEventListener(
+  "change",
+  async function(){
+
+    uploadedImages = [];
+
+    const files = Array.from(this.files);
+
+    const info = document.getElementById("fileInfo");
+
+    if(!files.length){
+      info.innerHTML = "";
+      return;
+    }
+
+    info.innerHTML =
+      files.length +
+      " file dipilih.";
+
+    for(const file of files){
+
+      if(!file.type.startsWith("image/"))
+        continue;
+
+      const reader = new FileReader();
+
+      reader.onload = function(e){
+
+        const img = new Image();
+
+        img.onload = function(){
+
+          uploadedImages.push(img);
+
+        };
+
+        img.src = e.target.result;
+
+      };
+
+      reader.readAsDataURL(file);
+
+    }
+
+  }
+);
+
+
+/* =========================
+   GET DATA
+========================= */
 
 function getData(){
 
- return {
+  return {
 
-  jenis:document.getElementById("jenis").value,
-  judul:document.getElementById("judul").value,
-  subjudul:document.getElementById("subjudul").value,
-  deskripsi:document.getElementById("deskripsi").value,
-  slogan:document.getElementById("slogan").value,
+    jenis:
+      document.getElementById("jenis").value,
 
-  whatsapp:document.getElementById("whatsapp").value,
-  instagram:document.getElementById("instagram").value,
-  tiktok:document.getElementById("tiktok").value,
-  social:document.getElementById("social").value,
-  alamat:document.getElementById("alamat").value,
+    judul:
+      document.getElementById("judul").value,
 
-  ukuran:document.getElementById("ukuran").value,
-  orientasi:document.getElementById("orientasi").value,
-  bleed:document.getElementById("bleed").value,
-  resolusi:document.getElementById("resolusi").value,
+    subjudul:
+      document.getElementById("subjudul").value,
 
-  colorMode:currentMode,
-  instruksi:document.getElementById("instruksi").value,
+    deskripsi:
+      document.getElementById("deskripsi").value,
 
-  revision:document.getElementById("revisi").value
- };
+    slogan:
+      document.getElementById("slogan").value,
+
+    whatsapp:
+      document.getElementById("whatsapp").value,
+
+    instagram:
+      document.getElementById("instagram").value,
+
+    tiktok:
+      document.getElementById("tiktok").value,
+
+    social:
+      document.getElementById("social").value,
+
+    alamat:
+      document.getElementById("alamat").value,
+
+    ukuran:
+      document.getElementById("ukuran").value,
+
+    orientasi:
+      document.getElementById("orientasi").value,
+
+    bleed:
+      document.getElementById("bleed").value,
+
+    resolusi:
+      document.getElementById("resolusi").value,
+
+    colorMode:
+      currentMode,
+
+    instruksi:
+      document.getElementById("instruksi").value,
+
+    revision:
+      document.getElementById("revisi").value
+
+  };
+
 }
 
-async function generateDesign(){
 
- const data = getData();
+/* =========================
+   GENERATE
+========================= */
 
- const buttons = document.querySelectorAll(".generate");
- const button = buttons[0];
+function generateDesign(){
 
- button.disabled = true;
- button.innerText = "⏳ GENERATING...";
+  const data = getData();
 
- const empty = document.getElementById("empty");
+  lastDesignData = data;
 
- empty.innerHTML = `
-  <div class="empty-icon">⏳</div>
-  <h3>AI sedang membuat desain...</h3>
-  <p>Mohon tunggu.</p>
- `;
+  const status =
+    document.getElementById("status");
 
- try{
+  status.innerText =
+    "⏳ Membuat desain...";
 
-  const response = await fetch("/api/generate",{
-   method:"POST",
-   headers:{
-    "Content-Type":"application/json"
-   },
-   body:JSON.stringify(data)
+  setTimeout(function(){
+
+    drawDesign(data);
+
+    status.innerText =
+      "✓ Desain berhasil dibuat tanpa API.";
+
+  },300);
+
+}
+
+
+/* =========================
+   COLOR
+========================= */
+
+function getColors(data){
+
+  const text =
+    (
+      data.instruksi +
+      " " +
+      data.judul +
+      " " +
+      data.jenis
+    ).toLowerCase();
+
+
+  if(text.includes("merah")){
+    return ["#b42318","#f04438","#fff1f0"];
+  }
+
+  if(text.includes("biru")){
+    return ["#175cd3","#2e90fa","#eff8ff"];
+  }
+
+  if(text.includes("hijau")){
+    return ["#027a48","#12b76a","#ecfdf3"];
+  }
+
+  if(text.includes("ungu")){
+    return ["#6941c6","#9e77ed","#f9f5ff"];
+  }
+
+  if(text.includes("hitam")){
+    return ["#101828","#344054","#f9fafb"];
+  }
+
+  if(text.includes("orange") ||
+     text.includes("oranye")){
+    return ["#c4320a","#f97066","#fff4ed"];
+  }
+
+  if(data.colorMode === "CMYK"){
+    return ["#175cd3","#7f56d9","#ffffff"];
+  }
+
+  return ["#4f46e5","#7c6cff","#f8f7ff"];
+
+}
+
+
+/* =========================
+   TEXT WRAP
+========================= */
+
+function wrapText(ctx,text,maxWidth){
+
+  const words =
+    String(text || "").split(/\s+/);
+
+  const lines = [];
+
+  let line = "";
+
+  for(const word of words){
+
+    const test =
+      line ? line + " " + word : word;
+
+    if(ctx.measureText(test).width > maxWidth &&
+       line){
+
+      lines.push(line);
+
+      line = word;
+
+    }else{
+
+      line = test;
+
+    }
+
+  }
+
+  if(line)
+    lines.push(line);
+
+  return lines;
+
+}
+
+
+/* =========================
+   DRAW TEXT
+========================= */
+
+function drawWrappedText(
+  ctx,
+  text,
+  x,
+  y,
+  maxWidth,
+  lineHeight,
+  maxLines
+){
+
+  const lines =
+    wrapText(ctx,text,maxWidth)
+    .slice(0,maxLines || 5);
+
+  lines.forEach(function(line,index){
+
+    ctx.fillText(
+      line,
+      x,
+      y + index * lineHeight
+    );
+
   });
 
-  const result = await response.json();
+  return y + lines.length * lineHeight;
 
-  if(!response.ok){
-   throw new Error(result.error || "Backend mengembalikan error.");
+}
+
+
+/* =========================
+   DRAW DESIGN
+========================= */
+
+function drawDesign(data){
+
+  const canvas =
+    document.getElementById("designCanvas");
+
+  let width = 1600;
+  let height = 1000;
+
+
+  if(data.orientasi === "Portrait"){
+
+    width = 1000;
+    height = 1400;
+
   }
 
-  if(!result.image_url){
-   throw new Error("Backend tidak mengembalikan image_url.");
+  if(data.orientasi === "Square"){
+
+    width = 1200;
+    height = 1200;
+
   }
 
-  showResult(result.image_url);
 
- }catch(error){
+  canvas.width = width;
+  canvas.height = height;
 
-  empty.innerHTML = `
-   <div class="empty-icon">⚠️</div>
-   <h3>AI Generate Error</h3>
-   <p>${escapeHtml(error.message)}</p>
-  `;
 
-  console.error("AI Generate Error:",error);
+  const ctx =
+    canvas.getContext("2d");
 
- }finally{
 
-  button.disabled = false;
-  button.innerText = "✨ GENERATE DESIGN";
- }
+  const colors =
+    getColors(data);
+
+
+  /* background */
+
+  const gradient =
+    ctx.createLinearGradient(
+      0,
+      0,
+      width,
+      height
+    );
+
+  gradient.addColorStop(
+    0,
+    colors[0]
+  );
+
+  gradient.addColorStop(
+    1,
+    colors[1]
+  );
+
+  ctx.fillStyle = gradient;
+
+  ctx.fillRect(
+    0,
+    0,
+    width,
+    height
+  );
+
+
+  /* decorative circle */
+
+  ctx.globalAlpha = .15;
+
+  ctx.fillStyle = "#ffffff";
+
+  ctx.beginPath();
+
+  ctx.arc(
+    width * .88,
+    height * .18,
+    height * .25,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+
+  ctx.beginPath();
+
+  ctx.arc(
+    width * .08,
+    height * .92,
+    height * .18,
+    0,
+    Math.PI * 2
+  );
+
+  ctx.fill();
+
+  ctx.globalAlpha = 1;
+
+
+  /* content panel */
+
+  ctx.fillStyle =
+    "rgba(255,255,255,.94)";
+
+  const panelX =
+    width * .07;
+
+  const panelY =
+    height * .08;
+
+  const panelW =
+    width * .86;
+
+  const panelH =
+    height * .84;
+
+
+  roundRect(
+    ctx,
+    panelX,
+    panelY,
+    panelW,
+    panelH,
+    35
+  );
+
+  ctx.fill();
+
+
+  /* top label */
+
+  ctx.fillStyle =
+    colors[0];
+
+  ctx.font =
+    "bold 26px Arial";
+
+  ctx.fillText(
+    (data.jenis || "SEIKO STUDIO").toUpperCase(),
+    panelX + 70,
+    panelY + 75
+  );
+
+
+  /* title */
+
+  ctx.fillStyle =
+    "#101828";
+
+  const title =
+    data.judul ||
+    "DESAIN PROFESIONAL";
+
+
+  ctx.font =
+    "bold " +
+    Math.max(52,Math.min(100,width/15)) +
+    "px Arial";
+
+
+  const titleY =
+    panelY + 190;
+
+
+  drawWrappedText(
+    ctx,
+    title,
+    panelX + 70,
+    titleY,
+    panelW * .78,
+    110,
+    3
+  );
+
+
+  /* subtitle */
+
+  ctx.fillStyle =
+    colors[0];
+
+  ctx.font =
+    "bold 34px Arial";
+
+
+  drawWrappedText(
+    ctx,
+    data.subjudul ||
+      "Solusi desain untuk kebutuhan bisnis Anda",
+    panelX + 70,
+    titleY + 250,
+    panelW * .72,
+    45,
+    2
+  );
+
+
+  /* description */
+
+  ctx.fillStyle =
+    "#475467";
+
+  ctx.font =
+    "28px Arial";
+
+
+  drawWrappedText(
+    ctx,
+    data.deskripsi ||
+      "Desain modern, bersih, profesional dan mudah dibaca.",
+    panelX + 70,
+    titleY + 350,
+    panelW * .68,
+    42,
+    4
+  );
+
+
+  /* uploaded image */
+
+  if(uploadedImages.length){
+
+    const img =
+      uploadedImages[0];
+
+    const boxX =
+      panelX + panelW * .68;
+
+    const boxY =
+      panelY + panelH * .40;
+
+    const boxW =
+      panelW * .23;
+
+    const boxH =
+      panelH * .30;
+
+
+    ctx.save();
+
+    ctx.beginPath();
+
+    roundRect(
+      ctx,
+      boxX,
+      boxY,
+      boxW,
+      boxH,
+      25
+    );
+
+    ctx.clip();
+
+
+    const ratio =
+      Math.max(
+        boxW / img.width,
+        boxH / img.height
+      );
+
+    const iw =
+      img.width * ratio;
+
+    const ih =
+      img.height * ratio;
+
+
+    ctx.drawImage(
+      img,
+      boxX + (boxW-iw)/2,
+      boxY + (boxH-ih)/2,
+      iw,
+      ih
+    );
+
+    ctx.restore();
+
+  }
+
+
+  /* CTA */
+
+  const cta =
+    data.slogan ||
+    "PESAN SEKARANG";
+
+
+  const ctaX =
+    panelX + 70;
+
+  const ctaY =
+    panelY + panelH - 150;
+
+  const ctaW =
+    330;
+
+  const ctaH =
+    70;
+
+
+  ctx.fillStyle =
+    colors[0];
+
+  roundRect(
+    ctx,
+    ctaX,
+    ctaY,
+    ctaW,
+    ctaH,
+    18
+  );
+
+  ctx.fill();
+
+
+  ctx.fillStyle =
+    "#ffffff";
+
+  ctx.font =
+    "bold 27px Arial";
+
+  ctx.textAlign =
+    "center";
+
+  ctx.fillText(
+    cta,
+    ctaX + ctaW/2,
+    ctaY + 46
+  );
+
+
+  ctx.textAlign =
+    "left";
+
+
+  /* contact */
+
+  const contact = [];
+
+  if(data.whatsapp)
+    contact.push("WhatsApp: " + data.whatsapp);
+
+  if(data.instagram)
+    contact.push("Instagram: " + data.instagram);
+
+  if(data.tiktok)
+    contact.push("TikTok: " + data.tiktok);
+
+  if(data.social)
+    contact.push(data.social);
+
+  if(data.alamat)
+    contact.push(data.alamat);
+
+
+  if(contact.length){
+
+    ctx.fillStyle =
+      "#667085";
+
+    ctx.font =
+      "20px Arial";
+
+    contact.slice(0,4)
+      .forEach(function(item,index){
+
+        ctx.fillText(
+          item,
+          panelX + 70,
+          ctaY + 115 + index*28
+        );
+
+      });
+
+  }
+
+
+  /* footer */
+
+  ctx.fillStyle =
+    "#98a2b3";
+
+  ctx.font =
+    "18px Arial";
+
+  ctx.fillText(
+    data.colorMode +
+    " • " +
+    (data.resolusi || "300 DPI"),
+    panelX + panelW - 260,
+    panelY + panelH - 45
+  );
+
+
+  /* show */
+
+  document.getElementById("empty")
+    .style.display = "none";
+
+  canvas.style.display =
+    "block";
+
+  document.getElementById("actions")
+    .style.display = "flex";
+
+
 }
 
-function escapeHtml(text){
 
- const div=document.createElement("div");
- div.textContent=text;
- return div.innerHTML;
+/* =========================
+   ROUNDED RECT
+========================= */
+
+function roundRect(
+  ctx,
+  x,
+  y,
+  width,
+  height,
+  radius
+){
+
+  ctx.beginPath();
+
+  ctx.moveTo(
+    x + radius,
+    y
+  );
+
+  ctx.arcTo(
+    x + width,
+    y,
+    x + width,
+    y + height,
+    radius
+  );
+
+  ctx.arcTo(
+    x + width,
+    y + height,
+    x,
+    y + height,
+    radius
+  );
+
+  ctx.arcTo(
+    x,
+    y + height,
+    x,
+    y,
+    radius
+  );
+
+  ctx.arcTo(
+    x,
+    y,
+    x + width,
+    y,
+    radius
+  );
+
+  ctx.closePath();
+
 }
 
-function showResult(url){
 
- document.getElementById("empty").style.display="none";
-
- const img=document.getElementById("previewImg");
-
- img.src=url;
- img.style.display="block";
-
- document.getElementById("actions").style.display="flex";
-}
-
-function focusRevision(){
-
- document.getElementById("revisi").focus();
-}
-
-function useDesign(){
-
- alert("Desain dipilih dan siap digunakan.");
-}
+/* =========================
+   REVISION
+========================= */
 
 function generateRevision(){
 
- const revision=document.getElementById("revisi").value.trim();
+  const revision =
+    document.getElementById("revisi")
+      .value
+      .trim();
 
- if(!revision){
-  alert("Tulis instruksi revisi terlebih dahulu.");
-  return;
- }
+  if(!revision){
 
- generateDesign();
+    alert(
+      "Tulis instruksi revisi terlebih dahulu."
+    );
+
+    return;
+
+  }
+
+
+  const instruction =
+    document.getElementById("instruksi");
+
+
+  instruction.value =
+    revision;
+
+
+  generateDesign();
+
 }
+
+
+/* =========================
+   USE DESIGN
+========================= */
+
+function useDesign(){
+
+  const status =
+    document.getElementById("status");
+
+  status.innerText =
+    "✓ Desain dipilih dan siap digunakan.";
+
+}
+
+
+/* =========================
+   FOCUS REVISION
+========================= */
+
+function focusRevision(){
+
+  const el =
+    document.getElementById("revisi");
+
+  el.focus();
+
+  el.scrollIntoView({
+    behavior:"smooth",
+    block:"center"
+  });
+
+}
+
+
+/* =========================
+   DOWNLOAD
+========================= */
 
 function downloadFile(){
 
- const img=document.getElementById("previewImg");
+  const canvas =
+    document.getElementById("designCanvas");
 
- if(!img.src || img.style.display==="none"){
-  alert("Generate desain terlebih dahulu.");
-  return;
- }
 
- const link=document.createElement("a");
- link.href=img.src;
- link.download="seiko-studio-design.png";
- document.body.appendChild(link);
- link.click();
- link.remove();
+  if(
+    canvas.style.display === "none" ||
+    !canvas.width
+  ){
+
+    alert(
+      "Generate desain terlebih dahulu."
+    );
+
+    return;
+
+  }
+
+
+  const link =
+    document.createElement("a");
+
+
+  link.download =
+    "seiko-studio-design.png";
+
+
+  link.href =
+    canvas.toDataURL(
+      "image/png",
+      1
+    );
+
+
+  document.body.appendChild(link);
+
+  link.click();
+
+  link.remove();
+
 }
+
 
 </script>
 
