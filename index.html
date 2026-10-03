@@ -10,7 +10,6 @@
 body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}
 .app{display:flex;min-height:100vh}
 
-/* SIDEBAR */
 .sidebar{
  width:220px;background:#101828;color:#fff;padding:24px 15px;
  position:fixed;top:0;bottom:0;left:0
@@ -25,7 +24,6 @@ body{font-family:Arial,Helvetica,sans-serif;background:#f5f7fb;color:#172033}
 }
 .menu a:hover,.menu a.active{background:#1d2939;color:#fff}
 
-/* MAIN */
 .main{margin-left:220px;width:calc(100% - 220px)}
 .topbar{
  height:65px;background:#fff;border-bottom:1px solid #e4e7ec;
@@ -62,7 +60,6 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 
 .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 
-/* UPLOAD */
 .upload{
  border:1.5px dashed #cbd5e1;border-radius:10px;
  padding:22px;text-align:center;background:#fafbfc;
@@ -78,7 +75,6 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 }
 .tool:hover{border-color:#6d5dfc}
 
-/* COLOR */
 .modes{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .mode{
  border:1px solid #d0d5dd;border-radius:10px;
@@ -88,15 +84,14 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 .mode b{font-size:13px}
 .mode small{display:block;color:#667085;font-size:10px;margin-top:4px}
 
-/* BUTTON */
 .generate{
  width:100%;border:0;border-radius:9px;
  padding:13px;background:#6d5dfc;color:#fff;
  font-size:14px;font-weight:bold;cursor:pointer
 }
 .generate:hover{background:#5948ed}
+.generate:disabled{opacity:.65;cursor:wait}
 
-/* PREVIEW */
 .preview{min-height:450px}
 .preview-box{
  min-height:370px;border:1px dashed #d0d5dd;
@@ -117,7 +112,6 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
  background:#fff;border-radius:8px;font-weight:bold;cursor:pointer
 }
 
-/* OUTPUT */
 .outputs{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}
 .outputs label{
  border:1px solid #d0d5dd;border-radius:7px;
@@ -125,7 +119,6 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 }
 .outputs input{width:auto;margin:0 4px 0 0}
 
-/* MOBILE */
 @media(max-width:1000px){
  .sidebar{display:none}
  .main{margin-left:0;width:100%}
@@ -182,7 +175,6 @@ input:focus,textarea:focus,select:focus{border-color:#6d5dfc}
 
 <div class="workspace">
 
-<!-- LEFT -->
 <div>
 
 <div class="card">
@@ -322,7 +314,6 @@ placeholder="Contoh: premium, modern, elegan, mudah dibaca, warna biru putih..."
 
 </div>
 
-<!-- RIGHT -->
 <div>
 
 <div class="card preview">
@@ -341,9 +332,9 @@ placeholder="Contoh: premium, modern, elegan, mudah dibaca, warna biru putih..."
 </div>
 
 <div class="actions" id="actions">
-<button>✓ Gunakan</button>
-<button>✎ Revisi</button>
-<button>↻ Regenerate</button>
+<button onclick="useDesign()">✓ Gunakan</button>
+<button onclick="focusRevision()">✎ Revisi</button>
+<button onclick="generateDesign()">↻ Regenerate</button>
 </div>
 </div>
 
@@ -371,7 +362,7 @@ placeholder="Contoh: ubah warna menjadi merah, buat judul lebih besar..."></text
 <label><input type="checkbox"> PSD</label>
 </div>
 
-<button class="generate" style="margin-top:14px">
+<button class="generate" style="margin-top:14px" onclick="downloadFile()">
 ↓ DOWNLOAD FILE
 </button>
 </div>
@@ -420,7 +411,9 @@ function getData(){
   resolusi:document.getElementById("resolusi").value,
 
   colorMode:currentMode,
-  instruksi:document.getElementById("instruksi").value
+  instruksi:document.getElementById("instruksi").value,
+
+  revision:document.getElementById("revisi").value
  };
 }
 
@@ -428,29 +421,21 @@ async function generateDesign(){
 
  const data = getData();
 
- const button = document.querySelector(".generate");
+ const buttons = document.querySelectorAll(".generate");
+ const button = buttons[0];
 
  button.disabled = true;
  button.innerText = "⏳ GENERATING...";
 
+ const empty = document.getElementById("empty");
+
+ empty.innerHTML = `
+  <div class="empty-icon">⏳</div>
+  <h3>AI sedang membuat desain...</h3>
+  <p>Mohon tunggu.</p>
+ `;
+
  try{
-
-  /*
-  BACKEND AI AKAN DIPANGGIL DI SINI.
-
-  Contoh endpoint:
-  POST https://DOMAIN-BACKEND-ANDA/api/generate
-
-  body:
-  {
-    ...data
-  }
-
-  Response:
-  {
-    image_url:"..."
-  }
-  */
 
   const response = await fetch("/api/generate",{
    method:"POST",
@@ -460,32 +445,40 @@ async function generateDesign(){
    body:JSON.stringify(data)
   });
 
+  const result = await response.json();
+
   if(!response.ok){
-   throw new Error("Backend belum terhubung");
+   throw new Error(result.error || "Backend mengembalikan error.");
   }
 
-  const result = await response.json();
+  if(!result.image_url){
+   throw new Error("Backend tidak mengembalikan image_url.");
+  }
 
   showResult(result.image_url);
 
  }catch(error){
 
-  /*
-  Sampai backend dipasang, tampilkan informasi
-  bahwa mesin AI belum tersambung.
-  */
-
-  document.getElementById("empty").innerHTML = `
-   <div class="empty-icon">⚙️</div>
-   <h3>AI Generate siap dipasang</h3>
-   <p>UI sudah siap. Backend AI perlu dihubungkan.</p>
+  empty.innerHTML = `
+   <div class="empty-icon">⚠️</div>
+   <h3>AI Generate Error</h3>
+   <p>${escapeHtml(error.message)}</p>
   `;
+
+  console.error("AI Generate Error:",error);
 
  }finally{
 
   button.disabled = false;
   button.innerText = "✨ GENERATE DESIGN";
  }
+}
+
+function escapeHtml(text){
+
+ const div=document.createElement("div");
+ div.textContent=text;
+ return div.innerHTML;
 }
 
 function showResult(url){
@@ -500,9 +493,19 @@ function showResult(url){
  document.getElementById("actions").style.display="flex";
 }
 
+function focusRevision(){
+
+ document.getElementById("revisi").focus();
+}
+
+function useDesign(){
+
+ alert("Desain dipilih dan siap digunakan.");
+}
+
 function generateRevision(){
 
- const revision=document.getElementById("revisi").value;
+ const revision=document.getElementById("revisi").value.trim();
 
  if(!revision){
   alert("Tulis instruksi revisi terlebih dahulu.");
@@ -512,7 +515,24 @@ function generateRevision(){
  generateDesign();
 }
 
+function downloadFile(){
+
+ const img=document.getElementById("previewImg");
+
+ if(!img.src || img.style.display==="none"){
+  alert("Generate desain terlebih dahulu.");
+  return;
+ }
+
+ const link=document.createElement("a");
+ link.href=img.src;
+ link.download="seiko-studio-design.png";
+ document.body.appendChild(link);
+ link.click();
+ link.remove();
+}
+
 </script>
 
 </body>
-  </html>
+</html>
