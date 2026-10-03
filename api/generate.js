@@ -1,61 +1,100 @@
 export default async function handler(req, res) {
   if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
+    return res.status(405).json({
+      error: "Method not allowed"
+    });
   }
 
   try {
     const data = req.body || {};
 
-    if (!process.env.OPENAI_API_KEY) {
+    if (!process.env.POLLINATIONS_API_KEY) {
       return res.status(500).json({
-        error: "OPENAI_API_KEY belum tersedia di Vercel."
+        error: "POLLINATIONS_API_KEY belum tersedia di Vercel."
       });
     }
 
     const prompt = `
-Buat desain grafis profesional berdasarkan data berikut.
+Create a professional graphic design.
 
-Jenis desain: ${data.jenis || ""}
-Judul utama: ${data.judul || ""}
-Subjudul: ${data.subjudul || ""}
-Deskripsi: ${data.deskripsi || ""}
-Slogan / CTA: ${data.slogan || ""}
+Design type:
+${data.jenis || "Professional promotional design"}
 
-WhatsApp: ${data.whatsapp || ""}
-Instagram: ${data.instagram || ""}
-TikTok: ${data.tiktok || ""}
-Facebook / YouTube: ${data.social || ""}
-Alamat: ${data.alamat || ""}
+Main title:
+${data.judul || ""}
 
-Ukuran: ${data.ukuran || ""}
-Orientasi: ${data.orientasi || "Landscape"}
-Color mode: ${data.colorMode || "RGB"}
-Resolusi: ${data.resolusi || "300 DPI"}
-Bleed: ${data.bleed || ""}
+Subtitle:
+${data.subjudul || ""}
 
-Instruksi tambahan:
+Description:
+${data.deskripsi || ""}
+
+Slogan / CTA:
+${data.slogan || ""}
+
+WhatsApp:
+${data.whatsapp || ""}
+
+Instagram:
+${data.instagram || ""}
+
+TikTok:
+${data.tiktok || ""}
+
+Facebook / YouTube:
+${data.social || ""}
+
+Address:
+${data.alamat || ""}
+
+Size:
+${data.ukuran || ""}
+
+Orientation:
+${data.orientasi || "Landscape"}
+
+Color mode:
+${data.colorMode || "RGB"}
+
+Resolution:
+${data.resolusi || "300 DPI"}
+
+Bleed:
+${data.bleed || ""}
+
+Additional instructions:
 ${data.instruksi || ""}
 
-Buat komposisi yang profesional, bersih, modern, mudah dibaca,
-dengan hierarki visual yang jelas.
+Revision:
+${data.revision || ""}
 
-Jangan membuat nomor telepon, alamat, logo, harga, atau informasi
-bisnis penting yang tidak diberikan pengguna.
+Create a clean, modern, professional commercial graphic design.
+Use strong visual hierarchy, readable typography, balanced spacing,
+appropriate colors, and a polished advertising layout.
+
+IMPORTANT:
+Do not invent phone numbers, addresses, prices, logos,
+social media accounts, or other important business information
+that was not provided.
+
+Make the design visually suitable for the requested orientation
+and design type.
 `;
 
     const response = await fetch(
-      "https://api.openai.com/v1/images/generations",
+      "https://gen.pollinations.ai/v1/images/generations",
       {
         method: "POST",
+
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`
+          "Authorization": `Bearer ${process.env.POLLINATIONS_API_KEY}`
         },
+
         body: JSON.stringify({
-          model: "gpt-image-2",
+          model: "flux",
           prompt: prompt,
-          size: "1024x1024",
-          quality: "medium"
+          size: "1024x1024"
         })
       }
     );
@@ -64,7 +103,10 @@ bisnis penting yang tidak diberikan pengguna.
 
     if (!response.ok) {
       return res.status(response.status).json({
-        error: result?.error?.message || "OpenAI gagal membuat desain."
+        error:
+          result?.error?.message ||
+          result?.error ||
+          "Pollinations gagal membuat desain."
       });
     }
 
@@ -72,7 +114,7 @@ bisnis penting yang tidak diberikan pengguna.
 
     if (!image) {
       return res.status(500).json({
-        error: "OpenAI tidak mengembalikan gambar."
+        error: "Pollinations tidak mengembalikan gambar."
       });
     }
 
@@ -89,7 +131,7 @@ bisnis penting yang tidak diberikan pengguna.
     }
 
     return res.status(500).json({
-      error: "Format gambar tidak dikenali."
+      error: "Format gambar dari Pollinations tidak dikenali."
     });
 
   } catch (error) {
@@ -99,4 +141,4 @@ bisnis penting yang tidak diberikan pengguna.
       error: error.message || "Terjadi kesalahan server."
     });
   }
-        }
+}
