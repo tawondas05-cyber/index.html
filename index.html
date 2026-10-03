@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seiko Studio — AI Design & Printing</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Inter, Arial, sans-serif;
+  background: #f5f7fb;
+  color: #172033;
+}
+
+.app {
+  display: flex;
+  min-height: 100vh;
+}
+
+/* SIDEBAR */
+.sidebar {
+  width: 230px;
+  background: #101828;
+  color: white;
+  padding: 24px 16px;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 800;
+  margin-bottom: 5px;
+}
+
+.logo span {
+  color: #6d5dfc;
+}
+
+.logo-sub {
+  font-size: 11px;
+  color: #98a2b3;
+  margin-bottom: 35px;
+}
+
+.menu-title {
+  font-size: 10px;
+  color: #667085;
+  font-weight: 700;
+  margin: 22px 10px 8px;
+  text-transform: uppercase;
+}
+
+.menu a {
+  display: block;
+  padding: 11px 12px;
+  color: #cbd5e1;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-bottom: 4px;
+  font-size: 14px;
+}
+
+.menu a:hover,
+.menu a.active {
+  background: #1d2939;
+  color: white;
+}
+
+/* MAIN */
+.main {
+  margin-left: 230px;
+  width: calc(100% - 230px);
+}
+
+.topbar {
+  height: 68px;
+  background: white;
+  border-bottom: 1px solid #e4e7ec;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px;
+}
+
+.top-title {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.credits {
+  background: #f2f0ff;
+  color: #5b4bd8;
+  padding: 8px 13px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.content {
+  padding: 25px;
+}
+
+.page-head {
+  margin-bottom: 20px;
+}
+
+.page-head h1 {
+  font-size: 25px;
+  margin-bottom: 5px;
+}
+
+.page-head p {
+  color: #667085;
+  font-size: 13px;
+}
+
+/* GRID */
+.workspace {
+  display: grid;
+  grid-template-columns: minmax(450px, 1.1fr) minmax(350px, .9fr);
+  gap: 18px;
+}
+
+.card {
+  background: white;
+  border: 1px solid #e4e7ec;
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(16,24,40,.03);
+}
+
+.card-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: #344054;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  padding: 10px 11px;
+  font-size: 13px;
+  outline: none;
+  background: white;
+  margin-bottom: 13px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  border-color: #6d5dfc;
+}
+
+textarea {
+  min-height: 78px;
+  resize: vertical;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+/* UPLOAD */
+.upload-box {
+  border: 1.5px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 20px;
+  text-align: center;
+  color: #667085;
+  cursor: pointer;
+  background: #fafbfc;
+}
+
+.upload-box:hover {
+  border-color: #6d5dfc;
+  background: #fafaff;
+}
+
+.upload-box strong {
+  display: block;
+  color: #344054;
+  margin-bottom: 5px;
+}
+
+/* TOOLS */
+.tools {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 9px;
+  margin-top: 12px;
+}
+
+.tool {
+  border: 1px solid #d0d5dd;
+  padding: 10px 5px;
+  text-align: center;
+  border-radius: 8px;
+  background: white;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.tool:hover {
+  border-color: #6d5dfc;
+}
+
+/* COLOR MODE */
+.color-modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.mode {
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  padding: 14px;
+  cursor: pointer;
+}
+
+.mode.active {
+  border: 2px solid #6d5dfc;
+  background: #f8f7ff;
+}
+
+.mode-title {
+  font-weight: 800;
+  font-size: 14px;
+}
+
+.mode-desc {
+  font-size: 11px;
+  color: #667085;
+  margin-top: 4px;
+}
+
+/* BUTTON */
+.generate {
+  width: 100%;
+  border: none;
+  border-radius: 9px;
+  padding: 13px;
+  background: #6d5dfc;
+  color: white;
+  font-size: 14px;
+  font-weight: 800;
+  cursor: pointer;
+  margin-top: 5px;
+}
+
+.generate:hover {
+  background: #5948ed;
+}
+
+/* PREVIEW */
+.preview {
+  min-height: 420px;
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-area {
+  flex: 1;
+  min-height: 350px;
+  background: #f8fafc;
+  border: 1px dashed #d0d5dd;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+.empty-icon {
+  font-size: 45px;
+  margin-bottom: 10px;
+}
+
+.preview-area h3 {
+  font-size: 15px;
+}
+
+.preview-area p {
+  font-size: 12px;
+  color: #667085;
+  margin-top: 5px;
+}
+
+.result-image {
+  width: 100%;
+  height: 100%;
+  max-height: 400px;
+  object-fit: contain;
+  border-radius: 10px;
+  display: none;
+}
+
+.preview-actions {
+  display: none;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.preview-actions button {
+  flex: 1;
+  border: 1px solid #d0d5dd;
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+/* OUTPUT */
+.output-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.output-options label {
+  border: 1px solid #d0d5dd;
+  border-radius: 7px;
+  padding: 9px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.output-options input {
+  width: auto;
+  margin: 0 4px 0 0;
+}
+
+/* RESPONSIVE */
+@media(max-width: 1000px) {
+  .sidebar {
+    display: none;
+  }
+
+  .main {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media(max-width: 600px) {
+  .row,
+  .color-modes {
+    grid-template-columns: 1fr;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  .output-options {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">SEIKO <span>STUDIO</span></div>
+    <div class="logo-sub">AI DESIGN & PRINTING</div>
+
+    <div class="menu-title">Workspace</div>
+    <div class="menu">
+      <a class="active" href="#">＋ Project</a>
+      <a href="#">Projects</a>
+      <a href="#">Designs</a>
+      <a href="#">Templates</a>
+    </div>
+
+    <div class="menu-title">AI Tools</div>
+    <div class="menu">
+      <a href="#">🎤 Voice Input</a>
+      <a href="#">🖼 Vision</a>
+    </div>
+
+    <div class="menu-title">System</div>
+    <div class="menu">
+      <a href="#">Settings</a>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <header class="topbar">
+      <div class="top-title">Project Studio</div>
+      <div class="credits">✨ 2,450 AI Credits</div>
+    </header>
+
+    <section class="content">
+
+      <div class="page-head">
+        <h1>Buat Desain Baru</h1>
+        <p>Masukkan informasi desain, upload bahan, lalu biarkan AI membuat desain untuk Anda.</p>
+      </div>
+
+      <div class="workspace">
+
+        <!-- LEFT -->
+        <div>
+
+          <!-- INFORMASI -->
+          <div class="card">
+            <div class="card-title">INFORMASI DESAIN</div>
+
+            <label>Jenis Desain</label>
+            <input type="text" placeholder="Contoh: Banner Promosi 3 × 1 meter">
+
+            <label>Judul Utama</label>
+            <input type="text" placeholder="Masukkan judul utama">
+
+            <label>Subjudul</label>
+            <input type="text" placeholder="Masukkan subjudul">
+
+            <label>Deskripsi / Informasi</label>
+            <textarea placeholder="Informasi yang ingin ditampilkan pada desain"></textarea>
+
+            <label>Slogan / CTA</label>
+            <input type="text" placeholder="Contoh: Pesan Sekarang">
+          </div>
+
+          <!-- KONTAK -->
+          <div class="card">
+            <div class="card-title">KONTAK & INFORMASI</div>
+
+            <div class="row">
+              <div>
+                <label>WhatsApp</label>
+                <input type="text" placeholder="08xxxxxxxxxx">
+              </div>
+
+              <div>
+                <label>Instagram</label>
+                <input type="text" placeholder="@username">
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label>TikTok</label>
+                <input type="text" placeholder="@username">
+              </div>
+
+              <div>
+                <label>Facebook / YouTube</label>
+                <input type="text" placeholder="Link / username">
+              </div>
+            </div>
+
+            <label>Alamat</label>
+            <input type="text" placeholder="Alamat / lokasi">
+          </div>
+
+          <!-- VISUAL -->
+          <div class="card">
+            <div class="card-title">BAHAN VISUAL</div>
+
+            <label class="upload-box">
+              <strong>＋ Upload Files</strong>
+              Logo • Foto Produk • Referensi • Screenshot • Dokumen
+              <input type="file" multiple hidden>
+            </label>
+
+            <div class="tools">
+              <div class="tool">🎤 Voice</div>
+              <div class="tool">🖼 Vision</div>
+              <div class="tool">📎 Files</div>
+            </div>
+          </div>
+
+          <!-- COLOR -->
+          <div class="card">
+            <div class="card-title">COLOR MODE</div>
+
+            <div class="color-modes">
+
+              <div class="mode active" onclick="selectMode(this)">
+                <div class="mode-title">🌈 RGB</div>
+                <div class="mode-desc">
+                  MEDIA DIGITAL<br>
+                  Social Media • Website • Display • WhatsApp
+                </div>
+              </div>
+
+              <div class="mode" onclick="selectMode(this)">
+                <div class="mode-title">🖨 CMYK</div>
+                <div class="mode-desc">
+                  PERCETAKAN<br>
+                  Banner • Poster • Brosur • ID Card • Undangan
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- SPESIFIKASI -->
+          <div class="card">
+            <div class="card-title">SPESIFIKASI DESAIN</div>
+
+            <div class="row">
+              <div>
+                <label>Ukuran</label>
+                <input type="text" placeholder="Contoh: 300 × 100 cm">
+              </div>
+
+              <div>
+                <label>Orientasi</label>
+                <select>
+                  <option>Landscape</option>
+                  <option>Portrait</option>
+                  <option>Square</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="row">
+              <div>
+                <label>Bleed</label>
+                <input type="text" value="3 mm">
+              </div>
+
+              <div>
+                <label>Resolusi</label>
+                <select>
+                  <option>300 DPI</option>
+                  <option>150 DPI</option>
+                  <option>96 DPI</option>
+                </select>
+              </div>
+            </div>
+
+            <label>
+              <input type="checkbox" checked style="width:auto">
+              Print-ready PDF
+            </label>
+
+            <label>
+              <input type="checkbox" checked style="width:auto">
+              Include Bleed
+            </label>
+
+            <label>
+              <input type="checkbox">
+              Crop Marks
+            </label>
+          </div>
+
+          <!-- INSTRUKSI -->
+          <div class="card">
+            <div class="card-title">INSTRUKSI TAMBAHAN</div>
+
+            <textarea placeholder="Contoh: desain premium, elegan, modern, mudah dibaca, gunakan warna biru dan putih..."></textarea>
+
+            <button class="generate" onclick="generateDesign()">
+              ✨ GENERATE DESIGN
+            </button>
+          </div>
+
+        </div>
+
+        <!-- RIGHT -->
+        <div>
+
+          <div class="card preview">
+            <div class="card-title">AI DESIGN PREVIEW</div>
+
+            <div class="preview-area" id="previewArea">
+
+              <div id="emptyPreview">
+                <div class="empty-icon">✦</div>
+                <h3>Belum ada desain</h3>
+                <p>Isi data dan klik Generate Design<br>untuk melihat hasil AI.</p>
+              </div>
+
+              <img id="resultImage" class="result-image" alt="AI Design Preview">
+
+            </div>
+
+            <div class="preview-actions" id="previewActions">
+              <button>✓ Gunakan</button>
+              <button>✎ Revisi</button>
+              <button>↻ Regenerate</button>
+            </div>
+          </div>
+
+          <!-- REVISI -->
+          <div class="card">
+            <div class="card-title">REVISI DESAIN</div>
+
+            <textarea placeholder="Contoh: ubah warna menjadi biru, buat judul lebih besar, tambahkan logo di kanan atas..."></textarea>
+
+            <button class="generate">
+              ✨ GENERATE REVISI
+            </button>
+          </div>
+
+          <!-- OUTPUT -->
+          <div class="card">
+            <div class="card-title">OUTPUT FILE</div>
+
+            <div class="output-options">
+              <label><input type="checkbox" checked> PDF</label>
+              <label><input type="checkbox"> JPG</label>
+              <label><input type="checkbox"> PNG</label>
+              <label><input type="checkbox"> TIFF</label>
+              <label><input type="checkbox"> CDR</label>
+              <label><input type="checkbox"> AI</label>
+              <label><input type="checkbox"> PSD</label>
+            </div>
+
+            <button class="generate" style="margin-top:15px">
+              ↓ DOWNLOAD FILE
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+function selectMode(element) {
+  document.querySelectorAll('.mode').forEach(mode => {
+    mode.classList.remove('active');
+  });
+
+  element.classList.add('active');
+}
+
+function generateDesign() {
+
+  const empty = document.getElementById("emptyPreview");
+  const image = document.getElementById("resultImage");
+  const actions = document.getElementById("previewActions");
+
+  empty.style.display = "none";
+
+  /*
+    Untuk tahap awal hanya simulasi preview.
+    Nanti bagian ini kita sambungkan ke AI Image Generation API.
+  */
+
+  image.src =
+    "https://placehold.co/1000x650/111827/ffffff?text=SEIKO+STUDIO+AI+DESIGN";
+
+  image.style.display = "block";
+  actions.style.display = "flex";
+}
+</script>
+
+</body>
+</html>
