@@ -1,163 +1,192 @@
-/**
- * SEIKO STUDIO — Backend AI Image Generation Serverless Endpoint
- * Vercel Serverless Function: /api/generate-image
- */
-
 export default async function handler(req, res) {
-  // Hanya menerima metode POST
-  if (req.method !== 'POST') {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+
+  if (req.method === "OPTIONS") {
+    return res.status(200).end();
+  }
+
+  if (req.method !== "POST") {
     return res.status(405).json({
       success: false,
-      error: 'Method Not Allowed. Gunakan HTTP POST.'
+      error: "Method tidak diizinkan. Gunakan POST."
     });
   }
 
-  try {
-    const { provider, prompt, images = [], mode = 'Text -> Image', revisionContext = '' } = req.body;
+  const apiKey = process.env.OPENAI_API_KEY;
 
-    // Validation: Prompt tidak boleh kosong
-    if (!prompt || typeof prompt !== 'string' || !prompt.trim()) {
-      return res.status(400).json({
-        success: false,
-        error: 'Prompt AI tidak boleh kosong.'
-      });
-    }
-
-    const finalPrompt = prompt.trim();
-
-    // -------------------------------------------------------------
-    // PROVIDER: GEMINI (Nano Banana 2 / Nano Banana Pro)
-    // -------------------------------------------------------------
-    if (provider === 'Gemini / Nano Banana 2' || provider === 'Gemini / Nano Banana Pro') {
-      const apiKey = process.env.GEMINI_API_KEY;
-
-      if (!apiKey) {
-        return res.status(503).json({
-          success: false,
-          error: 'Provider Gemini belum dikonfigurasi di server. Silakan set GEMINI_API_KEY pada Vercel Environment Variables.'
-        });
-      }
-
-      // Pemilihan Model Gemini resmi
-      const modelName = provider === 'Gemini / Nano Banana Pro' 
-        ? 'gemini-3.1-flash-image' 
-        : 'gemini-2.5-flash-image';
-
-      const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${apiKey}`;
-
-      // Menyusun parts request (Multimodal: Prompt + Reference Images)
-      const parts = [];
-
-      // Masukkan teks prompt
-      let fullTextPrompt = finalPrompt;
-      if (revisionContext) {
-        fullTextPrompt = `[REVISION CONTEXT]: ${revisionContext}\n\n[FINAL REVISED DESIGN PROMPT]: ${finalPrompt}`;
-      }
-      parts.push({ text: fullTextPrompt });
-
-      // Jika ada reference image (Image -> Image / Edit Image)
-      if (Array.isArray(images) && images.length > 0) {
-        for (const imgData of images) {
-          if (typeof imgData === 'string' && imgData.includes('base64,')) {
-            const matches = imgData.match(/^data:(image\/\w+);base64,(.+)$/);
-            if (matches && matches.length === 3) {
-              parts.push({
-                inline_data: {
-                  mime_type: matches[1],
-                  data: matches[2]
-                }
-              });
-            }
-          }
-        }
-      }
-
-      const requestBody = {
-        contents: [{ parts }],
-        generationConfig: {
-          response_modalities: ["image", "text"]
-        }
-      };
-
-      const response = await fetch(geminiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(requestBody)
-      });
-
-      const responseData = await response.json();
-
-      if (!response.ok) {
-        const errMessage = responseData.error?.message || `Google Gemini API Error (${response.status})`;
-        return res.status(response.status).json({
-          success: false,
-          error: errMessage
-        });
-      }
-
-      // Parsing response Gemini image
-      let imageUrl = null;
-      let returnedText = null;
-
-      const candidates = responseData.candidates || [];
-      if (candidates.length > 0 && candidates[0].content && candidates[0].content.parts) {
-        for (const part of candidates[0].content.parts) {
-          if (part.inline_data && part.inline_data.data) {
-            const mime = part.inline_data.mime_type || 'image/png';
-            imageUrl = `data:${mime};base64,${part.inline_data.data}`;
-          } else if (part.text) {
-            returnedText = part.text;
-          }
-        }
-      }
-
-      if (!imageUrl) {
-        return res.status(502).json({
-          success: false,
-          error: returnedText || 'Gemini API tidak mengembalikan data gambar. Pastikan prompt valid.'
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        provider: provider,
-        imageUrl: imageUrl,
-        promptUsed: finalPrompt,
-        mimeType: 'image/png'
-      });
-    }
-
-    // -------------------------------------------------------------
-    // PROVIDER LAIN (Not Connected Status)
-    // -------------------------------------------------------------
-    const unsupportedProviders = ['GPT Image', 'Leonardo AI', 'Ideogram', 'Custom API'];
-    if (unsupportedProviders.includes(provider)) {
-      return res.status(503).json({
-        success: false,
-        error: `Provider "${provider}" berstatus [Not Connected]. Backend API Key untuk provider ini belum dikonfigurasi.`
-      });
-    }
-
-    // Local Preview Fallback untuk pengujian lokal tanpa AI
-    if (provider === 'Local Preview') {
-      return res.status(400).json({
-        success: false,
-        error: 'Mode Local Preview bukan merupakan Generative AI. Pilih provider "Gemini / Nano Banana 2" untuk menggunakan AI aktif.'
-      });
-    }
-
-    return res.status(400).json({
-      success: false,
-      error: `Provider "${provider}" tidak dikenal.`
-    });
-
-  } catch (error) {
-    console.error('Serverless Execution Error:', error);
+  if (!apiKey) {
     return res.status(500).json({
       success: false,
-      error: `Internal Server Error: ${error.message || 'Gagal memproses request'}`
+      error: "OPENAI_API_KEY belum tersedia di Vercel."
     });
   }
+
+  let body;
+
+  try {
+    body =
+      typeof req.body === "string"
+        ? JSON.parse(req.body)
+        : req.body;
+  } catch {
+    return res.status(400).json({
+      success: false,
+      error: "Request JSON tidak valid."
+    });
+  }
+
+  const prompt =
+    typeof body?.prompt === "string"
+      ? body.prompt.trim()
+      : "";
+
+  if (!prompt) {
+    return res.status(400).json({
+      success: false,
+      error: "AI Prompt kosong."
+    });
+  }
+
+  const model =
+    typeof body?.model === "string" &&
+    body.model.startsWith("gpt-image")
+      ? body.model
+      : "gpt-image-2";
+
+  const size =
+    typeof body?.size === "string"
+      ? body.size
+      : "1024x1024";
+
+  const quality =
+    typeof body?.quality === "string"
+      ? body.quality
+      : "medium";
+
+  const requestBody = {
+    model,
+    prompt,
+    size,
+    quality,
+    output_format: "png"
+  };
+
+  let response;
+
+  try {
+    response = await fetch(
+      "https://api.openai.com/v1/images/generations",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${apiKey}`
+        },
+        body: JSON.stringify(requestBody)
+      }
+    );
+  } catch (error) {
+    console.error("OpenAI connection error:", error);
+
+    return res.status(502).json({
+      success: false,
+      error: "Tidak dapat terhubung ke OpenAI API."
+    });
+  }
+
+  let result;
+
+  try {
+    result = await response.json();
+  } catch {
+    return res.status(502).json({
+      success: false,
+      error: "Response OpenAI tidak dapat dibaca."
+    });
+  }
+
+  if (!response.ok) {
+    console.error(
+      "OpenAI API error:",
+      JSON.stringify(result)
+    );
+
+    const message =
+      result?.error?.message ||
+      "OpenAI API request gagal.";
+
+    if (response.status === 401) {
+      return res.status(401).json({
+        success: false,
+        error:
+          "OPENAI_API_KEY tidak valid atau sudah dicabut."
+      });
+    }
+
+    if (response.status === 403) {
+      return res.status(403).json({
+        success: false,
+        error:
+          "API key tidak memiliki akses ke image generation."
+      });
+    }
+
+    if (response.status === 429) {
+      return res.status(429).json({
+        success: false,
+        error:
+          "Quota atau billing OpenAI tidak mencukupi."
+      });
+    }
+
+    return res.status(response.status).json({
+      success: false,
+      error: message
+    });
+  }
+
+  const image =
+    Array.isArray(result?.data)
+      ? result.data[0]
+      : null;
+
+  if (!image) {
+    return res.status(502).json({
+      success: false,
+      error:
+        "OpenAI merespons tetapi tidak memberikan gambar."
+    });
+  }
+
+  if (image.b64_json) {
+    return res.status(200).json({
+      success: true,
+      provider: "OpenAI",
+      model,
+      prompt,
+      mimeType: "image/png",
+      imageBase64: image.b64_json,
+      dataUrl:
+        `data:image/png;base64,${image.b64_json}`
+    });
+  }
+
+  if (image.url) {
+    return res.status(200).json({
+      success: true,
+      provider: "OpenAI",
+      model,
+      prompt,
+      mimeType: "image/png",
+      imageUrl: image.url
+    });
+  }
+
+  return res.status(502).json({
+    success: false,
+    error:
+      "Format gambar dari OpenAI tidak dikenali."
+  });
 }
