@@ -1,1837 +1,2485 @@
 <!DOCTYPE html>
-
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
   <title>SEIKO STUDIO — AI Design & Printing Studio</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Plus Jakarta Sans', 'sans-serif'],
-            mono: ['JetBrains Mono', 'monospace'],
-          },
-          colors: {
-            brand: {
-              50: '#fff1f2',
-              100: '#ffe4e6',
-              500: '#e11d48',
-              600: '#be123c',
-              700: '#9f1239',
-              900: '#480b1a',
-              accent: '#f43f5e'
-            },
-            dark: {
-              bg: '#090a0f',
-              card: '#12141c',
-              border: '#1f2433',
-              input: '#181b26'
-            }
-          }
-        }
-      }
-    }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+    rel="stylesheet"
+  >
 
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
-      background-color: #090a0f;
-      color: #f3f4f6;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      margin: 0;
+      background:
+        radial-gradient(circle at top right, rgba(59,130,246,.08), transparent 35%),
+        radial-gradient(circle at bottom left, rgba(16,185,129,.05), transparent 30%),
+        #070b12;
+      color: #e5e7eb;
+      font-family: Inter, sans-serif;
     }
 
-    .glass-card {
-      background: rgba(18, 20, 28, 0.85);
-      backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.07);
+    .mono {
+      font-family: "JetBrains Mono", monospace;
     }
 
-    .custom-scrollbar::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+    .panel {
+      background: rgba(13,18,28,.88);
+      border: 1px solid rgba(148,163,184,.14);
+      box-shadow: 0 18px 60px rgba(0,0,0,.22);
+      backdrop-filter: blur(14px);
     }
 
-    .custom-scrollbar::-webkit-scrollbar-track {
-      background: #12141c;
+    .input {
+      width: 100%;
+      background: #080d16;
+      border: 1px solid rgba(148,163,184,.18);
+      color: #e5e7eb;
+      border-radius: 10px;
+      padding: 12px 14px;
+      outline: none;
+      transition: .2s;
     }
 
-    .custom-scrollbar::-webkit-scrollbar-thumb {
-      background: #2b3042;
-      border-radius: 3px;
+    .input:focus {
+      border-color: rgba(59,130,246,.7);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.10);
+    }
+
+    textarea.input {
+      resize: vertical;
+    }
+
+    select.input {
+      cursor: pointer;
+    }
+
+    .section-number {
+      width: 34px;
+      height: 34px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(59,130,246,.12);
+      border: 1px solid rgba(59,130,246,.22);
+      color: #60a5fa;
+      font-family: "JetBrains Mono", monospace;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .dropzone {
+      border: 1px dashed rgba(148,163,184,.28);
+      background: rgba(15,23,42,.55);
+      transition: .2s;
+    }
+
+    .dropzone.dragover {
+      border-color: #3b82f6;
+      background: rgba(59,130,246,.08);
+    }
+
+    .btn {
+      border-radius: 10px;
+      padding: 11px 15px;
+      font-weight: 700;
+      font-size: 13px;
+      transition: .2s;
+      cursor: pointer;
+    }
+
+    .btn:disabled {
+      cursor: not-allowed;
+      opacity: .5;
+    }
+
+    .btn-primary {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: #1d4ed8;
+    }
+
+    .btn-secondary {
+      background: #111827;
+      border: 1px solid rgba(148,163,184,.18);
+      color: #d1d5db;
+    }
+
+    .btn-secondary:hover:not(:disabled) {
+      background: #172033;
+    }
+
+    .btn-green {
+      background: #059669;
+      color: white;
+    }
+
+    .btn-green:hover:not(:disabled) {
+      background: #047857;
+    }
+
+    .btn-danger {
+      background: rgba(239,68,68,.10);
+      border: 1px solid rgba(239,68,68,.20);
+      color: #fca5a5;
+    }
+
+    .thumb {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #0b1220;
+      border: 1px solid rgba(148,163,184,.15);
+      aspect-ratio: 1;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .thumb-remove {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 25px;
+      height: 25px;
+      border-radius: 7px;
+      background: rgba(0,0,0,.75);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.15);
+      cursor: pointer;
+    }
+
+    .radio-card {
+      cursor: pointer;
+      border: 1px solid rgba(148,163,184,.16);
+      background: #0b111c;
+      border-radius: 10px;
+      padding: 13px;
+      transition: .2s;
+    }
+
+    .radio-card.active {
+      border-color: rgba(59,130,246,.65);
+      background: rgba(59,130,246,.08);
+    }
+
+    .check-row {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      padding: 9px 0;
+      color: #cbd5e1;
+      font-size: 13px;
+    }
+
+    .check-row input {
+      accent-color: #2563eb;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #10b981;
+      box-shadow: 0 0 12px rgba(16,185,129,.7);
+    }
+
+    .preview-frame {
+      min-height: 460px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.14);
+      background:
+        linear-gradient(45deg, #111827 25%, transparent 25%),
+        linear-gradient(-45deg, #111827 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #111827 75%),
+        linear-gradient(-45deg, transparent 75%, #111827 75%);
+      background-size: 28px 28px;
+      background-position: 0 0, 0 14px, 14px -14px, -14px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .preview-frame img {
+      max-width: 100%;
+      max-height: 650px;
+      object-fit: contain;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .error-box {
+      border: 1px solid rgba(239,68,68,.3);
+      background: rgba(127,29,29,.18);
+      color: #fecaca;
+    }
+
+    .success-box {
+      border: 1px solid rgba(16,185,129,.25);
+      background: rgba(6,78,59,.16);
+      color: #a7f3d0;
+    }
+
+    @media (max-width: 768px) {
+      .preview-frame {
+        min-height: 300px;
+      }
     }
   </style>
-
 </head>
 
-<body class="min-h-screen text-gray-100 selection:bg-brand-500 selection:text-white custom-scrollbar pb-12">
+<body>
 
   <!-- HEADER -->
+  <header class="border-b border-slate-800/80 sticky top-0 z-40 bg-[#070b12]/90 backdrop-blur-xl">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
 
-  <header class="sticky top-0 z-50 glass-card border-b border-dark-border px-4 lg:px-8 py-4 mb-8">
-    <div class="max-w-6xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-11 h-11 rounded-xl bg-blue-600 flex items-center justify-center font-black text-xl">
+            S
+          </div>
 
-```
-  <div class="flex items-center gap-3">
-    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-red-500 flex items-center justify-center font-extrabold text-xl text-white shadow-lg shadow-brand-500/30">
-      S
+          <div>
+            <div class="font-extrabold tracking-tight text-lg">
+              SEIKO STUDIO
+            </div>
+
+            <div class="text-xs text-slate-500 mono">
+              AI Design & Printing Studio
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="status-dot"></span>
+
+          <span
+            id="systemStatusText"
+            class="text-xs mono text-emerald-400"
+          >
+            System Ready
+          </span>
+        </div>
+
+      </div>
     </div>
-
-    <div>
-      <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-        SEIKO STUDIO
-        <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-brand-500/20 text-brand-accent border border-brand-500/30">
-          PROD FORM
-        </span>
-      </h1>
-      <p class="text-xs text-gray-400">AI Design & Printing Studio</p>
-    </div>
-  </div>
-
-  <div class="flex items-center gap-2 bg-dark-input px-3 py-1.5 rounded-full border border-dark-border">
-    <span id="systemStatusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-    <span class="text-xs font-mono text-gray-300" id="systemStatusText">
-      System Ready
-    </span>
-  </div>
-
-</div>
-```
-
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 lg:px-8 space-y-8">
 
-```
-<!-- ERROR -->
-<div id="errorBanner" class="hidden p-4 rounded-xl bg-red-950/80 border border-red-500/50 text-red-200 text-sm flex items-start justify-between gap-3 shadow-lg">
-  <div class="flex items-center gap-2">
-    <span class="text-xl">⚠️</span>
-    <span id="errorMessage">Terjadi kesalahan pada sistem.</span>
-  </div>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-6">
 
-  <button onclick="hideError()" class="text-red-400 hover:text-white font-bold">
-    &times;
-  </button>
-</div>
-
-<!-- 01 DATA DESAIN -->
-<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-
-  <div class="flex items-center gap-3 mb-6 pb-3 border-b border-dark-border">
-    <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-      01
-    </span>
-    <h2 class="text-lg font-bold text-white">DATA DESAIN</h2>
-  </div>
-
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Nama / Brand
-      </label>
-      <input
-        type="text"
-        id="inputBrand"
-        placeholder="Contoh: Kopi Janji Jiwa, Seiko Tech"
-        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
-      >
-    </div>
-
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Jenis Desain (Input Teks Bebas)
-      </label>
-      <input
-        type="text"
-        id="inputType"
-        placeholder="Contoh: Banner Promosi Roll-Up 200x80cm, Poster Cafe Minimalis"
-        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
-      >
-    </div>
-
-    <div class="md:col-span-2">
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Headline Utama
-      </label>
-      <input
-        type="text"
-        id="inputHeadline"
-        placeholder="Contoh: DISKON SPESIAL HARI INI - BELI 1 GRATIS 1"
-        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
-      >
-    </div>
-
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Informasi Pendukung
-      </label>
-      <textarea
-        id="inputInfo"
-        rows="3"
-        placeholder="Contoh: Alamat toko, Syarat & Ketentuan, List Menu, Sosmed"
-        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"
-      ></textarea>
-    </div>
-
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Call To Action (CTA)
-      </label>
-      <textarea
-        id="inputCTA"
-        rows="3"
-        placeholder="Contoh: Hubungi WA: 0812-3456-7890 / Kunjungi seikostudio.id"
-        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"
-      ></textarea>
-    </div>
-
-  </div>
-</section>
-
-<!-- 02 INPUT VISUAL -->
-<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-
-  <div class="flex items-center justify-between mb-6 pb-3 border-b border-dark-border">
-
-    <div class="flex items-center gap-3">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        02
-      </span>
-      <h2 class="text-lg font-bold text-white">INPUT VISUAL</h2>
-    </div>
-
-    <div class="flex items-center gap-2">
-
-      <button
-        id="btnVoiceInput"
-        onclick="toggleVoiceInput()"
-        class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition"
-      >
-        🎤 <span id="voiceText">Voice Input</span>
-      </button>
-
-      <button
-        id="btnAnalyzeImg"
-        onclick="analyzeImages()"
-        class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition"
-      >
-        🖼 <span>Analyze Image</span>
-      </button>
-
-    </div>
-  </div>
-
-  <div class="space-y-4">
-
+    <!-- ERROR -->
     <div
-      id="dropZone"
-      onclick="document.getElementById('fileInput').click()"
-      class="border-2 border-dashed border-dark-border hover:border-brand-500/50 rounded-2xl p-8 text-center bg-dark-input/50 cursor-pointer transition"
-    >
+      id="errorBox"
+      class="hidden error-box rounded-xl p-4 text-sm"
+    ></div>
 
-      <input
-        type="file"
-        id="fileInput"
-        multiple
-        accept="image/*"
-        class="hidden"
-        onchange="handleFileSelect(event)"
-      >
+    <!-- SUCCESS -->
+    <div
+      id="successBox"
+      class="hidden success-box rounded-xl p-4 text-sm"
+    ></div>
 
-      <div class="text-3xl mb-2">📁</div>
 
-      <p class="text-sm text-gray-300 font-medium">
-        Klik atau drag & drop file visual di sini
-      </p>
+    <!-- 01 DATA DESAIN -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
 
-      <p class="text-xs text-gray-500 mt-1">
-        Logo, Foto Produk, Screenshot, Foto Toko, Referensi Desain
-      </p>
-
-    </div>
-
-    <div id="thumbnailContainer" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
-
-  </div>
-</section>
-
-<!-- 03 04 05 -->
-<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-
-  <!-- 03 MODE -->
-  <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-
-    <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        03
-      </span>
-      <h2 class="text-sm font-bold text-white uppercase">
-        MODE DESAIN
-      </h2>
-    </div>
-
-    <div class="space-y-4">
-
-      <div class="grid grid-cols-2 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border">
-
-        <button
-          id="btnModeRGB"
-          onclick="setMode('RGB')"
-          class="py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition"
-        >
-          RGB (Digital)
-        </button>
-
-        <button
-          id="btnModeCMYK"
-          onclick="setMode('CMYK')"
-          class="py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition"
-        >
-          CMYK (Print)
-        </button>
-
-      </div>
-
-      <div id="presetsRGB" class="space-y-2">
-
-        <p class="text-[11px] font-semibold text-gray-400 uppercase">
-          Preset Media Digital:
-        </p>
-
-        <div class="flex flex-wrap gap-1.5 text-xs">
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Social Media</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Website</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">WhatsApp</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">TikTok</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">YouTube</span>
-        </div>
-
-      </div>
-
-      <div id="presetsCMYK" class="space-y-2 hidden">
-
-        <p class="text-[11px] font-semibold text-gray-400 uppercase">
-          Preset Percetakan:
-        </p>
-
-        <div class="flex flex-wrap gap-1.5 text-xs">
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Banner</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Poster</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Brochure</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">ID Card</span>
-          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Invitation</span>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- 04 SPESIFIKASI -->
-  <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-
-    <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        04
-      </span>
-      <h2 class="text-sm font-bold text-white uppercase">
-        SPESIFIKASI
-      </h2>
-    </div>
-
-    <div class="space-y-3">
-
-      <div>
-        <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
-          Ukuran
-        </label>
-
-        <input
-          type="text"
-          id="specSize"
-          value="1080 x 1080 px (1:1)"
-          class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
-        >
-      </div>
-
-      <div>
-        <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
-          Orientasi
-        </label>
-
-        <select
-          id="specOrientation"
-          class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
-        >
-          <option value="Square (1:1)">Square (1:1)</option>
-          <option value="Portrait (9:16)">Portrait (9:16)</option>
-          <option value="Landscape (16:9)">Landscape (16:9)</option>
-          <option value="Custom">Custom</option>
-        </select>
-      </div>
-
-      <div class="grid grid-cols-2 gap-2">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">01</div>
 
         <div>
-          <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
+          <h2 class="font-bold text-lg">DATA DESAIN</h2>
+          <p class="text-xs text-slate-500 mono">
+            Informasi utama proyek
+          </p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Nama / Brand
+          </label>
+
+          <input
+            id="inputBrand"
+            class="input"
+            placeholder="Contoh: SEIKO COFFEE"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Jenis Desain
+          </label>
+
+          <input
+            id="inputType"
+            class="input"
+            placeholder="Contoh: Poster promo, banner, flyer"
+          />
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Headline
+          </label>
+
+          <input
+            id="inputHeadline"
+            class="input"
+            placeholder="Headline utama desain"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Informasi Pendukung
+          </label>
+
+          <textarea
+            id="inputInfo"
+            class="input"
+            rows="5"
+            placeholder="Harga, alamat, tanggal, detail produk, dll."
+          ></textarea>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            CTA
+          </label>
+
+          <textarea
+            id="inputCTA"
+            class="input"
+            rows="5"
+            placeholder="Contoh: Pesan sekarang, Hubungi kami, Order via WhatsApp"
+          ></textarea>
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- 02 INPUT VISUAL -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">02</div>
+
+        <div>
+          <h2 class="font-bold text-lg">INPUT VISUAL</h2>
+          <p class="text-xs text-slate-500 mono">
+            Logo, produk, screenshot, referensi
+          </p>
+        </div>
+      </div>
+
+      <div
+        id="dropzone"
+        class="dropzone rounded-xl p-8 text-center"
+      >
+
+        <input
+          id="imageInput"
+          type="file"
+          accept="image/*"
+          multiple
+          class="hidden"
+        />
+
+        <div class="text-3xl mb-3">◫</div>
+
+        <div class="font-semibold">
+          Upload visual reference
+        </div>
+
+        <div class="text-xs text-slate-500 mt-1">
+          PNG / JPG / WEBP — bisa lebih dari satu gambar
+        </div>
+
+        <button
+          type="button"
+          id="btnChooseImages"
+          class="btn btn-secondary mt-5"
+        >
+          + PILIH GAMBAR
+        </button>
+
+        <div class="flex justify-center gap-2 mt-3 flex-wrap">
+          <span class="text-[11px] mono px-2 py-1 rounded bg-slate-800 text-slate-400">
+            LOGO
+          </span>
+
+          <span class="text-[11px] mono px-2 py-1 rounded bg-slate-800 text-slate-400">
+            PRODUCT
+          </span>
+
+          <span class="text-[11px] mono px-2 py-1 rounded bg-slate-800 text-slate-400">
+            STORE
+          </span>
+
+          <span class="text-[11px] mono px-2 py-1 rounded bg-slate-800 text-slate-400">
+            REFERENCE
+          </span>
+        </div>
+
+      </div>
+
+      <div
+        id="imagePreviewGrid"
+        class="grid grid-cols-3 sm:grid-cols-5 md:grid-cols-7 gap-3 mt-5"
+      ></div>
+
+      <div class="flex flex-wrap gap-3 mt-5">
+
+        <button
+          type="button"
+          id="btnVoice"
+          class="btn btn-secondary"
+        >
+          🎙 VOICE INPUT
+        </button>
+
+        <button
+          type="button"
+          id="btnAnalyze"
+          class="btn btn-secondary"
+        >
+          🔍 ANALYZE IMAGE
+        </button>
+
+        <button
+          type="button"
+          id="btnClearImages"
+          class="btn btn-danger"
+        >
+          CLEAR IMAGES
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- 03 MODE DESAIN -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">03</div>
+
+        <div>
+          <h2 class="font-bold text-lg">MODE DESAIN</h2>
+          <p class="text-xs text-slate-500 mono">
+            Pilih kebutuhan output
+          </p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-4">
+
+        <button
+          type="button"
+          id="modeRGB"
+          class="radio-card active text-left"
+          onclick="setColorMode('RGB')"
+        >
+          <div class="font-bold text-sm">
+            RGB — MEDIA DIGITAL
+          </div>
+
+          <div class="text-xs text-slate-500 mt-1">
+            Social media, website, display, digital advertising
+          </div>
+        </button>
+
+        <button
+          type="button"
+          id="modeCMYK"
+          class="radio-card text-left"
+          onclick="setColorMode('CMYK')"
+        >
+          <div class="font-bold text-sm">
+            CMYK — PERCETAKAN
+          </div>
+
+          <div class="text-xs text-slate-500 mt-1">
+            Flyer, poster, banner, packaging, print production
+          </div>
+        </button>
+
+      </div>
+
+      <div class="mt-4 text-xs mono text-slate-500">
+        Color Mode:
+        <span id="colorModeLabel" class="text-blue-400">
+          RGB
+        </span>
+      </div>
+
+    </section>
+
+
+    <!-- 04 SPESIFIKASI -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
+
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">04</div>
+
+        <div>
+          <h2 class="font-bold text-lg">SPESIFIKASI</h2>
+          <p class="text-xs text-slate-500 mono">
+            Ukuran dan kebutuhan produksi
+          </p>
+        </div>
+      </div>
+
+      <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Size
+          </label>
+
+          <input
+            id="specSize"
+            class="input"
+            value="1080x1350 px"
+            placeholder="Contoh: A4 / 1080x1350 px"
+          />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Orientation
+          </label>
+
+          <select id="specOrientation" class="input">
+            <option value="Portrait">Portrait</option>
+            <option value="Landscape">Landscape</option>
+            <option value="Square">Square</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
             Bleed
           </label>
 
           <input
-            type="text"
             id="specBleed"
+            class="input"
             value="3 mm"
-            class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
-          >
+          />
         </div>
 
         <div>
-          <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
-            Resolusi
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Resolution
           </label>
 
-          <input
-            type="text"
-            id="specRes"
-            value="300 DPI"
-            class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
-          >
+          <select id="specRes" class="input">
+            <option value="300 DPI">300 DPI</option>
+            <option value="150 DPI">150 DPI</option>
+            <option value="96 DPI">96 DPI</option>
+            <option value="72 DPI">72 DPI</option>
+          </select>
         </div>
 
       </div>
 
-      <div class="pt-1 space-y-1">
+      <div class="grid md:grid-cols-3 mt-5 gap-2">
 
-        <label class="flex items-center gap-2 text-xs text-gray-300">
-          <input type="checkbox" id="chkPrintReady" checked class="rounded border-dark-border bg-dark-input text-brand-500">
+        <label class="check-row">
+          <input
+            id="chkPrintReady"
+            type="checkbox"
+            checked
+          />
           Print-ready PDF
         </label>
 
-        <label class="flex items-center gap-2 text-xs text-gray-300">
-          <input type="checkbox" id="chkBleed" checked class="rounded border-dark-border bg-dark-input text-brand-500">
-          Include Bleed
+        <label class="check-row">
+          <input
+            id="chkBleed"
+            type="checkbox"
+            checked
+          />
+          Include bleed
         </label>
 
-        <label class="flex items-center gap-2 text-xs text-gray-300">
-          <input type="checkbox" id="chkCropMarks" checked class="rounded border-dark-border bg-dark-input text-brand-500">
-          Crop Marks
+        <label class="check-row">
+          <input
+            id="chkCropMarks"
+            type="checkbox"
+          />
+          Crop marks
         </label>
 
       </div>
 
-    </div>
-  </section>
+    </section>
 
-  <!-- 05 FORMAT -->
-  <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
 
-    <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        05
-      </span>
-      <h2 class="text-sm font-bold text-white uppercase">
-        FORMAT OUTPUT
-      </h2>
-    </div>
+    <!-- 05 FORMAT OUTPUT -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
 
-    <div class="space-y-2 text-xs">
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">05</div>
 
-      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
-        <span>PNG (Raster High-Res)</span>
-        <input type="checkbox" name="fmt" value="PNG" checked class="rounded border-dark-border bg-dark-input text-brand-500">
-      </label>
+        <div>
+          <h2 class="font-bold text-lg">FORMAT OUTPUT</h2>
+          <p class="text-xs text-slate-500 mono">
+            Target file format
+          </p>
+        </div>
+      </div>
 
-      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
-        <span>JPG (Standard Image)</span>
-        <input type="checkbox" name="fmt" value="JPG" class="rounded border-dark-border bg-dark-input text-brand-500">
-      </label>
+      <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
 
-      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
-        <span>PDF (Vector/Print Document)</span>
-        <input type="checkbox" name="fmt" value="PDF" class="rounded border-dark-border bg-dark-input text-brand-500">
-      </label>
+        <button type="button" class="radio-card active text-center" onclick="setOutputFormat(this,'PNG')">
+          PNG
+        </button>
 
-      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
-        <span class="flex items-center gap-1.5">
+        <button type="button" class="radio-card text-center" onclick="setOutputFormat(this,'JPG')">
+          JPG
+        </button>
+
+        <button type="button" class="radio-card text-center" onclick="setOutputFormat(this,'PDF')">
+          PDF
+        </button>
+
+        <button type="button" class="radio-card text-center" onclick="setOutputFormat(this,'TIFF')">
+          TIFF
+        </button>
+
+        <button type="button" class="radio-card text-center" onclick="setOutputFormat(this,'CDR')">
           CDR
-          <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">
-            Corel Export Required
-          </span>
-        </span>
-        <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
-      </label>
+        </button>
 
-      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
-        <span class="flex items-center gap-1.5">
-          AI / PSD
-          <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">
-            Adobe Engine Required
-          </span>
-        </span>
-        <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
-      </label>
+        <button type="button" class="radio-card text-center" onclick="setOutputFormat(this,'AI')">
+          AI
+        </button>
 
-    </div>
-  </section>
+        <button type="button" class="radio-card text-center" onclick="setOutputFormat(this,'PSD')">
+          PSD
+        </button>
 
-</div>
+      </div>
 
-<!-- 06 AI IMAGE ENGINE -->
-<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-6">
+      <p class="text-xs text-slate-500 mt-4">
+        Catatan: CDR / AI / PSD tidak dipalsukan dengan mengganti ekstensi PNG.
+        Backend hanya menghasilkan format yang benar-benar didukung.
+      </p>
 
-  <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+    </section>
 
-    <div class="flex items-center gap-3">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        06
-      </span>
 
-      <h2 class="text-lg font-bold text-white">
-        AI IMAGE ENGINE & PROMPT
-      </h2>
-    </div>
+    <!-- 06 AI ENGINE -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
 
-    <div
-      id="providerStatusBadge"
-      class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
-    >
-      Backend Connected
-    </div>
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">06</div>
 
-  </div>
+        <div>
+          <h2 class="font-bold text-lg">AI IMAGE ENGINE</h2>
+          <p class="text-xs text-slate-500 mono">
+            Engine generasi gambar
+          </p>
+        </div>
+      </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-    <div>
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Platform / Model AI
-      </label>
+      <div class="grid lg:grid-cols-2 gap-4">
 
-      <select
-        id="selectAIModel"
-        onchange="updateModelStatus()"
-        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
-      >
-        <option value="GPT Image" selected>
-          GPT Image (Backend Connected)
-        </option>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            AI Provider
+          </label>
 
-        <option value="Gemini / Nano Banana 2">
-          Gemini / Nano Banana 2 (Backend Required)
-        </option>
+          <select
+            id="selectAIModel"
+            class="input"
+            onchange="updateModelStatus()"
+          >
 
-        <option value="Gemini / Nano Banana Pro">
-          Gemini / Nano Banana Pro (Backend Required)
-        </option>
+            <option value="Gemini / Nano Banana 2" selected>
+              Gemini / Nano Banana 2
+            </option>
 
-        <option value="Leonardo AI">
-          Leonardo AI (Not Connected)
-        </option>
+            <option value="Gemini / Nano Banana Pro">
+              Gemini / Nano Banana Pro
+            </option>
 
-        <option value="Ideogram">
-          Ideogram (Not Connected)
-        </option>
+            <option value="GPT Image">
+              GPT Image
+            </option>
 
-        <option value="Custom API">
-          Custom API (Not Connected)
-        </option>
+            <option value="Local Preview">
+              Local Preview
+            </option>
 
-        <option value="Local Preview">
-          Local Preview (Testing Only - Non AI)
-        </option>
-      </select>
-    </div>
+          </select>
+        </div>
 
-    <div>
 
-      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-        Mode AI
-      </label>
+        <div>
+          <label class="block text-xs font-semibold text-slate-400 mb-2">
+            Connection
+          </label>
 
-      <div class="grid grid-cols-3 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border text-xs">
+          <div class="h-[46px] flex items-center">
+            <span
+              id="providerStatusBadge"
+              class="text-xs mono px-3 py-2 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+            >
+              Backend Connected
+            </span>
+          </div>
+        </div>
+
+      </div>
+
+
+      <div class="grid grid-cols-3 gap-2 mt-5">
 
         <button
-          id="btnAIModeTextToImg"
-          onclick="setAIMode('Text -> Image')"
-          class="py-2 rounded-lg bg-brand-600 font-bold text-white transition"
+          id="aiModeText"
+          type="button"
+          class="radio-card active text-center"
+          onclick="setAIMode('Text→Image',this)"
         >
           Text → Image
         </button>
 
         <button
-          id="btnAIModeImgToImg"
-          onclick="setAIMode('Image -> Image')"
-          class="py-2 rounded-lg text-gray-400 hover:text-white transition"
+          id="aiModeImage"
+          type="button"
+          class="radio-card text-center"
+          onclick="setAIMode('Image→Image',this)"
         >
           Image → Image
         </button>
 
         <button
-          id="btnAIModeEditImg"
-          onclick="setAIMode('Edit Image')"
-          class="py-2 rounded-lg text-gray-400 hover:text-white transition"
+          id="aiModeEdit"
+          type="button"
+          class="radio-card text-center"
+          onclick="setAIMode('Edit Image',this)"
         >
           Edit Image
         </button>
 
       </div>
 
-    </div>
-  </div>
 
-  <!-- PROMPT -->
-  <div class="space-y-3">
+      <div class="mt-5">
 
-    <div class="flex items-center justify-between">
+        <div class="flex items-center justify-between gap-3 mb-2">
 
-      <label class="block text-xs font-semibold uppercase text-gray-400">
-        AI Prompt (Source of Truth)
-      </label>
+          <label class="text-xs font-semibold text-slate-400">
+            AI PROMPT
+          </label>
 
-      <button
-        onclick="generatePromptAuto()"
-        class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-xs font-bold text-white shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5"
-      >
-        ✨ GENERATE PROMPT
-      </button>
+          <button
+            type="button"
+            class="btn btn-secondary !py-2 !px-3"
+            onclick="generatePromptAuto()"
+          >
+            ✨ GENERATE PROMPT
+          </button>
 
-    </div>
+        </div>
 
-    <textarea
-      id="aiPrompt"
-      rows="6"
-      placeholder="Ketik prompt AI secara manual atau klik tombol ✨ GENERATE PROMPT..."
-      class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-gray-100 font-mono focus:outline-none focus:border-brand-500 transition custom-scrollbar leading-relaxed"
-    ></textarea>
+        <textarea
+          id="aiPrompt"
+          class="input mono"
+          rows="10"
+          placeholder="Tulis prompt desain di sini..."
+        ></textarea>
 
-  </div>
+        <div class="flex flex-wrap gap-3 mt-4">
 
-  <!-- GENERATE -->
-  <div class="pt-2">
+          <button
+            id="btnGenerateDesign"
+            type="button"
+            class="btn btn-primary flex-1 min-w-[220px]"
+            onclick="executeGenerateDesign()"
+          >
+            ✨ GENERATE DESIGN
+          </button>
 
-    <button
-      id="btnGenerateDesign"
-      onclick="executeGenerateDesign()"
-      class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-600 via-red-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-extrabold text-base tracking-wide shadow-xl shadow-brand-600/30 transition transform active:scale-[0.99] flex items-center justify-center gap-2"
-    >
-      <span>✨ GENERATE DESIGN</span>
-    </button>
+        </div>
 
-    <p
-      id="processStepText"
-      class="text-center text-xs font-mono text-gray-400 mt-2"
-    >
-      Status: Ready
-    </p>
+      </div>
 
-  </div>
 
-</section>
-
-<!-- 07 REVISION -->
-<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
-
-  <div class="flex items-center gap-3 pb-3 border-b border-dark-border">
-    <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-      07
-    </span>
-    <h2 class="text-lg font-bold text-white">
-      REVISION
-    </h2>
-  </div>
-
-  <div>
-
-    <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
-      Instruksi Perubahan Desain
-    </label>
-
-    <textarea
-      id="revisionInstruction"
-      rows="3"
-      placeholder="Contoh: Buat lebih premium, headline lebih besar, foto produk lebih dominan, ubah warna menjadi hitam dan merah."
-      class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"
-    ></textarea>
-
-  </div>
-
-  <button
-    onclick="executeRevision()"
-    class="px-6 py-3 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-sm font-bold text-white transition flex items-center gap-2"
-  >
-    ↻ GENERATE REVISION
-  </button>
-
-</section>
-
-<!-- 08 PREVIEW -->
-<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
-
-  <div class="flex items-center justify-between pb-3 border-b border-dark-border">
-
-    <div class="flex items-center gap-3">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        08
-      </span>
-
-      <h2 class="text-lg font-bold text-white">
-        DESIGN PREVIEW
-      </h2>
-    </div>
-
-    <div
-      id="previewStatusBadge"
-      class="text-xs font-mono px-2.5 py-1 rounded bg-gray-800 text-gray-400 border border-dark-border"
-    >
-      Idle
-    </div>
-
-  </div>
-
-  <div class="relative w-full min-h-[420px] rounded-2xl bg-dark-input border border-dark-border flex items-center justify-center p-4 overflow-hidden group">
-
-    <div id="previewPlaceholder" class="text-center text-gray-500 space-y-2">
-
-      <div class="text-5xl">🎨</div>
-
-      <p class="text-sm font-medium">
-        Hasil desain AI akan muncul di sini
-      </p>
-
-      <p class="text-xs text-gray-600">
-        Tekan tombol
-        <span class="text-brand-accent font-semibold">
-          ✨ GENERATE DESIGN
+      <div class="mt-5 text-xs mono text-slate-500">
+        <span id="processStepText">
+          Status: Ready.
         </span>
-        untuk memulai
-      </p>
+      </div>
 
-    </div>
+    </section>
 
-    <img
-      id="generatedImageResult"
-      class="hidden max-h-[600px] w-auto max-w-full object-contain rounded-xl shadow-2xl border border-dark-border"
-      alt="Hasil Desain AI"
-    >
 
-  </div>
+    <!-- 07 REVISION -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
 
-  <div
-    id="previewActions"
-    class="hidden flex flex-wrap items-center justify-between gap-3 pt-2"
-  >
+      <div class="flex items-center gap-3 mb-6">
+        <div class="section-number">07</div>
 
-    <div class="flex flex-wrap items-center gap-2">
+        <div>
+          <h2 class="font-bold text-lg">REVISION</h2>
+          <p class="text-xs text-slate-500 mono">
+            Perbaikan desain berdasarkan hasil sebelumnya
+          </p>
+        </div>
+      </div>
+
+      <textarea
+        id="revisionText"
+        class="input"
+        rows="6"
+        placeholder="Contoh: ubah background menjadi hitam, headline lebih besar, tambahkan nuansa premium..."
+      ></textarea>
 
       <button
-        onclick="useDesign()"
-        class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition"
+        type="button"
+        id="btnRevision"
+        class="btn btn-secondary mt-4"
+        onclick="executeRevision()"
       >
-        ✓ USE DESIGN
+        ↻ GENERATE REVISION
       </button>
 
-      <button
-        onclick="focusRevision()"
-        class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition"
+    </section>
+
+
+    <!-- 08 PREVIEW -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
+
+      <div class="flex items-center justify-between gap-4 mb-6">
+
+        <div class="flex items-center gap-3">
+
+          <div class="section-number">08</div>
+
+          <div>
+            <h2 class="font-bold text-lg">
+              DESIGN PREVIEW
+            </h2>
+
+            <p class="text-xs text-slate-500 mono">
+              Hasil generasi AI
+            </p>
+          </div>
+
+        </div>
+
+        <span
+          id="previewStatusBadge"
+          class="text-xs mono px-2.5 py-1 rounded bg-slate-800 text-slate-500 border border-slate-700"
+        >
+          Waiting
+        </span>
+
+      </div>
+
+
+      <div class="preview-frame">
+
+        <div
+          id="previewPlaceholder"
+          class="text-center text-slate-600"
+        >
+
+          <div class="text-5xl mb-4 opacity-40">
+            ◇
+          </div>
+
+          <div class="font-semibold">
+            Design Preview
+          </div>
+
+          <div class="text-xs mt-1">
+            Generate design untuk melihat hasil.
+          </div>
+
+        </div>
+
+        <img
+          id="generatedImageResult"
+          class="hidden"
+          alt="Generated Design"
+        />
+
+      </div>
+
+
+      <div
+        id="previewActions"
+        class="hidden flex flex-wrap gap-3 mt-5"
       >
-        ✎ REVISE
-      </button>
+
+        <button
+          type="button"
+          class="btn btn-green"
+          onclick="useDesign()"
+        >
+          ✓ USE DESIGN
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="focusRevision()"
+        >
+          ↻ REVISE
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="executeGenerateDesign()"
+        >
+          ⟳ REGENERATE
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-secondary"
+          onclick="downloadDesign()"
+        >
+          ↓ DOWNLOAD
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- 09 PROMPT USED -->
+    <section class="panel rounded-2xl p-5 sm:p-7">
+
+      <div class="flex items-center justify-between gap-4 mb-5">
+
+        <div class="flex items-center gap-3">
+
+          <div class="section-number">09</div>
+
+          <div>
+            <h2 class="font-bold text-lg">
+              PROMPT USED
+            </h2>
+
+            <p class="text-xs text-slate-500 mono">
+              Prompt yang benar-benar dikirim ke backend
+            </p>
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-secondary !py-2 !px-3"
+          onclick="copyPromptUsed()"
+        >
+          COPY PROMPT
+        </button>
+
+      </div>
+
+      <textarea
+        id="promptUsedBox"
+        class="input mono"
+        rows="9"
+        placeholder="Prompt yang digunakan akan tampil di sini..."
+      ></textarea>
 
       <button
-        onclick="executeGenerateDesign()"
-        class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition"
-      >
-        ↻ REGENERATE
-      </button>
-
-    </div>
-
-    <button
-      onclick="downloadDesign()"
-      class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-red-600 hover:from-brand-500 hover:to-red-500 text-xs font-extrabold text-white shadow-lg transition flex items-center gap-2"
-    >
-      ↓ DOWNLOAD HASIL DESAIN
-    </button>
-
-  </div>
-
-</section>
-
-<!-- 09 PROMPT USED -->
-<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
-
-  <div class="flex items-center justify-between pb-3 border-b border-dark-border">
-
-    <div class="flex items-center gap-3">
-      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
-        09
-      </span>
-
-      <h2 class="text-lg font-bold text-white">
-        PROMPT YANG DIGUNAKAN
-      </h2>
-    </div>
-
-    <div class="flex items-center gap-2">
-
-      <button
-        onclick="copyPromptUsed()"
-        class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition"
-      >
-        📋 Copy Prompt
-      </button>
-
-      <button
+        type="button"
+        class="btn btn-secondary mt-4"
         onclick="editPromptUsed()"
-        class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition"
       >
-        ✏️ Edit
+        EDIT PROMPT
       </button>
 
-    </div>
+    </section>
 
-  </div>
 
-  <div
-    id="promptUsedBox"
-    class="p-4 rounded-xl bg-dark-input border border-dark-border text-xs text-gray-300 font-mono min-h-[80px] whitespace-pre-wrap break-words leading-relaxed"
-  >
-    (Belum ada prompt yang dieksekusi. Prompt yang benar-benar dikirim ke AI akan muncul di sini setelah generate berhasil).
-  </div>
+    <!-- SYSTEM INFO -->
+    <section class="pb-10">
 
-</section>
-```
+      <div class="panel rounded-2xl p-5">
+
+        <div class="grid sm:grid-cols-3 gap-4 text-xs">
+
+          <div>
+            <div class="text-slate-500 mono mb-1">
+              COLOR MODE
+            </div>
+
+            <div
+              id="infoColorMode"
+              class="font-semibold"
+            >
+              RGB
+            </div>
+          </div>
+
+          <div>
+            <div class="text-slate-500 mono mb-1">
+              OUTPUT FORMAT
+            </div>
+
+            <div
+              id="infoOutputFormat"
+              class="font-semibold"
+            >
+              PNG
+            </div>
+          </div>
+
+          <div>
+            <div class="text-slate-500 mono mb-1">
+              AI MODE
+            </div>
+
+            <div
+              id="infoAIMode"
+              class="font-semibold"
+            >
+              Text→Image
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
 
   </main>
 
-  <footer class="max-w-6xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-gray-500">
-    <p>
-      © 2026 SEIKO STUDIO — AI Design & Printing Studio. Production Ready Workflow.
-    </p>
-  </footer>
 
-  <!-- CLIENT SCRIPT -->
+<script>
 
-  <script>
+  /* =========================================================
+     GLOBAL STATE
+  ========================================================= */
 
-    let currentMode = 'RGB';
-    let currentAIMode = 'Text -> Image';
+  let uploadedImages = [];
 
-    let uploadedImages = [];
+  let currentMode = 'RGB';
 
-    let lastUsedPrompt = '';
-    let lastGeneratedImageUrl = null;
+  let currentAIMode = 'Text→Image';
 
-    /*
-      ============================================================
-      ERROR HANDLING
-      ============================================================
-    */
+  let currentOutputFormat = 'PNG';
 
-    function showError(msg) {
-      document.getElementById('errorMessage').innerText =
-        msg || 'Terjadi kesalahan pada sistem.';
+  let lastGeneratedImageUrl = '';
 
-      document.getElementById('errorBanner').classList.remove('hidden');
+  let lastUsedPrompt = '';
 
-      window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-      });
-    }
 
-    function hideError() {
-      document.getElementById('errorBanner').classList.add('hidden');
-    }
+  /* =========================================================
+     DOM READY
+  ========================================================= */
 
-    /*
-      ============================================================
-      PROVIDER STATUS
-      ============================================================
-    */
+  document.addEventListener('DOMContentLoaded', function () {
 
-    function updateModelStatus() {
+    updateModelStatus();
 
-      const selected =
-        document.getElementById('selectAIModel').value;
+    updateInfo();
 
-      const badge =
-        document.getElementById('providerStatusBadge');
+    const imageInput =
+      document.getElementById('imageInput');
 
-      if (selected === 'GPT Image') {
+    const chooseButton =
+      document.getElementById('btnChooseImages');
 
-        badge.innerText = 'Backend Connected';
+    const dropzone =
+      document.getElementById('dropzone');
 
-        badge.className =
-          'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-
-        return;
+    chooseButton.addEventListener(
+      'click',
+      function () {
+        imageInput.click();
       }
+    );
 
-      if (selected === 'Local Preview') {
-
-        badge.innerText = 'Local Testing';
-
-        badge.className =
-          'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
-
-        return;
+    imageInput.addEventListener(
+      'change',
+      function (event) {
+        handleImageFiles(event.target.files);
       }
+    );
 
-      if (selected.includes('Gemini')) {
 
-        badge.innerText = 'Backend Required';
-
-        badge.className =
-          'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
-
-        return;
+    dropzone.addEventListener(
+      'dragover',
+      function (event) {
+        event.preventDefault();
+        dropzone.classList.add('dragover');
       }
+    );
 
-      badge.innerText = 'Not Connected';
-
-      badge.className =
-        'text-xs font-mono px-2.5 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30';
-    }
-
-    /*
-      ============================================================
-      RGB / CMYK
-      ============================================================
-    */
-
-    function setMode(mode) {
-
-      currentMode = mode;
-
-      const btnRGB =
-        document.getElementById('btnModeRGB');
-
-      const btnCMYK =
-        document.getElementById('btnModeCMYK');
-
-      const presRGB =
-        document.getElementById('presetsRGB');
-
-      const presCMYK =
-        document.getElementById('presetsCMYK');
-
-      if (mode === 'RGB') {
-
-        btnRGB.className =
-          'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
-
-        btnCMYK.className =
-          'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
-
-        presRGB.classList.remove('hidden');
-        presCMYK.classList.add('hidden');
-
-      } else {
-
-        btnCMYK.className =
-          'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
-
-        btnRGB.className =
-          'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
-
-        presCMYK.classList.remove('hidden');
-        presRGB.classList.add('hidden');
+    dropzone.addEventListener(
+      'dragleave',
+      function () {
+        dropzone.classList.remove('dragover');
       }
-    }
+    );
 
-    /*
-      ============================================================
-      AI MODE
-      ============================================================
-    */
-
-    function setAIMode(mode) {
-
-      currentAIMode = mode;
-
-      const btn1 =
-        document.getElementById('btnAIModeTextToImg');
-
-      const btn2 =
-        document.getElementById('btnAIModeImgToImg');
-
-      const btn3 =
-        document.getElementById('btnAIModeEditImg');
-
-      [btn1, btn2, btn3].forEach(button => {
-
-        button.className =
-          'py-2 rounded-lg text-gray-400 hover:text-white transition';
-
-      });
-
-      if (mode === 'Text -> Image') {
-
-        btn1.className =
-          'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
-
-      }
-
-      if (mode === 'Image -> Image') {
-
-        btn2.className =
-          'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
-
-      }
-
-      if (mode === 'Edit Image') {
-
-        btn3.className =
-          'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
-
-      }
-    }
-
-    /*
-      ============================================================
-      FILE UPLOAD
-      ============================================================
-    */
-
-    function handleFileSelect(event) {
-
-      const files =
-        Array.from(event.target.files || []);
-
-      const container =
-        document.getElementById('thumbnailContainer');
-
-      files.forEach(file => {
-
-        if (!file.type.startsWith('image/')) {
-          return;
-        }
-
-        const reader =
-          new FileReader();
-
-        reader.onload = function(event) {
-
-          const base64Data =
-            event.target.result;
-
-          uploadedImages.push(base64Data);
-
-          const thumb =
-            document.createElement('div');
-
-          thumb.className =
-            'relative group aspect-square rounded-xl overflow-hidden border border-dark-border bg-dark-input';
-
-          thumb.innerHTML = `
-            <img
-              src="${base64Data}"
-              class="w-full h-full object-cover"
-              alt="Upload"
-            >
-
-            <button
-              type="button"
-              class="absolute top-1 right-1 bg-red-600/80 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
-            >
-              &times;
-            </button>
-          `;
-
-          const removeButton =
-            thumb.querySelector('button');
-
-          removeButton.addEventListener('click', function(event) {
-
-            event.stopPropagation();
-
-            uploadedImages =
-              uploadedImages.filter(
-                img => img !== base64Data
-              );
-
-            thumb.remove();
-
-          });
-
-          container.appendChild(thumb);
-        };
-
-        reader.readAsDataURL(file);
-      });
-
-      event.target.value = '';
-    }
-
-    /*
-      ============================================================
-      DRAG & DROP
-      ============================================================
-    */
-
-    const dropZone =
-      document.getElementById('dropZone');
-
-    if (dropZone) {
-
-      dropZone.addEventListener('dragover', function(event) {
+    dropzone.addEventListener(
+      'drop',
+      function (event) {
 
         event.preventDefault();
 
-        dropZone.classList.add(
-          'border-brand-500',
-          'bg-brand-500/5'
+        dropzone.classList.remove('dragover');
+
+        handleImageFiles(
+          event.dataTransfer.files
         );
-
-      });
-
-      dropZone.addEventListener('dragleave', function() {
-
-        dropZone.classList.remove(
-          'border-brand-500',
-          'bg-brand-500/5'
-        );
-
-      });
-
-      dropZone.addEventListener('drop', function(event) {
-
-        event.preventDefault();
-
-        dropZone.classList.remove(
-          'border-brand-500',
-          'bg-brand-500/5'
-        );
-
-        const files =
-          Array.from(event.dataTransfer.files || []);
-
-        const fakeEvent = {
-          target: {
-            files: files,
-            value: ''
-          }
-        };
-
-        handleFileSelect(fakeEvent);
-
-      });
-    }
-
-    /*
-      ============================================================
-      VOICE INPUT
-      ============================================================
-    */
-
-    function toggleVoiceInput() {
-
-      if (
-        !('webkitSpeechRecognition' in window) &&
-        !('SpeechRecognition' in window)
-      ) {
-
-        showError(
-          'Browser Anda tidak mendukung Web Speech API.'
-        );
-
-        return;
-      }
-
-      const SpeechRecognition =
-        window.SpeechRecognition ||
-        window.webkitSpeechRecognition;
-
-      const recognition =
-        new SpeechRecognition();
-
-      recognition.lang = 'id-ID';
-
-      recognition.interimResults = false;
-
-      const voiceBtnText =
-        document.getElementById('voiceText');
-
-      voiceBtnText.innerText =
-        'Listening...';
-
-      recognition.start();
-
-      recognition.onresult =
-        function(event) {
-
-          const transcript =
-            event.results[0][0].transcript;
-
-          const promptArea =
-            document.getElementById('aiPrompt');
-
-          promptArea.value =
-            (
-              promptArea.value
-                ? promptArea.value + ' '
-                : ''
-            ) + transcript;
-
-          voiceBtnText.innerText =
-            'Voice Input';
-        };
-
-      recognition.onerror =
-        function() {
-
-          voiceBtnText.innerText =
-            'Voice Input';
-
-          showError(
-            'Gagal merekam suara.'
-          );
-        };
-
-      recognition.onend =
-        function() {
-
-          voiceBtnText.innerText =
-            'Voice Input';
-
-        };
-    }
-
-    /*
-      ============================================================
-      ANALYZE IMAGE
-      ============================================================
-    */
-
-    function analyzeImages() {
-
-      if (uploadedImages.length === 0) {
-
-        showError(
-          'Silakan upload file visual terlebih dahulu sebelum melakukan analisis.'
-        );
-
-        return;
-      }
-
-      document.getElementById(
-        'processStepText'
-      ).innerText =
-        `Status: ${uploadedImages.length} gambar siap dikirim ke AI.`;
-
-      alert(
-        `Terdeteksi ${uploadedImages.length} gambar. Gambar akan dikirim bersama prompt saat Generate Design.`
-      );
-    }
-
-    /*
-      ============================================================
-      AUTO PROMPT
-      ============================================================
-    */
-
-    function generatePromptAuto() {
-
-      const brand =
-        document.getElementById('inputBrand').value ||
-        'Brand';
-
-      const type =
-        document.getElementById('inputType').value ||
-        'Promotional Poster';
-
-      const headline =
-        document.getElementById('inputHeadline').value ||
-        '';
-
-      const info =
-        document.getElementById('inputInfo').value ||
-        '';
-
-      const cta =
-        document.getElementById('inputCTA').value ||
-        '';
-
-      const size =
-        document.getElementById('specSize').value ||
-        'Square';
-
-      const orientation =
-        document.getElementById('specOrientation').value ||
-        'Square (1:1)';
-
-      const bleed =
-        document.getElementById('specBleed').value ||
-        '3 mm';
-
-      const res =
-        document.getElementById('specRes').value ||
-        '300 DPI';
-
-      let prompt =
-        `Create a high-end professional graphic design for "${brand}".\n`;
-
-      prompt +=
-        `Design Type: ${type}.\n`;
-
-      if (headline) {
-
-        prompt +=
-          `Main Headline Text: "${headline}".\n`;
-      }
-
-      if (info) {
-
-        prompt +=
-          `Supporting Information: "${info}".\n`;
-      }
-
-      if (cta) {
-
-        prompt +=
-          `Call To Action: "${cta}".\n`;
-      }
-
-      prompt +=
-        `Color Mode: ${currentMode}.\n`;
-
-      prompt +=
-        `Dimensions: ${size}.\n`;
-
-      prompt +=
-        `Orientation: ${orientation}.\n`;
-
-      prompt +=
-        `Bleed: ${bleed}.\n`;
-
-      prompt +=
-        `Resolution: ${res}.\n`;
-
-      prompt +=
-        `AI Mode: ${currentAIMode}.\n`;
-
-      prompt +=
-        `Style: modern, premium, sleek, ultra-clean, professional commercial advertising design, strong visual hierarchy, balanced composition, polished typography, high-end studio quality.`;
-
-      if (uploadedImages.length > 0) {
-
-        prompt +=
-          `\nUse the uploaded reference image(s) as visual reference while preserving the requested brand identity and composition.`;
-      }
-
-      document.getElementById(
-        'aiPrompt'
-      ).value = prompt;
-    }
-
-    /*
-      ============================================================
-      GENERATE DESIGN
-      ============================================================
-    */
-
-    async function executeGenerateDesign() {
-
-      hideError();
-
-      const promptArea =
-        document.getElementById('aiPrompt');
-
-      /*
-        SOURCE OF TRUTH
-        Prompt yang ada di textarea inilah
-        yang benar-benar dikirim ke backend.
-      */
-
-      const promptToUse =
-        promptArea.value.trim();
-
-      if (!promptToUse) {
-
-        showError(
-          'AI Prompt kosong. Ketik prompt atau klik GENERATE PROMPT terlebih dahulu.'
-        );
-
-        return;
-      }
-
-      const selectedModel =
-        document.getElementById('selectAIModel').value;
-
-      if (
-        selectedModel !== 'GPT Image' &&
-        selectedModel !== 'Local Preview'
-      ) {
-
-        showError(
-          `${selectedModel} belum memiliki backend aktif. Pilih GPT Image.`
-        );
-
-        return;
-      }
-
-      const btnGen =
-        document.getElementById('btnGenerateDesign');
-
-      const processText =
-        document.getElementById('processStepText');
-
-      const systemText =
-        document.getElementById('systemStatusText');
-
-      btnGen.disabled = true;
-
-      btnGen.classList.add(
-        'opacity-50',
-        'cursor-not-allowed'
-      );
-
-      btnGen.innerHTML =
-        `<span>⏳ GENERATING...</span>`;
-
-      processText.innerText =
-        'Status: Mengirim prompt ke backend...';
-
-      systemText.innerText =
-        'Generating Design...';
-
-      try {
-
-        const response =
-          await fetch(
-            '/api/generate-image',
-            {
-              method: 'POST',
-
-              headers: {
-                'Content-Type': 'application/json'
-              },
-
-              body: JSON.stringify({
-
-                provider: selectedModel,
-
-                model:
-                  selectedModel === 'GPT Image'
-                    ? 'gpt-image-2'
-                    : 'local-preview',
-
-                prompt: promptToUse,
-
-                images: uploadedImages,
-
-                mode: currentAIMode,
-
-                designData: {
-
-                  brand:
-                    document.getElementById('inputBrand').value,
-
-                  type:
-                    document.getElementById('inputType').value,
-
-                  headline:
-                    document.getElementById('inputHeadline').value,
-
-                  info:
-                    document.getElementById('inputInfo').value,
-
-                  cta:
-                    document.getElementById('inputCTA').value,
-
-                  colorMode:
-                    currentMode,
-
-                  size:
-                    document.getElementById('specSize').value,
-
-                  orientation:
-                    document.getElementById('specOrientation').value,
-
-                  bleed:
-                    document.getElementById('specBleed').value,
-
-                  resolution:
-                    document.getElementById('specRes').value
-
-                }
-
-              })
-            }
-          );
-
-        let data = {};
-
-        try {
-
-          data =
-            await response.json();
-
-        } catch (jsonError) {
-
-          throw new Error(
-            `Backend mengembalikan respons yang tidak valid. HTTP ${response.status}.`
-          );
-        }
-
-        if (!response.ok || !data.success) {
-
-          throw new Error(
-            data.error ||
-            data.message ||
-            `Gagal menghasilkan gambar. HTTP ${response.status}.`
-          );
-        }
-
-        /*
-          Backend kamu dapat mengembalikan:
-          - dataUrl
-          - imageUrl
-
-          Kita dukung keduanya.
-        */
-
-        const imageUrl =
-          data.imageUrl ||
-          data.dataUrl ||
-          (
-            data.b64_json
-              ? `data:image/png;base64,${data.b64_json}`
-              : null
-          );
-
-        if (!imageUrl) {
-
-          throw new Error(
-            'API berhasil merespons tetapi tidak mengirim hasil gambar.'
-          );
-        }
-
-        /*
-          Simpan hasil sebenarnya
-        */
-
-        lastGeneratedImageUrl =
-          imageUrl;
-
-        /*
-          Prompt yang digunakan harus persis
-          dengan prompt yang dikirim.
-        */
-
-        lastUsedPrompt =
-          data.promptUsed ||
-          data.prompt ||
-          promptToUse;
-
-        /*
-          PREVIEW
-        */
-
-        const imgResult =
-          document.getElementById(
-            'generatedImageResult'
-          );
-
-        imgResult.src =
-          imageUrl;
-
-        imgResult.classList.remove(
-          'hidden'
-        );
-
-        document.getElementById(
-          'previewPlaceholder'
-        ).classList.add(
-          'hidden'
-        );
-
-        document.getElementById(
-          'previewActions'
-        ).classList.remove(
-          'hidden'
-        );
-
-        /*
-          STATUS
-        */
-
-        const providerName =
-          data.provider ||
-          'GPT Image';
-
-        const badge =
-          document.getElementById(
-            'previewStatusBadge'
-          );
-
-        badge.innerText =
-          `Generated via ${providerName}`;
-
-        badge.className =
-          'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-
-        /*
-          PROMPT USED
-        */
-
-        document.getElementById(
-          'promptUsedBox'
-        ).innerText =
-          lastUsedPrompt;
-
-        processText.innerText =
-          'Status: Preview Ready!';
-
-        systemText.innerText =
-          'System Ready';
-
-      } catch (err) {
-
-        console.error(
-          'Generate Design Error:',
-          err
-        );
-
-        showError(
-          err.message ||
-          'Terjadi kesalahan saat menghubungi backend.'
-        );
-
-        processText.innerText =
-          'Status: Generation Failed.';
-
-        systemText.innerText =
-          'Generation Error';
-
-      } finally {
-
-        btnGen.disabled = false;
-
-        btnGen.classList.remove(
-          'opacity-50',
-          'cursor-not-allowed'
-        );
-
-        btnGen.innerHTML =
-          `<span>✨ GENERATE DESIGN</span>`;
-
-      }
-    }
-
-    /*
-      ============================================================
-      REVISION
-      ============================================================
-    */
-
-    async function executeRevision() {
-
-      hideError();
-
-      const instruction =
-        document
-          .getElementById('revisionInstruction')
-          .value
-          .trim();
-
-      if (!instruction) {
-
-        showError(
-          'Silakan isi instruksi perubahan desain.'
-        );
-
-        return;
-      }
-
-      if (!lastUsedPrompt) {
-
-        showError(
-          'Belum ada desain sebelumnya. Generate Design terlebih dahulu.'
-        );
-
-        return;
-      }
-
-      const revisedPrompt =
-        `${lastUsedPrompt}
-
-[REVISION INSTRUCTIONS]
-${instruction}
-
-Please generate the revised design while preserving the important information, brand identity, headline, CTA, composition requirements, and visual references from the previous design.`;
-
-      document.getElementById(
-        'aiPrompt'
-      ).value =
-        revisedPrompt;
-
-      await executeGenerateDesign();
-    }
-
-    /*
-      ============================================================
-      COPY PROMPT
-      ============================================================
-    */
-
-    async function copyPromptUsed() {
-
-      if (!lastUsedPrompt) {
-
-        showError(
-          'Belum ada prompt yang dieksekusi.'
-        );
-
-        return;
-      }
-
-      try {
-
-        await navigator.clipboard.writeText(
-          lastUsedPrompt
-        );
-
-        alert(
-          'Prompt berhasil disalin ke clipboard!'
-        );
-
-      } catch (err) {
-
-        showError(
-          'Clipboard browser tidak tersedia.'
-        );
-      }
-    }
-
-    /*
-      ============================================================
-      EDIT PROMPT
-      ============================================================
-    */
-
-    function editPromptUsed() {
-
-      if (!lastUsedPrompt) {
-        return;
-      }
-
-      const promptArea =
-        document.getElementById('aiPrompt');
-
-      promptArea.value =
-        lastUsedPrompt;
-
-      promptArea.focus();
-
-      window.scrollTo({
-        top: promptArea.offsetTop - 100,
-        behavior: 'smooth'
-      });
-    }
-
-    /*
-      ============================================================
-      FOCUS REVISION
-      ============================================================
-    */
-
-    function focusRevision() {
-
-      const revArea =
-        document.getElementById(
-          'revisionInstruction'
-        );
-
-      revArea.focus();
-
-      window.scrollTo({
-        top: revArea.offsetTop - 100,
-        behavior: 'smooth'
-      });
-    }
-
-    /*
-      ============================================================
-      USE DESIGN
-      ============================================================
-    */
-
-    function useDesign() {
-
-      if (!lastGeneratedImageUrl) {
-
-        showError(
-          'Belum ada desain yang dapat digunakan.'
-        );
-
-        return;
-      }
-
-      alert(
-        'Desain disetujui untuk proses percetakan / ekspor produksi.'
-      );
-    }
-
-    /*
-      ============================================================
-      DOWNLOAD
-      ============================================================
-    */
-
-    function downloadDesign() {
-
-      if (!lastGeneratedImageUrl) {
-
-        showError(
-          'Belum ada hasil desain yang siap didownload.'
-        );
-
-        return;
-      }
-
-      const a =
-        document.createElement('a');
-
-      a.href =
-        lastGeneratedImageUrl;
-
-      a.download =
-        `SEIKO_STUDIO_DESIGN_${Date.now()}.png`;
-
-      document.body.appendChild(a);
-
-      a.click();
-
-      document.body.removeChild(a);
-    }
-
-    /*
-      ============================================================
-      INITIALIZE
-      ============================================================
-    */
-
-    document.addEventListener(
-      'DOMContentLoaded',
-      function() {
-
-        updateModelStatus();
 
       }
     );
 
-  </script>
+
+    document
+      .getElementById('btnClearImages')
+      .addEventListener(
+        'click',
+        clearImages
+      );
+
+
+    document
+      .getElementById('btnAnalyze')
+      .addEventListener(
+        'click',
+        analyzeImages
+      );
+
+
+    document
+      .getElementById('btnVoice')
+      .addEventListener(
+        'click',
+        startVoiceInput
+      );
+
+  });
+
+
+  /* =========================================================
+     ERROR / SUCCESS
+  ========================================================= */
+
+  function showError(message) {
+
+    const box =
+      document.getElementById('errorBox');
+
+    box.innerText =
+      message || 'Terjadi kesalahan.';
+
+    box.classList.remove('hidden');
+
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  }
+
+
+  function hideError() {
+
+    document
+      .getElementById('errorBox')
+      .classList.add('hidden');
+
+  }
+
+
+  function showSuccess(message) {
+
+    const box =
+      document.getElementById('successBox');
+
+    box.innerText =
+      message || 'Berhasil.';
+
+    box.classList.remove('hidden');
+
+    setTimeout(function () {
+      box.classList.add('hidden');
+    }, 5000);
+
+  }
+
+
+  /* =========================================================
+     IMAGE UPLOAD
+  ========================================================= */
+
+  function handleImageFiles(fileList) {
+
+    const files =
+      Array.from(fileList || []);
+
+    const imageFiles =
+      files.filter(function (file) {
+        return file.type.startsWith('image/');
+      });
+
+    if (!imageFiles.length) {
+      showError('Tidak ada file gambar yang dipilih.');
+      return;
+    }
+
+    imageFiles.forEach(function (file) {
+
+      const reader =
+        new FileReader();
+
+      reader.onload = function (event) {
+
+        uploadedImages.push({
+          name: file.name,
+          mimeType: file.type,
+          dataUrl: event.target.result
+        });
+
+        renderImagePreviews();
+
+      };
+
+      reader.readAsDataURL(file);
+
+    });
+
+  }
+
+
+  function renderImagePreviews() {
+
+    const grid =
+      document.getElementById(
+        'imagePreviewGrid'
+      );
+
+    grid.innerHTML = '';
+
+    uploadedImages.forEach(
+      function (item, index) {
+
+        const wrapper =
+          document.createElement('div');
+
+        wrapper.className =
+          'thumb';
+
+        const img =
+          document.createElement('img');
+
+        img.src =
+          item.dataUrl;
+
+        img.alt =
+          item.name;
+
+        const button =
+          document.createElement('button');
+
+        button.className =
+          'thumb-remove';
+
+        button.innerText =
+          '×';
+
+        button.type =
+          'button';
+
+        button.onclick =
+          function () {
+
+            uploadedImages.splice(
+              index,
+              1
+            );
+
+            renderImagePreviews();
+
+          };
+
+        wrapper.appendChild(img);
+
+        wrapper.appendChild(button);
+
+        grid.appendChild(wrapper);
+
+      }
+    );
+
+  }
+
+
+  function clearImages() {
+
+    uploadedImages = [];
+
+    document.getElementById(
+      'imagePreviewGrid'
+    ).innerHTML = '';
+
+    document.getElementById(
+      'imageInput'
+    ).value = '';
+
+    showSuccess(
+      'Semua gambar reference telah dihapus.'
+    );
+
+  }
+
+
+  function analyzeImages() {
+
+    if (!uploadedImages.length) {
+
+      showError(
+        'Upload minimal satu gambar terlebih dahulu.'
+      );
+
+      return;
+
+    }
+
+    const info =
+      uploadedImages
+        .map(function (item) {
+          return item.name;
+        })
+        .join(', ');
+
+    showSuccess(
+      `Visual reference siap digunakan: ${info}`
+    );
+
+  }
+
+
+  /* =========================================================
+     VOICE INPUT
+  ========================================================= */
+
+  function startVoiceInput() {
+
+    const SpeechRecognition =
+      window.SpeechRecognition ||
+      window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+
+      showError(
+        'Voice Input tidak didukung browser ini.'
+      );
+
+      return;
+
+    }
+
+    const recognition =
+      new SpeechRecognition();
+
+    recognition.lang =
+      'id-ID';
+
+    recognition.interimResults =
+      false;
+
+    recognition.maxAlternatives =
+      1;
+
+    recognition.onstart =
+      function () {
+
+        showSuccess(
+          'Voice Input aktif. Silakan bicara.'
+        );
+
+      };
+
+    recognition.onresult =
+      function (event) {
+
+        const text =
+          event.results[0][0].transcript;
+
+        const info =
+          document.getElementById(
+            'inputInfo'
+          );
+
+        info.value =
+          (
+            info.value
+              ? info.value + '\n'
+              : ''
+          ) + text;
+
+      };
+
+    recognition.onerror =
+      function () {
+
+        showError(
+          'Voice Input gagal digunakan.'
+        );
+
+      };
+
+    recognition.start();
+
+  }
+
+
+  /* =========================================================
+     COLOR MODE
+  ========================================================= */
+
+  function setColorMode(mode) {
+
+    currentMode =
+      mode;
+
+    document
+      .getElementById('modeRGB')
+      .classList.toggle(
+        'active',
+        mode === 'RGB'
+      );
+
+    document
+      .getElementById('modeCMYK')
+      .classList.toggle(
+        'active',
+        mode === 'CMYK'
+      );
+
+    document
+      .getElementById('colorModeLabel')
+      .innerText =
+      mode;
+
+    updateInfo();
+
+  }
+
+
+  /* =========================================================
+     OUTPUT FORMAT
+  ========================================================= */
+
+  function setOutputFormat(
+    element,
+    format
+  ) {
+
+    currentOutputFormat =
+      format;
+
+    document
+      .querySelectorAll(
+        '#05-output .radio-card'
+      )
+      .forEach(function (item) {
+        item.classList.remove('active');
+      });
+
+    document
+      .querySelectorAll(
+        '.radio-card'
+      )
+      .forEach(function (item) {
+
+        if (
+          item.innerText.trim() ===
+          format
+        ) {
+          item.classList.remove('active');
+        }
+
+      });
+
+    element.classList.add('active');
+
+    updateInfo();
+
+  }
+
+
+  /* =========================================================
+     AI MODE
+  ========================================================= */
+
+  function setAIMode(
+    mode,
+    element
+  ) {
+
+    currentAIMode =
+      mode;
+
+    document
+      .querySelectorAll(
+        '#aiModeText, #aiModeImage, #aiModeEdit'
+      )
+      .forEach(function (item) {
+        item.classList.remove('active');
+      });
+
+    element.classList.add('active');
+
+    updateInfo();
+
+  }
+
+
+  /* =========================================================
+     MODEL STATUS
+  ========================================================= */
+
+  function updateModelStatus() {
+
+    const selectedModel =
+      document.getElementById(
+        'selectAIModel'
+      ).value;
+
+    const badge =
+      document.getElementById(
+        'providerStatusBadge'
+      );
+
+    if (
+      selectedModel ===
+      'Local Preview'
+    ) {
+
+      badge.innerText =
+        'Local Testing';
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-slate-500/20 text-slate-400 border border-slate-500/30';
+
+      return;
+
+    }
+
+
+    if (
+      selectedModel ===
+      'Gemini / Nano Banana 2'
+    ) {
+
+      badge.innerText =
+        'Gemini Backend';
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+      return;
+
+    }
+
+
+    if (
+      selectedModel ===
+      'Gemini / Nano Banana Pro'
+    ) {
+
+      badge.innerText =
+        'Gemini Pro Backend';
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+      return;
+
+    }
+
+
+    if (
+      selectedModel ===
+      'GPT Image'
+    ) {
+
+      badge.innerText =
+        'OpenAI Backend';
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30';
+
+      return;
+
+    }
+
+  }
+
+
+  /* =========================================================
+     GENERATE PROMPT
+  ========================================================= */
+
+  function generatePromptAuto() {
+
+    const brand =
+      document.getElementById(
+        'inputBrand'
+      ).value.trim();
+
+    const type =
+      document.getElementById(
+        'inputType'
+      ).value.trim();
+
+    const headline =
+      document.getElementById(
+        'inputHeadline'
+      ).value.trim();
+
+    const info =
+      document.getElementById(
+        'inputInfo'
+      ).value.trim();
+
+    const cta =
+      document.getElementById(
+        'inputCTA'
+      ).value.trim();
+
+    const size =
+      document.getElementById(
+        'specSize'
+      ).value.trim();
+
+    const orientation =
+      document.getElementById(
+        'specOrientation'
+      ).value;
+
+    const resolution =
+      document.getElementById(
+        'specRes'
+      ).value;
+
+    const prompt = `Create a professional commercial graphic design.
+
+Brand:
+${brand || 'Not specified'}
+
+Design type:
+${type || 'Professional promotional design'}
+
+Main headline:
+${headline || 'Create a strong visual headline'}
+
+Supporting information:
+${info || 'Use appropriate supporting visual information'}
+
+Call to action:
+${cta || 'Use a clear and visually strong CTA'}
+
+Design mode:
+${currentMode}
+
+AI mode:
+${currentAIMode}
+
+Canvas:
+${size || '1080x1350 px'}
+
+Orientation:
+${orientation}
+
+Resolution:
+${resolution}
+
+Visual direction:
+Premium, professional, clean composition, strong hierarchy, balanced spacing, high-quality typography, polished commercial art direction, realistic details where appropriate, strong focal point, production-ready composition.
+
+Text requirements:
+Keep the provided brand, headline, information and CTA accurate.
+Do not invent important business information.
+Make all visible typography clean and readable.
+
+If reference images are provided, use them as visual references while preserving important brand/product identity.
+
+Output should look like a finished professional design, not a rough concept.`;
+
+    document.getElementById(
+      'aiPrompt'
+    ).value =
+      prompt;
+
+    showSuccess(
+      'AI Prompt berhasil dibuat.'
+    );
+
+  }
+
+
+  /* =========================================================
+     DESIGN DATA
+  ========================================================= */
+
+  function collectDesignData() {
+
+    return {
+
+      brand:
+        document.getElementById(
+          'inputBrand'
+        ).value,
+
+      type:
+        document.getElementById(
+          'inputType'
+        ).value,
+
+      headline:
+        document.getElementById(
+          'inputHeadline'
+        ).value,
+
+      info:
+        document.getElementById(
+          'inputInfo'
+        ).value,
+
+      cta:
+        document.getElementById(
+          'inputCTA'
+        ).value,
+
+      colorMode:
+        currentMode,
+
+      size:
+        document.getElementById(
+          'specSize'
+        ).value,
+
+      orientation:
+        document.getElementById(
+          'specOrientation'
+        ).value,
+
+      bleed:
+        document.getElementById(
+          'specBleed'
+        ).value,
+
+      resolution:
+        document.getElementById(
+          'specRes'
+        ).value,
+
+      printReady:
+        document.getElementById(
+          'chkPrintReady'
+        ).checked,
+
+      includeBleed:
+        document.getElementById(
+          'chkBleed'
+        ).checked,
+
+      cropMarks:
+        document.getElementById(
+          'chkCropMarks'
+        ).checked,
+
+      outputFormat:
+        currentOutputFormat
+
+    };
+
+  }
+
+
+  /* =========================================================
+     GENERATE DESIGN
+  ========================================================= */
+
+  async function executeGenerateDesign() {
+
+    hideError();
+
+    const promptArea =
+      document.getElementById(
+        'aiPrompt'
+      );
+
+    /*
+      SOURCE OF TRUTH:
+      prompt yang ada di textarea
+      inilah prompt yang dikirim.
+    */
+
+    const promptToUse =
+      promptArea.value.trim();
+
+    if (!promptToUse) {
+
+      showError(
+        'AI Prompt kosong. Ketik prompt atau klik GENERATE PROMPT terlebih dahulu.'
+      );
+
+      return;
+
+    }
+
+
+    const selectedModel =
+      document.getElementById(
+        'selectAIModel'
+      ).value;
+
+
+    const btnGen =
+      document.getElementById(
+        'btnGenerateDesign'
+      );
+
+    const processText =
+      document.getElementById(
+        'processStepText'
+      );
+
+    const systemText =
+      document.getElementById(
+        'systemStatusText'
+      );
+
+    const badge =
+      document.getElementById(
+        'providerStatusBadge'
+      );
+
+
+    btnGen.disabled =
+      true;
+
+    btnGen.classList.add(
+      'opacity-50',
+      'cursor-not-allowed'
+    );
+
+    btnGen.innerHTML =
+      '<span>⏳ GENERATING...</span>';
+
+
+    processText.innerText =
+      'Status: Menghubungi backend...';
+
+    systemText.innerText =
+      'Generating Design...';
+
+
+    try {
+
+      let model =
+        'local-preview';
+
+
+      if (
+        selectedModel ===
+        'GPT Image'
+      ) {
+
+        model =
+          'gpt-image-2';
+
+      }
+
+
+      if (
+        selectedModel ===
+        'Gemini / Nano Banana 2'
+      ) {
+
+        model =
+          'gemini-3.1-flash-image';
+
+      }
+
+
+      if (
+        selectedModel ===
+        'Gemini / Nano Banana Pro'
+      ) {
+
+        model =
+          'gemini-3-pro-image';
+
+      }
+
+
+      if (
+        selectedModel.includes(
+          'Gemini'
+        )
+      ) {
+
+        badge.innerText =
+          'Connecting Gemini...';
+
+        badge.className =
+          'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
+
+      }
+
+
+      const response =
+        await fetch(
+          '/api/generate-image',
+          {
+            method: 'POST',
+
+            headers: {
+              'Content-Type':
+                'application/json'
+            },
+
+            body:
+              JSON.stringify({
+
+                provider:
+                  selectedModel,
+
+                model:
+                  model,
+
+                prompt:
+                  promptToUse,
+
+                images:
+                  uploadedImages,
+
+                mode:
+                  currentAIMode,
+
+                designData:
+                  collectDesignData()
+
+              })
+
+          }
+        );
+
+
+      const rawText =
+        await response.text();
+
+
+      let data = {};
+
+
+      try {
+
+        data =
+          JSON.parse(
+            rawText
+          );
+
+      } catch {
+
+        throw new Error(
+          `Backend mengembalikan respons tidak valid. HTTP ${response.status}.`
+        );
+
+      }
+
+
+      if (
+        !response.ok ||
+        data.success === false
+      ) {
+
+        throw new Error(
+          data.error ||
+          data.message ||
+          `Generation gagal. HTTP ${response.status}.`
+        );
+
+      }
+
+
+      const imageUrl =
+        data.imageUrl ||
+        data.dataUrl ||
+        (
+          data.b64_json
+            ? `data:image/png;base64,${data.b64_json}`
+            : null
+        );
+
+
+      if (!imageUrl) {
+
+        throw new Error(
+          'Backend berhasil merespons tetapi tidak mengirim gambar.'
+        );
+
+      }
+
+
+      lastGeneratedImageUrl =
+        imageUrl;
+
+
+      lastUsedPrompt =
+        data.promptUsed ||
+        data.prompt ||
+        promptToUse;
+
+
+      const imgResult =
+        document.getElementById(
+          'generatedImageResult'
+        );
+
+
+      imgResult.src =
+        imageUrl;
+
+
+      imgResult.classList.remove(
+        'hidden'
+      );
+
+
+      document
+        .getElementById(
+          'previewPlaceholder'
+        )
+        .classList.add(
+          'hidden'
+        );
+
+
+      document
+        .getElementById(
+          'previewActions'
+        )
+        .classList.remove(
+          'hidden'
+        );
+
+
+      const providerName =
+        data.provider ||
+        selectedModel;
+
+
+      const previewBadge =
+        document.getElementById(
+          'previewStatusBadge'
+        );
+
+
+      previewBadge.innerText =
+        `Generated via ${providerName}`;
+
+
+      previewBadge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+
+      badge.innerText =
+        'Backend Connected';
+
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+
+      document.getElementById(
+        'promptUsedBox'
+      ).value =
+        lastUsedPrompt;
+
+
+      processText.innerText =
+        'Status: Preview Ready!';
+
+
+      systemText.innerText =
+        'System Ready';
+
+
+      showSuccess(
+        `${providerName} berhasil menghasilkan design.`
+      );
+
+
+      document
+        .getElementById(
+          'generatedImageResult'
+        )
+        .scrollIntoView({
+          behavior: 'smooth',
+          block: 'center'
+        });
+
+
+    } catch (err) {
+
+      console.error(
+        'Generate Design Error:',
+        err
+      );
+
+
+      showError(
+        err.message ||
+        'Terjadi kesalahan saat menghubungi backend.'
+      );
+
+
+      processText.innerText =
+        'Status: Generation Failed.';
+
+
+      systemText.innerText =
+        'Generation Error';
+
+
+      badge.innerText =
+        'Connection Error';
+
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30';
+
+    } finally {
+
+      btnGen.disabled =
+        false;
+
+
+      btnGen.classList.remove(
+        'opacity-50',
+        'cursor-not-allowed'
+      );
+
+
+      btnGen.innerHTML =
+        '<span>✨ GENERATE DESIGN</span>';
+
+    }
+
+  }
+
+
+  /* =========================================================
+     REVISION
+  ========================================================= */
+
+  async function executeRevision() {
+
+    const revision =
+      document.getElementById(
+        'revisionText'
+      ).value.trim();
+
+
+    if (!revision) {
+
+      showError(
+        'Tulis instruksi revision terlebih dahulu.'
+      );
+
+      return;
+
+    }
+
+
+    const currentPrompt =
+      document.getElementById(
+        'aiPrompt'
+      ).value.trim();
+
+
+    if (!currentPrompt) {
+
+      showError(
+        'Belum ada prompt desain untuk direvisi.'
+      );
+
+      return;
+
+    }
+
+
+    const revisedPrompt =
+      `${currentPrompt}
+
+REVISION INSTRUCTION:
+${revision}
+
+Create a revised version of the previous design.
+Preserve the important brand identity, subject, composition and required information unless the revision specifically asks to change them.
+Apply the revision accurately and professionally.`;
+
+
+    document.getElementById(
+      'aiPrompt'
+    ).value =
+      revisedPrompt;
+
+
+    await executeGenerateDesign();
+
+  }
+
+
+  /* =========================================================
+     PROMPT USED
+  ========================================================= */
+
+  async function copyPromptUsed() {
+
+    const box =
+      document.getElementById(
+        'promptUsedBox'
+      );
+
+    const text =
+      box.value.trim();
+
+
+    if (!text) {
+
+      showError(
+        'Belum ada prompt yang digunakan.'
+      );
+
+      return;
+
+    }
+
+
+    try {
+
+      await navigator.clipboard.writeText(
+        text
+      );
+
+      showSuccess(
+        'Prompt berhasil disalin.'
+      );
+
+    } catch {
+
+      box.select();
+
+      document.execCommand(
+        'copy'
+      );
+
+      showSuccess(
+        'Prompt berhasil disalin.'
+      );
+
+    }
+
+  }
+
+
+  function editPromptUsed() {
+
+    const promptUsed =
+      document.getElementById(
+        'promptUsedBox'
+      ).value;
+
+
+    if (!promptUsed.trim()) {
+
+      showError(
+        'Belum ada prompt yang digunakan.'
+      );
+
+      return;
+
+    }
+
+
+    document.getElementById(
+      'aiPrompt'
+    ).value =
+      promptUsed;
+
+
+    document.getElementById(
+      'aiPrompt'
+    ).focus();
+
+
+    document.getElementById(
+      'aiPrompt'
+    ).scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+  }
+
+
+  /* =========================================================
+     PREVIEW ACTIONS
+  ========================================================= */
+
+  function focusRevision() {
+
+    document.getElementById(
+      'revisionText'
+    ).focus();
+
+
+    document.getElementById(
+      'revisionText'
+    ).scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
+
+  }
+
+
+  function useDesign() {
+
+    if (!lastGeneratedImageUrl) {
+
+      showError(
+        'Belum ada design yang bisa digunakan.'
+      );
+
+      return;
+
+    }
+
+
+    showSuccess(
+      'Design dipilih sebagai design aktif.'
+    );
+
+  }
+
+
+  function downloadDesign() {
+
+    if (!lastGeneratedImageUrl) {
+
+      showError(
+        'Belum ada design untuk di-download.'
+      );
+
+      return;
+
+    }
+
+
+    const link =
+      document.createElement('a');
+
+
+    link.href =
+      lastGeneratedImageUrl;
+
+
+    const extension =
+      currentOutputFormat === 'JPG'
+        ? 'jpg'
+        : 'png';
+
+
+    link.download =
+      `seiko-studio-design.${extension}`;
+
+
+    document.body.appendChild(
+      link
+    );
+
+
+    link.click();
+
+
+    link.remove();
+
+  }
+
+
+  /* =========================================================
+     INFO
+  ========================================================= */
+
+  function updateInfo() {
+
+    document.getElementById(
+      'infoColorMode'
+    ).innerText =
+      currentMode;
+
+
+    document.getElementById(
+      'infoOutputFormat'
+    ).innerText =
+      currentOutputFormat;
+
+
+    document.getElementById(
+      'infoAIMode'
+    ).innerText =
+      currentAIMode;
+
+  }
+
+</script>
 
 </body>
 </html>
