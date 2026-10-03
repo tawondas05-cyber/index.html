@@ -1,11 +1,15 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>SEIKO STUDIO — AI Design & Printing Studio</title>
+
   <script src="https://cdn.tailwindcss.com"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -36,708 +40,1798 @@
       }
     }
   </script>
+
   <style>
     body {
       background-color: #090a0f;
       color: #f3f4f6;
       font-family: 'Plus Jakarta Sans', sans-serif;
     }
+
     .glass-card {
       background: rgba(18, 20, 28, 0.85);
       backdrop-filter: blur(12px);
       border: 1px solid rgba(255, 255, 255, 0.07);
     }
+
     .custom-scrollbar::-webkit-scrollbar {
       width: 6px;
       height: 6px;
     }
+
     .custom-scrollbar::-webkit-scrollbar-track {
       background: #12141c;
     }
+
     .custom-scrollbar::-webkit-scrollbar-thumb {
       background: #2b3042;
       border-radius: 3px;
     }
   </style>
+
 </head>
+
 <body class="min-h-screen text-gray-100 selection:bg-brand-500 selection:text-white custom-scrollbar pb-12">
 
   <!-- HEADER -->
+
   <header class="sticky top-0 z-50 glass-card border-b border-dark-border px-4 lg:px-8 py-4 mb-8">
     <div class="max-w-6xl mx-auto flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-red-500 flex items-center justify-center font-extrabold text-xl text-white shadow-lg shadow-brand-500/30">
-          S
-        </div>
-        <div>
-          <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
-            SEIKO STUDIO
-            <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-brand-500/20 text-brand-accent border border-brand-500/30">PROD FORM</span>
-          </h1>
-          <p class="text-xs text-gray-400">AI Design & Printing Studio</p>
-        </div>
-      </div>
-      <div class="flex items-center gap-2 bg-dark-input px-3 py-1.5 rounded-full border border-dark-border">
-        <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-        <span class="text-xs font-mono text-gray-300" id="systemStatusText">System Ready</span>
-      </div>
+
+```
+  <div class="flex items-center gap-3">
+    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-red-500 flex items-center justify-center font-extrabold text-xl text-white shadow-lg shadow-brand-500/30">
+      S
     </div>
+
+    <div>
+      <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+        SEIKO STUDIO
+        <span class="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-brand-500/20 text-brand-accent border border-brand-500/30">
+          PROD FORM
+        </span>
+      </h1>
+      <p class="text-xs text-gray-400">AI Design & Printing Studio</p>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2 bg-dark-input px-3 py-1.5 rounded-full border border-dark-border">
+    <span id="systemStatusDot" class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+    <span class="text-xs font-mono text-gray-300" id="systemStatusText">
+      System Ready
+    </span>
+  </div>
+
+</div>
+```
+
   </header>
 
   <main class="max-w-6xl mx-auto px-4 lg:px-8 space-y-8">
 
-    <!-- ERROR ALERT BANNER (HIDDEN BY DEFAULT) -->
-    <div id="errorBanner" class="hidden p-4 rounded-xl bg-red-950/80 border border-red-500/50 text-red-200 text-sm flex items-start justify-between gap-3 shadow-lg">
-      <div class="flex items-center gap-2">
-        <span class="text-xl">⚠️</span>
-        <span id="errorMessage">Terjadi kesalahan pada sistem.</span>
-      </div>
-      <button onclick="hideError()" class="text-red-400 hover:text-white font-bold">&times;</button>
+```
+<!-- ERROR -->
+<div id="errorBanner" class="hidden p-4 rounded-xl bg-red-950/80 border border-red-500/50 text-red-200 text-sm flex items-start justify-between gap-3 shadow-lg">
+  <div class="flex items-center gap-2">
+    <span class="text-xl">⚠️</span>
+    <span id="errorMessage">Terjadi kesalahan pada sistem.</span>
+  </div>
+
+  <button onclick="hideError()" class="text-red-400 hover:text-white font-bold">
+    &times;
+  </button>
+</div>
+
+<!-- 01 DATA DESAIN -->
+<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+
+  <div class="flex items-center gap-3 mb-6 pb-3 border-b border-dark-border">
+    <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+      01
+    </span>
+    <h2 class="text-lg font-bold text-white">DATA DESAIN</h2>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Nama / Brand
+      </label>
+      <input
+        type="text"
+        id="inputBrand"
+        placeholder="Contoh: Kopi Janji Jiwa, Seiko Tech"
+        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+      >
     </div>
 
-    <!-- 01 — DATA DESAIN -->
-    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-      <div class="flex items-center gap-3 mb-6 pb-3 border-b border-dark-border">
-        <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">01</span>
-        <h2 class="text-lg font-bold text-white">DATA DESAIN</h2>
-      </div>
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Jenis Desain (Input Teks Bebas)
+      </label>
+      <input
+        type="text"
+        id="inputType"
+        placeholder="Contoh: Banner Promosi Roll-Up 200x80cm, Poster Cafe Minimalis"
+        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+      >
+    </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-        <div>
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Nama / Brand</label>
-          <input type="text" id="inputBrand" placeholder="Contoh: Kopi Janji Jiwa, Seiko Tech" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-        </div>
+    <div class="md:col-span-2">
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Headline Utama
+      </label>
+      <input
+        type="text"
+        id="inputHeadline"
+        placeholder="Contoh: DISKON SPESIAL HARI INI - BELI 1 GRATIS 1"
+        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+      >
+    </div>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Jenis Desain (Input Teks Bebas)</label>
-          <input type="text" id="inputType" placeholder="Contoh: Banner Promosi Roll-Up 200x80cm, Poster Cafe Minimalis" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-        </div>
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Informasi Pendukung
+      </label>
+      <textarea
+        id="inputInfo"
+        rows="3"
+        placeholder="Contoh: Alamat toko, Syarat & Ketentuan, List Menu, Sosmed"
+        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"
+      ></textarea>
+    </div>
 
-        <div class="md:col-span-2">
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Headline Utama</label>
-          <input type="text" id="inputHeadline" placeholder="Contoh: DISKON SPESIAL HARI INI - BELI 1 GRATIS 1" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-        </div>
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Call To Action (CTA)
+      </label>
+      <textarea
+        id="inputCTA"
+        rows="3"
+        placeholder="Contoh: Hubungi WA: 0812-3456-7890 / Kunjungi seikostudio.id"
+        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"
+      ></textarea>
+    </div>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Informasi Pendukung</label>
-          <textarea id="inputInfo" rows="3" placeholder="Contoh: Alamat toko, Syarat & Ketentuan, List Menu, Sosmed" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"></textarea>
-        </div>
+  </div>
+</section>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Call To Action (CTA)</label>
-          <textarea id="inputCTA" rows="3" placeholder="Contoh: Hubungi WA: 0812-3456-7890 / Kunjungi seikostudio.id" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"></textarea>
-        </div>
-      </div>
-    </section>
+<!-- 02 INPUT VISUAL -->
+<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
 
-    <!-- 02 — INPUT VISUAL -->
-    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-      <div class="flex items-center justify-between mb-6 pb-3 border-b border-dark-border">
-        <div class="flex items-center gap-3">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">02</span>
-          <h2 class="text-lg font-bold text-white">INPUT VISUAL</h2>
-        </div>
-        <div class="flex items-center gap-2">
-          <button id="btnVoiceInput" onclick="toggleVoiceInput()" class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition">
-            🎤 <span id="voiceText">Voice Input</span>
-          </button>
-          <button id="btnAnalyzeImg" onclick="analyzeImages()" class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition">
-            🖼 <span>Analyze Image</span>
-          </button>
-        </div>
-      </div>
+  <div class="flex items-center justify-between mb-6 pb-3 border-b border-dark-border">
 
-      <div class="space-y-4">
-        <div id="dropZone" onclick="document.getElementById('fileInput').click()" class="border-2 border-dashed border-dark-border hover:border-brand-500/50 rounded-2xl p-8 text-center bg-dark-input/50 cursor-pointer transition">
-          <input type="file" id="fileInput" multiple accept="image/*" class="hidden" onchange="handleFileSelect(event)">
-          <div class="text-3xl mb-2">📁</div>
-          <p class="text-sm text-gray-300 font-medium">Klik atau drag & drop file visual di sini</p>
-          <p class="text-xs text-gray-500 mt-1">Logo, Foto Produk, Screenshot, Foto Toko, Referensi Desain</p>
-        </div>
+    <div class="flex items-center gap-3">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        02
+      </span>
+      <h2 class="text-lg font-bold text-white">INPUT VISUAL</h2>
+    </div>
 
-        <div id="thumbnailContainer" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
-      </div>
-    </section>
+    <div class="flex items-center gap-2">
 
-    <!-- 03 — MODE DESAIN & 04 — SPESIFIKASI & 05 — FORMAT OUTPUT -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <button
+        id="btnVoiceInput"
+        onclick="toggleVoiceInput()"
+        class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition"
+      >
+        🎤 <span id="voiceText">Voice Input</span>
+      </button>
 
-      <!-- 03 MODE DESAIN -->
-      <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-        <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">03</span>
-          <h2 class="text-sm font-bold text-white uppercase">MODE DESAIN</h2>
-        </div>
+      <button
+        id="btnAnalyzeImg"
+        onclick="analyzeImages()"
+        class="px-3 py-1.5 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs text-gray-300 flex items-center gap-1.5 transition"
+      >
+        🖼 <span>Analyze Image</span>
+      </button>
 
-        <div class="space-y-4">
-          <div class="grid grid-cols-2 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border">
-            <button id="btnModeRGB" onclick="setMode('RGB')" class="py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition">RGB (Digital)</button>
-            <button id="btnModeCMYK" onclick="setMode('CMYK')" class="py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition">CMYK (Print)</button>
-          </div>
+    </div>
+  </div>
 
-          <div id="presetsRGB" class="space-y-2">
-            <p class="text-[11px] font-semibold text-gray-400 uppercase">Preset Media Digital:</p>
-            <div class="flex flex-wrap gap-1.5 text-xs">
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Social Media</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Website</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">WhatsApp</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">TikTok</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">YouTube</span>
-            </div>
-          </div>
+  <div class="space-y-4">
 
-          <div id="presetsCMYK" class="space-y-2 hidden">
-            <p class="text-[11px] font-semibold text-gray-400 uppercase">Preset Percetakan:</p>
-            <div class="flex flex-wrap gap-1.5 text-xs">
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Banner</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Poster</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Brochure</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">ID Card</span>
-              <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Invitation</span>
-            </div>
-          </div>
-        </div>
-      </section>
+    <div
+      id="dropZone"
+      onclick="document.getElementById('fileInput').click()"
+      class="border-2 border-dashed border-dark-border hover:border-brand-500/50 rounded-2xl p-8 text-center bg-dark-input/50 cursor-pointer transition"
+    >
 
-      <!-- 04 SPESIFIKASI -->
-      <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-        <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">04</span>
-          <h2 class="text-sm font-bold text-white uppercase">SPESIFIKASI</h2>
-        </div>
+      <input
+        type="file"
+        id="fileInput"
+        multiple
+        accept="image/*"
+        class="hidden"
+        onchange="handleFileSelect(event)"
+      >
 
-        <div class="space-y-3">
-          <div>
-            <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Ukuran</label>
-            <input type="text" id="specSize" value="1080 x 1080 px (1:1)" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
-          </div>
-          <div>
-            <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Orientasi</label>
-            <select id="specOrientation" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
-              <option value="Square (1:1)">Square (1:1)</option>
-              <option value="Portrait (9:16)">Portrait (9:16)</option>
-              <option value="Landscape (16:9)">Landscape (16:9)</option>
-              <option value="Custom">Custom</option>
-            </select>
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Bleed</label>
-              <input type="text" id="specBleed" value="3 mm" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
-            </div>
-            <div>
-              <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">Resolusi</label>
-              <input type="text" id="specRes" value="300 DPI" class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white">
-            </div>
-          </div>
-          <div class="pt-1 space-y-1">
-            <label class="flex items-center gap-2 text-xs text-gray-300">
-              <input type="checkbox" id="chkPrintReady" checked class="rounded border-dark-border bg-dark-input text-brand-500"> Print-ready PDF
-            </label>
-            <label class="flex items-center gap-2 text-xs text-gray-300">
-              <input type="checkbox" id="chkBleed" checked class="rounded border-dark-border bg-dark-input text-brand-500"> Include Bleed
-            </label>
-            <label class="flex items-center gap-2 text-xs text-gray-300">
-              <input type="checkbox" id="chkCropMarks" checked class="rounded border-dark-border bg-dark-input text-brand-500"> Crop Marks
-            </label>
-          </div>
-        </div>
-      </section>
+      <div class="text-3xl mb-2">📁</div>
 
-      <!-- 05 FORMAT OUTPUT -->
-      <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
-        <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">05</span>
-          <h2 class="text-sm font-bold text-white uppercase">FORMAT OUTPUT</h2>
-        </div>
+      <p class="text-sm text-gray-300 font-medium">
+        Klik atau drag & drop file visual di sini
+      </p>
 
-        <div class="space-y-2 text-xs">
-          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
-            <span>PNG (Raster High-Res)</span>
-            <input type="checkbox" name="fmt" value="PNG" checked class="rounded border-dark-border bg-dark-input text-brand-500">
-          </label>
-          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
-            <span>JPG (Standard Image)</span>
-            <input type="checkbox" name="fmt" value="JPG" class="rounded border-dark-border bg-dark-input text-brand-500">
-          </label>
-          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
-            <span>PDF (Vector/Print Document)</span>
-            <input type="checkbox" name="fmt" value="PDF" class="rounded border-dark-border bg-dark-input text-brand-500">
-          </label>
-          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
-            <span class="flex items-center gap-1.5">
-              CDR
-              <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">Corel Export Required</span>
-            </span>
-            <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
-          </label>
-          <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
-            <span class="flex items-center gap-1.5">
-              AI / PSD
-              <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">Adobe Engine Required</span>
-            </span>
-            <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
-          </label>
-        </div>
-      </section>
+      <p class="text-xs text-gray-500 mt-1">
+        Logo, Foto Produk, Screenshot, Foto Toko, Referensi Desain
+      </p>
 
     </div>
 
-    <!-- 06 — AI IMAGE ENGINE & PROMPT -->
-    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-6">
-      <div class="flex items-center justify-between pb-3 border-b border-dark-border">
-        <div class="flex items-center gap-3">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">06</span>
-          <h2 class="text-lg font-bold text-white">AI IMAGE ENGINE & PROMPT</h2>
-        </div>
-        <div id="providerStatusBadge" class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-          Connected
-        </div>
-      </div>
+    <div id="thumbnailContainer" class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 gap-3"></div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Platform / Model AI</label>
-          <select id="selectAIModel" onchange="updateModelStatus()" class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition">
-            <option value="Gemini / Nano Banana 2" selected>Gemini / Nano Banana 2 (Active)</option>
-            <option value="Gemini / Nano Banana Pro">Gemini / Nano Banana Pro (Active Pro)</option>
-            <option value="GPT Image">GPT Image (Not Connected)</option>
-            <option value="Leonardo AI">Leonardo AI (Not Connected)</option>
-            <option value="Ideogram">Ideogram (Not Connected)</option>
-            <option value="Custom API">Custom API (Not Connected)</option>
-            <option value="Local Preview">Local Preview (Testing Only - Non AI)</option>
-          </select>
-        </div>
+  </div>
+</section>
 
-        <div>
-          <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Mode AI</label>
-          <div class="grid grid-cols-3 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border text-xs">
-            <button id="btnAIModeTextToImg" onclick="setAIMode('Text -> Image')" class="py-2 rounded-lg bg-brand-600 font-bold text-white transition">Text → Image</button>
-            <button id="btnAIModeImgToImg" onclick="setAIMode('Image -> Image')" class="py-2 rounded-lg text-gray-400 hover:text-white transition">Image → Image</button>
-            <button id="btnAIModeEditImg" onclick="setAIMode('Edit Image')" class="py-2 rounded-lg text-gray-400 hover:text-white transition">Edit Image</button>
-          </div>
-        </div>
-      </div>
+<!-- 03 04 05 -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
 
-      <!-- AI PROMPT AREA -->
-      <div class="space-y-3">
-        <div class="flex items-center justify-between">
-          <label class="block text-xs font-semibold uppercase text-gray-400">AI Prompt (Source of Truth)</label>
-          <button onclick="generatePromptAuto()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-xs font-bold text-white shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5">
-            ✨ GENERATE PROMPT
-          </button>
-        </div>
+  <!-- 03 MODE -->
+  <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
 
-        <textarea id="aiPrompt" rows="6" placeholder="Ketik prompt AI secara manual atau klik tombol ✨ GENERATE PROMPT untuk membuat prompt otomatis dari data formulir di atas..." class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-gray-100 font-mono focus:outline-none focus:border-brand-500 transition custom-scrollbar leading-relaxed"></textarea>
-      </div>
+    <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        03
+      </span>
+      <h2 class="text-sm font-bold text-white uppercase">
+        MODE DESAIN
+      </h2>
+    </div>
 
-      <!-- MAIN GENERATE BUTTON -->
-      <div class="pt-2">
-        <button id="btnGenerateDesign" onclick="executeGenerateDesign()" class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-600 via-red-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-extrabold text-base tracking-wide shadow-xl shadow-brand-600/30 transition transform active:scale-[0.99] flex items-center justify-center gap-2">
-          <span>✨ GENERATE DESIGN</span>
+    <div class="space-y-4">
+
+      <div class="grid grid-cols-2 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border">
+
+        <button
+          id="btnModeRGB"
+          onclick="setMode('RGB')"
+          class="py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition"
+        >
+          RGB (Digital)
         </button>
-        <p id="processStepText" class="text-center text-xs font-mono text-gray-400 mt-2">Status: Ready</p>
-      </div>
-    </section>
 
-    <!-- 07 — REVISION -->
-    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
-      <div class="flex items-center gap-3 pb-3 border-b border-dark-border">
-        <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">07</span>
-        <h2 class="text-lg font-bold text-white">REVISION</h2>
+        <button
+          id="btnModeCMYK"
+          onclick="setMode('CMYK')"
+          class="py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition"
+        >
+          CMYK (Print)
+        </button>
+
+      </div>
+
+      <div id="presetsRGB" class="space-y-2">
+
+        <p class="text-[11px] font-semibold text-gray-400 uppercase">
+          Preset Media Digital:
+        </p>
+
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Social Media</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Website</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">WhatsApp</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">TikTok</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">YouTube</span>
+        </div>
+
+      </div>
+
+      <div id="presetsCMYK" class="space-y-2 hidden">
+
+        <p class="text-[11px] font-semibold text-gray-400 uppercase">
+          Preset Percetakan:
+        </p>
+
+        <div class="flex flex-wrap gap-1.5 text-xs">
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Banner</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Poster</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Brochure</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">ID Card</span>
+          <span class="px-2 py-1 rounded bg-dark-input border border-dark-border text-gray-300">Invitation</span>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- 04 SPESIFIKASI -->
+  <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+
+    <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        04
+      </span>
+      <h2 class="text-sm font-bold text-white uppercase">
+        SPESIFIKASI
+      </h2>
+    </div>
+
+    <div class="space-y-3">
+
+      <div>
+        <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
+          Ukuran
+        </label>
+
+        <input
+          type="text"
+          id="specSize"
+          value="1080 x 1080 px (1:1)"
+          class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
+        >
       </div>
 
       <div>
-        <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">Instruksi Perubahan Desain</label>
-        <textarea id="revisionInstruction" rows="3" placeholder="Contoh: Buat lebih premium, headline lebih besar, foto produk lebih dominan, ubah warna menjadi hitam dan merah, tambahkan badge DISKON 30%." class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"></textarea>
+        <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
+          Orientasi
+        </label>
+
+        <select
+          id="specOrientation"
+          class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
+        >
+          <option value="Square (1:1)">Square (1:1)</option>
+          <option value="Portrait (9:16)">Portrait (9:16)</option>
+          <option value="Landscape (16:9)">Landscape (16:9)</option>
+          <option value="Custom">Custom</option>
+        </select>
       </div>
 
-      <button onclick="executeRevision()" class="px-6 py-3 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-sm font-bold text-white transition flex items-center gap-2">
-        ↻ GENERATE REVISION
-      </button>
-    </section>
+      <div class="grid grid-cols-2 gap-2">
 
-    <!-- 08 — DESIGN PREVIEW -->
-    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-dark-border">
-        <div class="flex items-center gap-3">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">08</span>
-          <h2 class="text-lg font-bold text-white">DESIGN PREVIEW</h2>
+        <div>
+          <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
+            Bleed
+          </label>
+
+          <input
+            type="text"
+            id="specBleed"
+            value="3 mm"
+            class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
+          >
         </div>
-        <div id="previewStatusBadge" class="text-xs font-mono px-2.5 py-1 rounded bg-gray-800 text-gray-400 border border-dark-border">
-          Idle
+
+        <div>
+          <label class="block text-[11px] font-semibold uppercase text-gray-400 mb-1">
+            Resolusi
+          </label>
+
+          <input
+            type="text"
+            id="specRes"
+            value="300 DPI"
+            class="w-full bg-dark-input border border-dark-border rounded-lg px-3 py-1.5 text-xs text-white"
+          >
         </div>
+
       </div>
 
-      <!-- CANVAS PREVIEW CONTAINER -->
-      <div class="relative w-full min-h-[420px] rounded-2xl bg-dark-input border border-dark-border flex items-center justify-center p-4 overflow-hidden group">
-        <div id="previewPlaceholder" class="text-center text-gray-500 space-y-2">
-          <div class="text-5xl">🎨</div>
-          <p class="text-sm font-medium">Hasil desain AI akan muncul di sini</p>
-          <p class="text-xs text-gray-600">Tekan tombol <span class="text-brand-accent font-semibold">✨ GENERATE DESIGN</span> untuk memulai</p>
-        </div>
+      <div class="pt-1 space-y-1">
 
-        <img id="generatedImageResult" class="hidden max-h-[600px] w-auto max-w-full object-contain rounded-xl shadow-2xl border border-dark-border" alt="Hasil Desain AI">
+        <label class="flex items-center gap-2 text-xs text-gray-300">
+          <input type="checkbox" id="chkPrintReady" checked class="rounded border-dark-border bg-dark-input text-brand-500">
+          Print-ready PDF
+        </label>
+
+        <label class="flex items-center gap-2 text-xs text-gray-300">
+          <input type="checkbox" id="chkBleed" checked class="rounded border-dark-border bg-dark-input text-brand-500">
+          Include Bleed
+        </label>
+
+        <label class="flex items-center gap-2 text-xs text-gray-300">
+          <input type="checkbox" id="chkCropMarks" checked class="rounded border-dark-border bg-dark-input text-brand-500">
+          Crop Marks
+        </label>
+
       </div>
 
-      <!-- PREVIEW ACTION BUTTONS -->
-      <div id="previewActions" class="hidden flex flex-wrap items-center justify-between gap-3 pt-2">
-        <div class="flex flex-wrap items-center gap-2">
-          <button onclick="useDesign()" class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition">
-            ✓ USE DESIGN
-          </button>
-          <button onclick="focusRevision()" class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition">
-            ✎ REVISE
-          </button>
-          <button onclick="executeGenerateDesign()" class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition">
-            ↻ REGENERATE
-          </button>
-        </div>
+    </div>
+  </section>
 
-        <button onclick="downloadDesign()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-red-600 hover:from-brand-500 hover:to-red-500 text-xs font-extrabold text-white shadow-lg transition flex items-center gap-2">
-          ↓ DOWNLOAD HASIL DESAIN
+  <!-- 05 FORMAT -->
+  <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl">
+
+    <div class="flex items-center gap-3 mb-4 pb-3 border-b border-dark-border">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        05
+      </span>
+      <h2 class="text-sm font-bold text-white uppercase">
+        FORMAT OUTPUT
+      </h2>
+    </div>
+
+    <div class="space-y-2 text-xs">
+
+      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
+        <span>PNG (Raster High-Res)</span>
+        <input type="checkbox" name="fmt" value="PNG" checked class="rounded border-dark-border bg-dark-input text-brand-500">
+      </label>
+
+      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
+        <span>JPG (Standard Image)</span>
+        <input type="checkbox" name="fmt" value="JPG" class="rounded border-dark-border bg-dark-input text-brand-500">
+      </label>
+
+      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border">
+        <span>PDF (Vector/Print Document)</span>
+        <input type="checkbox" name="fmt" value="PDF" class="rounded border-dark-border bg-dark-input text-brand-500">
+      </label>
+
+      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
+        <span class="flex items-center gap-1.5">
+          CDR
+          <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">
+            Corel Export Required
+          </span>
+        </span>
+        <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
+      </label>
+
+      <label class="flex items-center justify-between p-2 rounded bg-dark-input border border-dark-border opacity-70">
+        <span class="flex items-center gap-1.5">
+          AI / PSD
+          <span class="text-[9px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 rounded">
+            Adobe Engine Required
+          </span>
+        </span>
+        <input type="checkbox" disabled class="rounded border-dark-border bg-dark-input">
+      </label>
+
+    </div>
+  </section>
+
+</div>
+
+<!-- 06 AI IMAGE ENGINE -->
+<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-6">
+
+  <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+
+    <div class="flex items-center gap-3">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        06
+      </span>
+
+      <h2 class="text-lg font-bold text-white">
+        AI IMAGE ENGINE & PROMPT
+      </h2>
+    </div>
+
+    <div
+      id="providerStatusBadge"
+      class="text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+    >
+      Backend Connected
+    </div>
+
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+    <div>
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Platform / Model AI
+      </label>
+
+      <select
+        id="selectAIModel"
+        onchange="updateModelStatus()"
+        class="w-full bg-dark-input border border-dark-border rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-500 transition"
+      >
+        <option value="GPT Image" selected>
+          GPT Image (Backend Connected)
+        </option>
+
+        <option value="Gemini / Nano Banana 2">
+          Gemini / Nano Banana 2 (Backend Required)
+        </option>
+
+        <option value="Gemini / Nano Banana Pro">
+          Gemini / Nano Banana Pro (Backend Required)
+        </option>
+
+        <option value="Leonardo AI">
+          Leonardo AI (Not Connected)
+        </option>
+
+        <option value="Ideogram">
+          Ideogram (Not Connected)
+        </option>
+
+        <option value="Custom API">
+          Custom API (Not Connected)
+        </option>
+
+        <option value="Local Preview">
+          Local Preview (Testing Only - Non AI)
+        </option>
+      </select>
+    </div>
+
+    <div>
+
+      <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+        Mode AI
+      </label>
+
+      <div class="grid grid-cols-3 gap-2 p-1 bg-dark-input rounded-xl border border-dark-border text-xs">
+
+        <button
+          id="btnAIModeTextToImg"
+          onclick="setAIMode('Text -> Image')"
+          class="py-2 rounded-lg bg-brand-600 font-bold text-white transition"
+        >
+          Text → Image
         </button>
-      </div>
-    </section>
 
-    <!-- 09 — PROMPT USED -->
-    <section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
-      <div class="flex items-center justify-between pb-3 border-b border-dark-border">
-        <div class="flex items-center gap-3">
-          <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">09</span>
-          <h2 class="text-lg font-bold text-white">PROMPT YANG DIGUNAKAN</h2>
-        </div>
-        <div class="flex items-center gap-2">
-          <button onclick="copyPromptUsed()" class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition">
-            📋 Copy Prompt
-          </button>
-          <button onclick="editPromptUsed()" class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition">
-            ✏️ Edit
-          </button>
-        </div>
+        <button
+          id="btnAIModeImgToImg"
+          onclick="setAIMode('Image -> Image')"
+          class="py-2 rounded-lg text-gray-400 hover:text-white transition"
+        >
+          Image → Image
+        </button>
+
+        <button
+          id="btnAIModeEditImg"
+          onclick="setAIMode('Edit Image')"
+          class="py-2 rounded-lg text-gray-400 hover:text-white transition"
+        >
+          Edit Image
+        </button>
+
       </div>
 
-      <div id="promptUsedBox" class="p-4 rounded-xl bg-dark-input border border-dark-border text-xs text-gray-300 font-mono min-h-[80px] whitespace-pre-wrap break-words leading-relaxed">
-        (Belum ada prompt yang dieksekusi. Prompt yang benar-benar dikirim ke AI akan muncul di sini setelah generate berhasil).
-      </div>
-    </section>
+    </div>
+  </div>
+
+  <!-- PROMPT -->
+  <div class="space-y-3">
+
+    <div class="flex items-center justify-between">
+
+      <label class="block text-xs font-semibold uppercase text-gray-400">
+        AI Prompt (Source of Truth)
+      </label>
+
+      <button
+        onclick="generatePromptAuto()"
+        class="px-4 py-2 rounded-xl bg-gradient-to-r from-brand-600 to-rose-600 hover:from-brand-500 hover:to-rose-500 text-xs font-bold text-white shadow-lg shadow-brand-500/20 transition flex items-center gap-1.5"
+      >
+        ✨ GENERATE PROMPT
+      </button>
+
+    </div>
+
+    <textarea
+      id="aiPrompt"
+      rows="6"
+      placeholder="Ketik prompt AI secara manual atau klik tombol ✨ GENERATE PROMPT..."
+      class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-gray-100 font-mono focus:outline-none focus:border-brand-500 transition custom-scrollbar leading-relaxed"
+    ></textarea>
+
+  </div>
+
+  <!-- GENERATE -->
+  <div class="pt-2">
+
+    <button
+      id="btnGenerateDesign"
+      onclick="executeGenerateDesign()"
+      class="w-full py-4 rounded-xl bg-gradient-to-r from-brand-600 via-red-600 to-brand-700 hover:from-brand-500 hover:to-brand-600 text-white font-extrabold text-base tracking-wide shadow-xl shadow-brand-600/30 transition transform active:scale-[0.99] flex items-center justify-center gap-2"
+    >
+      <span>✨ GENERATE DESIGN</span>
+    </button>
+
+    <p
+      id="processStepText"
+      class="text-center text-xs font-mono text-gray-400 mt-2"
+    >
+      Status: Ready
+    </p>
+
+  </div>
+
+</section>
+
+<!-- 07 REVISION -->
+<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
+
+  <div class="flex items-center gap-3 pb-3 border-b border-dark-border">
+    <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+      07
+    </span>
+    <h2 class="text-lg font-bold text-white">
+      REVISION
+    </h2>
+  </div>
+
+  <div>
+
+    <label class="block text-xs font-semibold uppercase text-gray-400 mb-2">
+      Instruksi Perubahan Desain
+    </label>
+
+    <textarea
+      id="revisionInstruction"
+      rows="3"
+      placeholder="Contoh: Buat lebih premium, headline lebih besar, foto produk lebih dominan, ubah warna menjadi hitam dan merah."
+      class="w-full bg-dark-input border border-dark-border rounded-xl p-4 text-sm text-white focus:outline-none focus:border-brand-500 transition custom-scrollbar"
+    ></textarea>
+
+  </div>
+
+  <button
+    onclick="executeRevision()"
+    class="px-6 py-3 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-sm font-bold text-white transition flex items-center gap-2"
+  >
+    ↻ GENERATE REVISION
+  </button>
+
+</section>
+
+<!-- 08 PREVIEW -->
+<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
+
+  <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+
+    <div class="flex items-center gap-3">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        08
+      </span>
+
+      <h2 class="text-lg font-bold text-white">
+        DESIGN PREVIEW
+      </h2>
+    </div>
+
+    <div
+      id="previewStatusBadge"
+      class="text-xs font-mono px-2.5 py-1 rounded bg-gray-800 text-gray-400 border border-dark-border"
+    >
+      Idle
+    </div>
+
+  </div>
+
+  <div class="relative w-full min-h-[420px] rounded-2xl bg-dark-input border border-dark-border flex items-center justify-center p-4 overflow-hidden group">
+
+    <div id="previewPlaceholder" class="text-center text-gray-500 space-y-2">
+
+      <div class="text-5xl">🎨</div>
+
+      <p class="text-sm font-medium">
+        Hasil desain AI akan muncul di sini
+      </p>
+
+      <p class="text-xs text-gray-600">
+        Tekan tombol
+        <span class="text-brand-accent font-semibold">
+          ✨ GENERATE DESIGN
+        </span>
+        untuk memulai
+      </p>
+
+    </div>
+
+    <img
+      id="generatedImageResult"
+      class="hidden max-h-[600px] w-auto max-w-full object-contain rounded-xl shadow-2xl border border-dark-border"
+      alt="Hasil Desain AI"
+    >
+
+  </div>
+
+  <div
+    id="previewActions"
+    class="hidden flex flex-wrap items-center justify-between gap-3 pt-2"
+  >
+
+    <div class="flex flex-wrap items-center gap-2">
+
+      <button
+        onclick="useDesign()"
+        class="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-xs font-bold text-white transition"
+      >
+        ✓ USE DESIGN
+      </button>
+
+      <button
+        onclick="focusRevision()"
+        class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition"
+      >
+        ✎ REVISE
+      </button>
+
+      <button
+        onclick="executeGenerateDesign()"
+        class="px-4 py-2 rounded-xl bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-white transition"
+      >
+        ↻ REGENERATE
+      </button>
+
+    </div>
+
+    <button
+      onclick="downloadDesign()"
+      class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-red-600 hover:from-brand-500 hover:to-red-500 text-xs font-extrabold text-white shadow-lg transition flex items-center gap-2"
+    >
+      ↓ DOWNLOAD HASIL DESAIN
+    </button>
+
+  </div>
+
+</section>
+
+<!-- 09 PROMPT USED -->
+<section class="glass-card rounded-2xl p-6 border border-dark-border shadow-xl space-y-4">
+
+  <div class="flex items-center justify-between pb-3 border-b border-dark-border">
+
+    <div class="flex items-center gap-3">
+      <span class="font-mono text-xs text-brand-accent font-bold px-2 py-1 rounded bg-brand-500/10 border border-brand-500/20">
+        09
+      </span>
+
+      <h2 class="text-lg font-bold text-white">
+        PROMPT YANG DIGUNAKAN
+      </h2>
+    </div>
+
+    <div class="flex items-center gap-2">
+
+      <button
+        onclick="copyPromptUsed()"
+        class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition"
+      >
+        📋 Copy Prompt
+      </button>
+
+      <button
+        onclick="editPromptUsed()"
+        class="px-3 py-1.5 rounded-lg bg-dark-input hover:bg-gray-800 border border-dark-border text-xs font-bold text-gray-300 transition"
+      >
+        ✏️ Edit
+      </button>
+
+    </div>
+
+  </div>
+
+  <div
+    id="promptUsedBox"
+    class="p-4 rounded-xl bg-dark-input border border-dark-border text-xs text-gray-300 font-mono min-h-[80px] whitespace-pre-wrap break-words leading-relaxed"
+  >
+    (Belum ada prompt yang dieksekusi. Prompt yang benar-benar dikirim ke AI akan muncul di sini setelah generate berhasil).
+  </div>
+
+</section>
+```
 
   </main>
 
   <footer class="max-w-6xl mx-auto px-4 lg:px-8 mt-12 text-center text-xs text-gray-500">
-    <p>© 2026 SEIKO STUDIO — AI Design & Printing Studio. Production Ready Workflow.</p>
+    <p>
+      © 2026 SEIKO STUDIO — AI Design & Printing Studio. Production Ready Workflow.
+    </p>
   </footer>
 
-  <!-- CLIENT-SIDE SCRIPT -->
+  <!-- CLIENT SCRIPT -->
+
   <script>
-    // App State
+
     let currentMode = 'RGB';
     let currentAIMode = 'Text -> Image';
-    let uploadedImages = []; // base64 images
+
+    let uploadedImages = [];
+
     let lastUsedPrompt = '';
     let lastGeneratedImageUrl = null;
 
-    // Show / Hide Error Alert
+    /*
+      ============================================================
+      ERROR HANDLING
+      ============================================================
+    */
+
     function showError(msg) {
-      document.getElementById('errorMessage').innerText = msg;
+      document.getElementById('errorMessage').innerText =
+        msg || 'Terjadi kesalahan pada sistem.';
+
       document.getElementById('errorBanner').classList.remove('hidden');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
     }
 
     function hideError() {
       document.getElementById('errorBanner').classList.add('hidden');
     }
 
-    // Provider Selector Change Handler
+    /*
+      ============================================================
+      PROVIDER STATUS
+      ============================================================
+    */
+
     function updateModelStatus() {
-      const selected = document.getElementById('selectAIModel').value;
-      const badge = document.getElementById('providerStatusBadge');
+
+      const selected =
+        document.getElementById('selectAIModel').value;
+
+      const badge =
+        document.getElementById('providerStatusBadge');
+
+      if (selected === 'GPT Image') {
+
+        badge.innerText = 'Backend Connected';
+
+        badge.className =
+          'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+        return;
+      }
+
+      if (selected === 'Local Preview') {
+
+        badge.innerText = 'Local Testing';
+
+        badge.className =
+          'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
+
+        return;
+      }
 
       if (selected.includes('Gemini')) {
-        badge.innerText = 'Connected';
-        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
-      } else if (selected === 'Local Preview') {
-        badge.innerText = 'Local Testing';
-        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
-      } else {
-        badge.innerText = 'Not Connected';
-        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30';
+
+        badge.innerText = 'Backend Required';
+
+        badge.className =
+          'text-xs font-mono px-2.5 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30';
+
+        return;
       }
+
+      badge.innerText = 'Not Connected';
+
+      badge.className =
+        'text-xs font-mono px-2.5 py-1 rounded bg-red-500/20 text-red-400 border border-red-500/30';
     }
 
-    // Set RGB vs CMYK Mode
+    /*
+      ============================================================
+      RGB / CMYK
+      ============================================================
+    */
+
     function setMode(mode) {
+
       currentMode = mode;
-      const btnRGB = document.getElementById('btnModeRGB');
-      const btnCMYK = document.getElementById('btnModeCMYK');
-      const presRGB = document.getElementById('presetsRGB');
-      const presCMYK = document.getElementById('presetsCMYK');
+
+      const btnRGB =
+        document.getElementById('btnModeRGB');
+
+      const btnCMYK =
+        document.getElementById('btnModeCMYK');
+
+      const presRGB =
+        document.getElementById('presetsRGB');
+
+      const presCMYK =
+        document.getElementById('presetsCMYK');
 
       if (mode === 'RGB') {
-        btnRGB.className = 'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
-        btnCMYK.className = 'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
+
+        btnRGB.className =
+          'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
+
+        btnCMYK.className =
+          'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
+
         presRGB.classList.remove('hidden');
         presCMYK.classList.add('hidden');
+
       } else {
-        btnCMYK.className = 'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
-        btnRGB.className = 'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
+
+        btnCMYK.className =
+          'py-2 text-xs font-bold rounded-lg bg-brand-600 text-white transition';
+
+        btnRGB.className =
+          'py-2 text-xs font-bold rounded-lg text-gray-400 hover:text-white transition';
+
         presCMYK.classList.remove('hidden');
         presRGB.classList.add('hidden');
       }
     }
 
-    // Set AI Mode
+    /*
+      ============================================================
+      AI MODE
+      ============================================================
+    */
+
     function setAIMode(mode) {
+
       currentAIMode = mode;
-      const btn1 = document.getElementById('btnAIModeTextToImg');
-      const btn2 = document.getElementById('btnAIModeImgToImg');
-      const btn3 = document.getElementById('btnAIModeEditImg');
 
-      [btn1, btn2, btn3].forEach(b => b.className = 'py-2 rounded-lg text-gray-400 hover:text-white transition');
+      const btn1 =
+        document.getElementById('btnAIModeTextToImg');
 
-      if (mode === 'Text -> Image') btn1.className = 'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
-      if (mode === 'Image -> Image') btn2.className = 'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
-      if (mode === 'Edit Image') btn3.className = 'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+      const btn2 =
+        document.getElementById('btnAIModeImgToImg');
+
+      const btn3 =
+        document.getElementById('btnAIModeEditImg');
+
+      [btn1, btn2, btn3].forEach(button => {
+
+        button.className =
+          'py-2 rounded-lg text-gray-400 hover:text-white transition';
+
+      });
+
+      if (mode === 'Text -> Image') {
+
+        btn1.className =
+          'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+
+      }
+
+      if (mode === 'Image -> Image') {
+
+        btn2.className =
+          'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+
+      }
+
+      if (mode === 'Edit Image') {
+
+        btn3.className =
+          'py-2 rounded-lg bg-brand-600 font-bold text-white transition';
+
+      }
     }
 
-    // Handle Image Upload & Convert to Base64
-    function handleFileSelect(e) {
-      const files = Array.from(e.target.files);
-      const container = document.getElementById('thumbnailContainer');
+    /*
+      ============================================================
+      FILE UPLOAD
+      ============================================================
+    */
+
+    function handleFileSelect(event) {
+
+      const files =
+        Array.from(event.target.files || []);
+
+      const container =
+        document.getElementById('thumbnailContainer');
 
       files.forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const base64Data = event.target.result;
+
+        if (!file.type.startsWith('image/')) {
+          return;
+        }
+
+        const reader =
+          new FileReader();
+
+        reader.onload = function(event) {
+
+          const base64Data =
+            event.target.result;
+
           uploadedImages.push(base64Data);
 
-          const thumb = document.createElement('div');
-          thumb.className = 'relative group aspect-square rounded-xl overflow-hidden border border-dark-border bg-dark-input';
+          const thumb =
+            document.createElement('div');
+
+          thumb.className =
+            'relative group aspect-square rounded-xl overflow-hidden border border-dark-border bg-dark-input';
+
           thumb.innerHTML = `
-            <img src="${base64Data}" class="w-full h-full object-cover" alt="Upload">
-            <button onclick="removeImage(this, '${base64Data}')" class="absolute top-1 right-1 bg-red-600/80 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition">&times;</button>
+            <img
+              src="${base64Data}"
+              class="w-full h-full object-cover"
+              alt="Upload"
+            >
+
+            <button
+              type="button"
+              class="absolute top-1 right-1 bg-red-600/80 text-white w-5 h-5 rounded-full flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition"
+            >
+              &times;
+            </button>
           `;
+
+          const removeButton =
+            thumb.querySelector('button');
+
+          removeButton.addEventListener('click', function(event) {
+
+            event.stopPropagation();
+
+            uploadedImages =
+              uploadedImages.filter(
+                img => img !== base64Data
+              );
+
+            thumb.remove();
+
+          });
+
           container.appendChild(thumb);
         };
+
         reader.readAsDataURL(file);
+      });
+
+      event.target.value = '';
+    }
+
+    /*
+      ============================================================
+      DRAG & DROP
+      ============================================================
+    */
+
+    const dropZone =
+      document.getElementById('dropZone');
+
+    if (dropZone) {
+
+      dropZone.addEventListener('dragover', function(event) {
+
+        event.preventDefault();
+
+        dropZone.classList.add(
+          'border-brand-500',
+          'bg-brand-500/5'
+        );
+
+      });
+
+      dropZone.addEventListener('dragleave', function() {
+
+        dropZone.classList.remove(
+          'border-brand-500',
+          'bg-brand-500/5'
+        );
+
+      });
+
+      dropZone.addEventListener('drop', function(event) {
+
+        event.preventDefault();
+
+        dropZone.classList.remove(
+          'border-brand-500',
+          'bg-brand-500/5'
+        );
+
+        const files =
+          Array.from(event.dataTransfer.files || []);
+
+        const fakeEvent = {
+          target: {
+            files: files,
+            value: ''
+          }
+        };
+
+        handleFileSelect(fakeEvent);
+
       });
     }
 
-    function removeImage(btnEl, base64Data) {
-      uploadedImages = uploadedImages.filter(img => img !== base64Data);
-      btnEl.parentElement.remove();
-    }
+    /*
+      ============================================================
+      VOICE INPUT
+      ============================================================
+    */
 
-    // Voice Input via Web Speech API
     function toggleVoiceInput() {
-      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
-        showError('Browser Anda tidak mendukung Web Speech API.');
+
+      if (
+        !('webkitSpeechRecognition' in window) &&
+        !('SpeechRecognition' in window)
+      ) {
+
+        showError(
+          'Browser Anda tidak mendukung Web Speech API.'
+        );
+
         return;
       }
 
-      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-      const recognition = new SpeechRecognition();
+      const SpeechRecognition =
+        window.SpeechRecognition ||
+        window.webkitSpeechRecognition;
+
+      const recognition =
+        new SpeechRecognition();
+
       recognition.lang = 'id-ID';
+
       recognition.interimResults = false;
 
-      const voiceBtnText = document.getElementById('voiceText');
-      voiceBtnText.innerText = 'Listening...';
+      const voiceBtnText =
+        document.getElementById('voiceText');
+
+      voiceBtnText.innerText =
+        'Listening...';
 
       recognition.start();
 
-      recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        const promptArea = document.getElementById('aiPrompt');
-        promptArea.value = (promptArea.value ? promptArea.value + ' ' : '') + transcript;
-        voiceBtnText.innerText = 'Voice Input';
-      };
+      recognition.onresult =
+        function(event) {
 
-      recognition.onerror = () => {
-        voiceBtnText.innerText = 'Voice Input';
-        showError('Gagal merekam suara.');
-      };
+          const transcript =
+            event.results[0][0].transcript;
 
-      recognition.onend = () => {
-        voiceBtnText.innerText = 'Voice Input';
-      };
+          const promptArea =
+            document.getElementById('aiPrompt');
+
+          promptArea.value =
+            (
+              promptArea.value
+                ? promptArea.value + ' '
+                : ''
+            ) + transcript;
+
+          voiceBtnText.innerText =
+            'Voice Input';
+        };
+
+      recognition.onerror =
+        function() {
+
+          voiceBtnText.innerText =
+            'Voice Input';
+
+          showError(
+            'Gagal merekam suara.'
+          );
+        };
+
+      recognition.onend =
+        function() {
+
+          voiceBtnText.innerText =
+            'Voice Input';
+
+        };
     }
+
+    /*
+      ============================================================
+      ANALYZE IMAGE
+      ============================================================
+    */
 
     function analyzeImages() {
+
       if (uploadedImages.length === 0) {
-        showError('Silakan upload file visual terlebih dahulu sebelum melakukan analisis.');
+
+        showError(
+          'Silakan upload file visual terlebih dahulu sebelum melakukan analisis.'
+        );
+
         return;
       }
-      alert(`Analisis Visual: Terdeteksi ${uploadedImages.length} berkas gambar siap dikirimkan ke AI.`);
+
+      document.getElementById(
+        'processStepText'
+      ).innerText =
+        `Status: ${uploadedImages.length} gambar siap dikirim ke AI.`;
+
+      alert(
+        `Terdeteksi ${uploadedImages.length} gambar. Gambar akan dikirim bersama prompt saat Generate Design.`
+      );
     }
 
-    // ✨ GENERATE PROMPT (Automatic prompt builder from design data)
-    function generatePromptAuto() {
-      const brand = document.getElementById('inputBrand').value || 'Brand';
-      const type = document.getElementById('inputType').value || 'Promotional Poster';
-      const headline = document.getElementById('inputHeadline').value || '';
-      const info = document.getElementById('inputInfo').value || '';
-      const cta = document.getElementById('inputCTA').value || '';
-      const size = document.getElementById('specSize').value || 'Square';
-      const res = document.getElementById('specRes').value || '300 DPI';
+    /*
+      ============================================================
+      AUTO PROMPT
+      ============================================================
+    */
 
-      let prompt = `Create a high-end, professional graphic design for "${brand}".\n`;
-      prompt += `Design Type: ${type}.\n`;
-      if (headline) prompt += `Main Headline Text: "${headline}".\n`;
-      if (info) prompt += `Supporting Info: "${info}".\n`;
-      if (cta) prompt += `Call To Action: "${cta}".\n`;
-      prompt += `Mode: ${currentMode} color space, Dimensions/Resolution: ${size}, ${res}.\n`;
-      prompt += `Style: Modern, sleek, ultra-clean, studio lighting, highly descriptive typography, commercial advertising quality.`;
+    function generatePromptAuto() {
+
+      const brand =
+        document.getElementById('inputBrand').value ||
+        'Brand';
+
+      const type =
+        document.getElementById('inputType').value ||
+        'Promotional Poster';
+
+      const headline =
+        document.getElementById('inputHeadline').value ||
+        '';
+
+      const info =
+        document.getElementById('inputInfo').value ||
+        '';
+
+      const cta =
+        document.getElementById('inputCTA').value ||
+        '';
+
+      const size =
+        document.getElementById('specSize').value ||
+        'Square';
+
+      const orientation =
+        document.getElementById('specOrientation').value ||
+        'Square (1:1)';
+
+      const bleed =
+        document.getElementById('specBleed').value ||
+        '3 mm';
+
+      const res =
+        document.getElementById('specRes').value ||
+        '300 DPI';
+
+      let prompt =
+        `Create a high-end professional graphic design for "${brand}".\n`;
+
+      prompt +=
+        `Design Type: ${type}.\n`;
+
+      if (headline) {
+
+        prompt +=
+          `Main Headline Text: "${headline}".\n`;
+      }
+
+      if (info) {
+
+        prompt +=
+          `Supporting Information: "${info}".\n`;
+      }
+
+      if (cta) {
+
+        prompt +=
+          `Call To Action: "${cta}".\n`;
+      }
+
+      prompt +=
+        `Color Mode: ${currentMode}.\n`;
+
+      prompt +=
+        `Dimensions: ${size}.\n`;
+
+      prompt +=
+        `Orientation: ${orientation}.\n`;
+
+      prompt +=
+        `Bleed: ${bleed}.\n`;
+
+      prompt +=
+        `Resolution: ${res}.\n`;
+
+      prompt +=
+        `AI Mode: ${currentAIMode}.\n`;
+
+      prompt +=
+        `Style: modern, premium, sleek, ultra-clean, professional commercial advertising design, strong visual hierarchy, balanced composition, polished typography, high-end studio quality.`;
 
       if (uploadedImages.length > 0) {
-        prompt += `\nIncorporate visual style and composition elements from the provided reference image(s).`;
+
+        prompt +=
+          `\nUse the uploaded reference image(s) as visual reference while preserving the requested brand identity and composition.`;
       }
 
-      document.getElementById('aiPrompt').value = prompt;
+      document.getElementById(
+        'aiPrompt'
+      ).value = prompt;
     }
 
-    // ✨ GENERATE DESIGN (Main Workflow Function)
+    /*
+      ============================================================
+      GENERATE DESIGN
+      ============================================================
+    */
+
     async function executeGenerateDesign() {
+
       hideError();
 
-      // SOURCE OF TRUTH: Ambil prompt langsung dari textarea #aiPrompt
-      const promptArea = document.getElementById('aiPrompt');
-      const promptToUse = promptArea.value.trim();
+      const promptArea =
+        document.getElementById('aiPrompt');
+
+      /*
+        SOURCE OF TRUTH
+        Prompt yang ada di textarea inilah
+        yang benar-benar dikirim ke backend.
+      */
+
+      const promptToUse =
+        promptArea.value.trim();
 
       if (!promptToUse) {
-        showError('Isi AI Prompt tidak boleh kosong. Ketik prompt atau klik ✨ GENERATE PROMPT terlebih dahulu.');
+
+        showError(
+          'AI Prompt kosong. Ketik prompt atau klik GENERATE PROMPT terlebih dahulu.'
+        );
+
         return;
       }
 
-      const selectedModel = document.getElementById('selectAIModel').value;
-      const btnGen = document.getElementById('btnGenerateDesign');
-      const processText = document.getElementById('processStepText');
+      const selectedModel =
+        document.getElementById('selectAIModel').value;
 
-      // Update State: Generating...
+      if (
+        selectedModel !== 'GPT Image' &&
+        selectedModel !== 'Local Preview'
+      ) {
+
+        showError(
+          `${selectedModel} belum memiliki backend aktif. Pilih GPT Image.`
+        );
+
+        return;
+      }
+
+      const btnGen =
+        document.getElementById('btnGenerateDesign');
+
+      const processText =
+        document.getElementById('processStepText');
+
+      const systemText =
+        document.getElementById('systemStatusText');
+
       btnGen.disabled = true;
-      btnGen.classList.add('opacity-50', 'cursor-not-allowed');
-      btnGen.innerHTML = `<span>⏳ GENERATING...</span>`;
-      processText.innerText = 'Status: Preparing Prompt → Processing → Sending Request...';
+
+      btnGen.classList.add(
+        'opacity-50',
+        'cursor-not-allowed'
+      );
+
+      btnGen.innerHTML =
+        `<span>⏳ GENERATING...</span>`;
+
+      processText.innerText =
+        'Status: Mengirim prompt ke backend...';
+
+      systemText.innerText =
+        'Generating Design...';
 
       try {
-        // Panggil Serverless API Backend
-        const response = await fetch('/api/generate-image', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            provider: selectedModel,
-            prompt: promptToUse,
-            images: uploadedImages,
-            mode: currentAIMode
-          })
-        });
 
-        const data = await response.json();
+        const response =
+          await fetch(
+            '/api/generate-image',
+            {
+              method: 'POST',
 
-        if (!response.ok || !data.success) {
-          throw new Error(data.error || 'Gagal menghasilkan gambar dari API.');
+              headers: {
+                'Content-Type': 'application/json'
+              },
+
+              body: JSON.stringify({
+
+                provider: selectedModel,
+
+                model:
+                  selectedModel === 'GPT Image'
+                    ? 'gpt-image-2'
+                    : 'local-preview',
+
+                prompt: promptToUse,
+
+                images: uploadedImages,
+
+                mode: currentAIMode,
+
+                designData: {
+
+                  brand:
+                    document.getElementById('inputBrand').value,
+
+                  type:
+                    document.getElementById('inputType').value,
+
+                  headline:
+                    document.getElementById('inputHeadline').value,
+
+                  info:
+                    document.getElementById('inputInfo').value,
+
+                  cta:
+                    document.getElementById('inputCTA').value,
+
+                  colorMode:
+                    currentMode,
+
+                  size:
+                    document.getElementById('specSize').value,
+
+                  orientation:
+                    document.getElementById('specOrientation').value,
+
+                  bleed:
+                    document.getElementById('specBleed').value,
+
+                  resolution:
+                    document.getElementById('specRes').value
+
+                }
+
+              })
+            }
+          );
+
+        let data = {};
+
+        try {
+
+          data =
+            await response.json();
+
+        } catch (jsonError) {
+
+          throw new Error(
+            `Backend mengembalikan respons yang tidak valid. HTTP ${response.status}.`
+          );
         }
 
-        // BERHASIL: Update UI dengan hasil AI sebenarnya
-        lastGeneratedImageUrl = data.imageUrl;
-        lastUsedPrompt = data.promptUsed;
+        if (!response.ok || !data.success) {
 
-        const imgResult = document.getElementById('generatedImageResult');
-        imgResult.src = data.imageUrl;
-        imgResult.classList.remove('hidden');
+          throw new Error(
+            data.error ||
+            data.message ||
+            `Gagal menghasilkan gambar. HTTP ${response.status}.`
+          );
+        }
 
-        document.getElementById('previewPlaceholder').classList.add('hidden');
-        document.getElementById('previewActions').classList.remove('hidden');
+        /*
+          Backend kamu dapat mengembalikan:
+          - dataUrl
+          - imageUrl
 
-        // Status Badges
-        const badge = document.getElementById('previewStatusBadge');
-        badge.innerText = `Generated via ${data.provider}`;
-        badge.className = 'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+          Kita dukung keduanya.
+        */
 
-        // Update Section 09 — PROMPT USED
-        document.getElementById('promptUsedBox').innerText = data.promptUsed;
+        const imageUrl =
+          data.imageUrl ||
+          data.dataUrl ||
+          (
+            data.b64_json
+              ? `data:image/png;base64,${data.b64_json}`
+              : null
+          );
 
-        processText.innerText = 'Status: Preview Ready!';
+        if (!imageUrl) {
+
+          throw new Error(
+            'API berhasil merespons tetapi tidak mengirim hasil gambar.'
+          );
+        }
+
+        /*
+          Simpan hasil sebenarnya
+        */
+
+        lastGeneratedImageUrl =
+          imageUrl;
+
+        /*
+          Prompt yang digunakan harus persis
+          dengan prompt yang dikirim.
+        */
+
+        lastUsedPrompt =
+          data.promptUsed ||
+          data.prompt ||
+          promptToUse;
+
+        /*
+          PREVIEW
+        */
+
+        const imgResult =
+          document.getElementById(
+            'generatedImageResult'
+          );
+
+        imgResult.src =
+          imageUrl;
+
+        imgResult.classList.remove(
+          'hidden'
+        );
+
+        document.getElementById(
+          'previewPlaceholder'
+        ).classList.add(
+          'hidden'
+        );
+
+        document.getElementById(
+          'previewActions'
+        ).classList.remove(
+          'hidden'
+        );
+
+        /*
+          STATUS
+        */
+
+        const providerName =
+          data.provider ||
+          'GPT Image';
+
+        const badge =
+          document.getElementById(
+            'previewStatusBadge'
+          );
+
+        badge.innerText =
+          `Generated via ${providerName}`;
+
+        badge.className =
+          'text-xs font-mono px-2.5 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30';
+
+        /*
+          PROMPT USED
+        */
+
+        document.getElementById(
+          'promptUsedBox'
+        ).innerText =
+          lastUsedPrompt;
+
+        processText.innerText =
+          'Status: Preview Ready!';
+
+        systemText.innerText =
+          'System Ready';
 
       } catch (err) {
-        showError(err.message || 'Terjadi kesalahan sistem.');
-        processText.innerText = 'Status: Generation Failed.';
+
+        console.error(
+          'Generate Design Error:',
+          err
+        );
+
+        showError(
+          err.message ||
+          'Terjadi kesalahan saat menghubungi backend.'
+        );
+
+        processText.innerText =
+          'Status: Generation Failed.';
+
+        systemText.innerText =
+          'Generation Error';
+
       } finally {
-        // Re-enable button
+
         btnGen.disabled = false;
-        btnGen.classList.remove('opacity-50', 'cursor-not-allowed');
-        btnGen.innerHTML = `<span>✨ GENERATE DESIGN</span>`;
+
+        btnGen.classList.remove(
+          'opacity-50',
+          'cursor-not-allowed'
+        );
+
+        btnGen.innerHTML =
+          `<span>✨ GENERATE DESIGN</span>`;
+
       }
     }
 
-    // ↻ GENERATE REVISION
+    /*
+      ============================================================
+      REVISION
+      ============================================================
+    */
+
     async function executeRevision() {
+
       hideError();
-      const instruction = document.getElementById('revisionInstruction').value.trim();
+
+      const instruction =
+        document
+          .getElementById('revisionInstruction')
+          .value
+          .trim();
 
       if (!instruction) {
-        showError('Silakan isi instruksi perubahan desain pada bagian Revision.');
+
+        showError(
+          'Silakan isi instruksi perubahan desain.'
+        );
+
         return;
       }
 
       if (!lastUsedPrompt) {
-        showError('Belum ada desain sebelumnya yang dihasilkan. Lakukan GENERATE DESIGN terlebih dahulu.');
+
+        showError(
+          'Belum ada desain sebelumnya. Generate Design terlebih dahulu.'
+        );
+
         return;
       }
 
-      // Gabungkan prompt sebelumnya dengan instruksi revisi baru
-      const revisedPrompt = `${lastUsedPrompt}\n\n[REVISION INSTRUCTIONS]: ${instruction}`;
+      const revisedPrompt =
+        `${lastUsedPrompt}
 
-      // Masukkan ke prompt textarea
-      document.getElementById('aiPrompt').value = revisedPrompt;
+[REVISION INSTRUCTIONS]
+${instruction}
 
-      // Jalankan generate ulang
+Please generate the revised design while preserving the important information, brand identity, headline, CTA, composition requirements, and visual references from the previous design.`;
+
+      document.getElementById(
+        'aiPrompt'
+      ).value =
+        revisedPrompt;
+
       await executeGenerateDesign();
     }
 
-    // Section 09 Action Buttons
-    function copyPromptUsed() {
+    /*
+      ============================================================
+      COPY PROMPT
+      ============================================================
+    */
+
+    async function copyPromptUsed() {
+
       if (!lastUsedPrompt) {
-        showError('Belum ada prompt yang dieksekusi untuk disalin.');
+
+        showError(
+          'Belum ada prompt yang dieksekusi.'
+        );
+
         return;
       }
-      navigator.clipboard.writeText(lastUsedPrompt);
-      alert('Prompt berhasil disalin ke clipboard!');
+
+      try {
+
+        await navigator.clipboard.writeText(
+          lastUsedPrompt
+        );
+
+        alert(
+          'Prompt berhasil disalin ke clipboard!'
+        );
+
+      } catch (err) {
+
+        showError(
+          'Clipboard browser tidak tersedia.'
+        );
+      }
     }
+
+    /*
+      ============================================================
+      EDIT PROMPT
+      ============================================================
+    */
 
     function editPromptUsed() {
-      if (!lastUsedPrompt) return;
-      const promptArea = document.getElementById('aiPrompt');
-      promptArea.value = lastUsedPrompt;
-      promptArea.focus();
-      window.scrollTo({ top: promptArea.offsetTop - 100, behavior: 'smooth' });
-    }
 
-    function focusRevision() {
-      const revArea = document.getElementById('revisionInstruction');
-      revArea.focus();
-      window.scrollTo({ top: revArea.offsetTop - 100, behavior: 'smooth' });
-    }
-
-    function useDesign() {
-      alert('Desain disetujui untuk proses percetakan / ekspor produksi.');
-    }
-
-    // Download Design Result
-    function downloadDesign() {
-      if (!lastGeneratedImageUrl) {
-        showError('Belum ada hasil desain yang siap didownload.');
+      if (!lastUsedPrompt) {
         return;
       }
 
-      const a = document.createElement('a');
-      a.href = lastGeneratedImageUrl;
-      a.download = `SEIKO_STUDIO_DESIGN_${Date.now()}.png`;
+      const promptArea =
+        document.getElementById('aiPrompt');
+
+      promptArea.value =
+        lastUsedPrompt;
+
+      promptArea.focus();
+
+      window.scrollTo({
+        top: promptArea.offsetTop - 100,
+        behavior: 'smooth'
+      });
+    }
+
+    /*
+      ============================================================
+      FOCUS REVISION
+      ============================================================
+    */
+
+    function focusRevision() {
+
+      const revArea =
+        document.getElementById(
+          'revisionInstruction'
+        );
+
+      revArea.focus();
+
+      window.scrollTo({
+        top: revArea.offsetTop - 100,
+        behavior: 'smooth'
+      });
+    }
+
+    /*
+      ============================================================
+      USE DESIGN
+      ============================================================
+    */
+
+    function useDesign() {
+
+      if (!lastGeneratedImageUrl) {
+
+        showError(
+          'Belum ada desain yang dapat digunakan.'
+        );
+
+        return;
+      }
+
+      alert(
+        'Desain disetujui untuk proses percetakan / ekspor produksi.'
+      );
+    }
+
+    /*
+      ============================================================
+      DOWNLOAD
+      ============================================================
+    */
+
+    function downloadDesign() {
+
+      if (!lastGeneratedImageUrl) {
+
+        showError(
+          'Belum ada hasil desain yang siap didownload.'
+        );
+
+        return;
+      }
+
+      const a =
+        document.createElement('a');
+
+      a.href =
+        lastGeneratedImageUrl;
+
+      a.download =
+        `SEIKO_STUDIO_DESIGN_${Date.now()}.png`;
+
       document.body.appendChild(a);
+
       a.click();
+
       document.body.removeChild(a);
     }
+
+    /*
+      ============================================================
+      INITIALIZE
+      ============================================================
+    */
+
+    document.addEventListener(
+      'DOMContentLoaded',
+      function() {
+
+        updateModelStatus();
+
+      }
+    );
+
   </script>
+
 </body>
 </html>
